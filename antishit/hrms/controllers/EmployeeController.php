@@ -45,6 +45,11 @@ class EmployeeController {
         $leaveBalance= $leaveModel->getBalance($id, date('Y'));
         $documents   = $docModel->all(['admin_view'=>true,'employee_id2'=>$id], 10, 0);
         $attSummary  = $attModel->monthlySummary($id, date('Y'), date('n'));
+        
+        // Load active sessions
+        $sessionModel = new UserSession();
+        $activeSessions = $sessionModel->getByUserId($employee['user_id']);
+        
         include APP_ROOT . '/views/employees/view.php';
     }
 
@@ -195,5 +200,27 @@ class EmployeeController {
         header('Content-Type: application/json');
         echo json_encode($this->model->positions($deptId));
         exit;
+    }
+
+    public function revokeSession(): void {
+        requireLogin();
+        validateCsrf();
+        $sessionId = (int)post('session_db_id');
+        $employeeId = (int)post('employee_id');
+        
+        $employee = $this->model->findById($employeeId);
+        if (!$employee) jsonResponse(false, 'Employee not found.');
+
+        // Verify ownership/permission
+        if (currentRole() === ROLE_EMPLOYEE && $employee['user_id'] !== currentUserId()) {
+            jsonResponse(false, 'Unauthorized.');
+        }
+
+        $sessionModel = new UserSession();
+        if ($sessionModel->revoke($sessionId, $employee['user_id'])) {
+            auditLog('revoke_session', 'auth', "Revoked session ID #$sessionId for user #{$employee['user_id']}", $employeeId);
+            jsonResponse(true, 'Session revoked successfully.');
+        }
+        jsonResponse(false, 'Failed to revoke session.');
     }
 }

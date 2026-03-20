@@ -127,8 +127,12 @@ if (!empty($loginHistory)) {
 
                 <!-- Mapbox Map -->
                 <?php if (!empty($mapPoints)): ?>
+                <style>
+                    #loginMap img { max-width: none !important; height: auto !important; }
+                    .leaflet-container { z-index: 1 !important; border: 1px solid #e0e0e0; border-radius: 4px; background: #f8f9fa; }
+                </style>
                 <div id="loginMapContainer" style="display:none;">
-                    <div id="loginMap" style="height: 320px; border-radius: 0;"></div>
+                    <div id="loginMap" class="mb-3" style="height: 320px; border-radius: 0;"></div>
                 </div>
                 <?php endif; ?>
 
@@ -194,6 +198,82 @@ if (!empty($loginHistory)) {
             </div>
         </div>
     </div>
+
+    <!-- NEW: Active Sessions Management -->
+    <div class="row g-4 mt-2">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white pt-3 pb-2 border-0">
+                    <h6 class="fw-bold text-danger mb-0"><i class="bi bi-shield-lock-fill me-2"></i>Active Sessions / Logout Devices</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="alert alert-info border-0 rounded-0 m-0 py-2 small" style="background-color: #f0f7ff;">
+                        <i class="bi bi-info-circle me-2"></i>Here you can see the devices currently logged into your account. You can "Revoke" any session to log them out immediately.
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-muted small">
+                                <tr>
+                                    <th class="ps-4">Device / Browser</th>
+                                    <th>IP & Location</th>
+                                    <th>Last Activity</th>
+                                    <th class="text-end pe-4">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if(empty($activeSessions)): ?>
+                                    <tr><td colspan="4" class="text-center py-4 text-muted small">No other active sessions found.</td></tr>
+                                <?php endif; ?>
+                                <?php foreach($activeSessions as $s): 
+                                    $isCurrent = ($s['session_id'] === session_id());
+                                ?>
+                                <tr class="<?= $isCurrent ? 'table-primary-subtle' : '' ?>">
+                                    <td class="ps-4">
+                                        <div class="fw-bold small"><?= e($s['device'] ?: 'Unknown Device') ?></div>
+                                        <div class="text-muted" style="font-size:.7rem"><?= truncate($s['user_agent'], 70) ?></div>
+                                        <?php if($isCurrent): ?><span class="badge bg-primary px-2" style="font-size:.65rem">Current Session</span><?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <div class="small"><?= e($s['ip_address']) ?></div>
+                                        <div class="text-muted" style="font-size:.7rem"><?= e($s['location'] ?: 'Local, Localhost') ?></div>
+                                    </td>
+                                    <td class="small text-muted"><?= timeAgo($s['last_activity']) ?></td>
+                                    <td class="text-end pe-4">
+                                        <?php if(!$isCurrent): ?>
+                                        <button type="button" class="btn btn-outline-danger btn-sm px-3 revoke-session-btn" 
+                                                data-id="<?= $s['id'] ?>">
+                                            Revoke (Logout)
+                                        </button>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Revoke Session Confirmation Modal -->
+<div class="modal fade" id="revokeSessionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+            <div class="modal-body p-4 text-center">
+                <div class="mb-3">
+                    <i class="bi bi-shield-lock-fill text-danger" style="font-size: 3rem;"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Logout this Device?</h5>
+                <p class="text-muted small px-3">Are you sure you want to log out of this session? This device will immediately lose access to your account.</p>
+                
+                <div class="d-grid gap-2 mt-4">
+                    <button type="button" class="btn btn-danger py-2 fw-bold" id="confirmRevokeBtn">Yes, Logout Device</button>
+                    <button type="button" class="btn btn-light py-2 text-muted" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <?php if (!empty($mapPoints)): ?>
@@ -225,10 +305,11 @@ function initMap() {
 
     leafletMap = L.map('loginMap', { zoomControl: true }).setView([first.lat, first.lng], 4);
 
-    // OpenStreetMap tiles — completely free
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 18,
+    // CartoDB Voyager - More colorful/visible than Positron
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
     }).addTo(leafletMap);
 
     const bounds = [];
@@ -274,3 +355,62 @@ function initMap() {
 
 
 <?php include APP_ROOT . '/views/layouts/footer.php'; ?>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Revoke Session Handler (MODAL)
+    let sessionToRevoke = null;
+    let rowToRevoke = null;
+    const revokeModal = new bootstrap.Modal(document.getElementById('revokeSessionModal'));
+    const confirmBtn = document.getElementById('confirmRevokeBtn');
+
+    document.querySelectorAll('.revoke-session-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            sessionToRevoke = this.dataset.id;
+            rowToRevoke = this.closest('tr');
+            revokeModal.show();
+        });
+    });
+
+    confirmBtn.addEventListener('click', function() {
+        if (!sessionToRevoke) return;
+        
+        const btn = this;
+        btn.disabled = true;
+        confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging out device...';
+        
+        const formData = new FormData();
+        formData.append('session_db_id', sessionToRevoke);
+        formData.append('csrf_token', '<?= csrfToken() ?>');
+
+        fetch('index.php?module=profile&action=revokeSession', {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                revokeModal.hide();
+                rowToRevoke.style.transition = 'all 0.5s ease';
+                rowToRevoke.style.background = '#ffebeb';
+                rowToRevoke.style.opacity = '0';
+                rowToRevoke.style.transform = 'translateX(20px)';
+                setTimeout(() => rowToRevoke.remove(), 500);
+            } else {
+                alert(data.message || 'Failed to revoke session.');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('An error occurred.');
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = 'Yes, Logout Device';
+            sessionToRevoke = null;
+        });
+    });
+
+    // Map Toggle Logic...
+});
+</script>

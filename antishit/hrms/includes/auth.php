@@ -12,20 +12,18 @@ function isLoggedIn(): bool {
         return false;
     }
     
-    // Check session_token against database for immediate invalidation on password change
-    if (isset($_SESSION[SESSION_USER]['session_token'])) {
-        try {
-            $stmt = db()->prepare("SELECT session_token FROM users WHERE id = ?");
-            $stmt->execute([$_SESSION[SESSION_USER]['id']]);
-            $dbToken = $stmt->fetchColumn();
-            if ($dbToken !== $_SESSION[SESSION_USER]['session_token']) {
-                destroySession();
-                return false;
-            }
-        } catch (Exception $e) {
+    // Check session_token against database (Optional: remove if you want full multi-device)
+    // Removed token comparison to allow up to 2 devices per Option 1
+    
+    // Check persistent user_sessions table
+    try {
+        $stmt = db()->prepare("SELECT COUNT(*) FROM user_sessions WHERE user_id = ? AND session_id = ?");
+        $stmt->execute([$_SESSION[SESSION_USER]['id'], session_id()]);
+        if ((int)$stmt->fetchColumn() === 0) {
+            destroySession();
             return false;
         }
-    }
+    } catch (Exception $e) {}
     return true;
 }
 
@@ -114,6 +112,13 @@ function regenerateSession(): void {
  * Destroy session and redirect to login.
  */
 function destroySession(): void {
+    if (session_id()) {
+        try {
+            // Remove from database if exists
+            db()->prepare("DELETE FROM user_sessions WHERE session_id = ?")
+               ->execute([session_id()]);
+        } catch (Exception $e) {}
+    }
     $_SESSION = [];
     if (ini_get('session.use_cookies')) {
         $p = session_get_cookie_params();

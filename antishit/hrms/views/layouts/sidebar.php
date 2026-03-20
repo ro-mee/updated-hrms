@@ -128,7 +128,7 @@ $companyName = $settings->get('company_name','HRMS Pro');
     </ul>
 </nav>
 <div class="sidebar-footer">
-    <form method="POST" action="index.php?module=auth&action=logout">
+    <form method="POST" action="index.php?module=auth&action=logout" onsubmit="localStorage.setItem('hrms-logout-event', Date.now());">
         <?= csrfField() ?>
         <button class="btn-sidebar-logout w-100 d-flex align-items-center justify-content-center">
             <i class="bi bi-box-arrow-right me-2"></i><span>Logout</span>

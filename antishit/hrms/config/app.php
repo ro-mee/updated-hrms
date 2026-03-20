@@ -39,7 +39,7 @@ if ($isSecure) {
 }
 
 // Basic CSP to prevent malicious external scripts while allowing local assets & CDNs
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https://unpkg.com; connect-src 'self' https://api.pwnedpasswords.com; frame-src 'none'; object-src 'none';");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https://unpkg.com https://*.basemaps.cartocdn.com https://*.tile.openstreetmap.org; connect-src 'self' https://api.pwnedpasswords.com; frame-src 'none'; object-src 'none';");
 
 // ── Create logs directory if missing ─────────────────────────────
 $logDir = APP_ROOT . '/logs';

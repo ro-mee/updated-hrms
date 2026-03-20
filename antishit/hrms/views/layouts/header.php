@@ -24,6 +24,14 @@ $companyName = $settings->get('company_name', APP_NAME);
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="<?= APP_URL ?>/assets/css/style.css" rel="stylesheet">
+    <!-- Cross-Tab Logout Sync -->
+    <script>
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'hrms-logout-event') {
+                window.location.href = 'index.php?module=auth&action=login';
+            }
+        });
+    </script>
 </head>
 <body>
 <?php 
@@ -102,7 +110,7 @@ $sidebarCollapsed = isset($_COOKIE['hrms_sidebar_collapsed']) && $_COOKIE['hrms_
                     <li><a class="dropdown-item" href="index.php?module=auth&action=changePassword"><i class="bi bi-key me-2"></i>Change Password</a></li>
                     <li><hr class="dropdown-divider my-1"></li>
                     <li>
-                        <form method="POST" action="index.php?module=auth&action=logout">
+                        <form method="POST" action="index.php?module=auth&action=logout" onsubmit="localStorage.setItem('hrms-logout-event', Date.now());">
                             <?= csrfField() ?>
                             <button class="dropdown-item text-danger" type="submit"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
                         </form>

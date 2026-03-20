@@ -77,6 +77,11 @@ class ProfileController {
         $employee     = currentUser()['employee_id'] ? $empModel->findById(currentUser()['employee_id']) : null;
         $loginHistory = $userModel->getLoginHistory(currentUserId(), 20);
         $lastLogin    = !empty($loginHistory) ? $loginHistory[0] : null;
+
+        // Load active sessions
+        $sessionModel = new UserSession();
+        $activeSessions = $sessionModel->getByUserId(currentUserId());
+
         include APP_ROOT . '/views/employees/profile.php';
     }
 
@@ -115,5 +120,18 @@ class ProfileController {
             setFlash('error', implode(' ', $errors));
         }
         redirect('index.php?module=profile&action=index');
+    }
+
+    public function revokeSession(): void {
+        requireLogin();
+        validateCsrf();
+        $sessionId = (int)post('session_db_id');
+        
+        $sessionModel = new UserSession();
+        if ($sessionModel->revoke($sessionId, currentUserId())) {
+            auditLog('revoke_session', 'profile', "User revoked their own session ID #$sessionId");
+            jsonResponse(true, 'Session revoked successfully.');
+        }
+        jsonResponse(false, 'Failed to revoke session.');
     }
 }

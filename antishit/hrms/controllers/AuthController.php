@@ -180,6 +180,18 @@ class AuthController {
         ];
         $userModel->recordLoginLog($logData);
         
+        // Record persistent session in database (Limit to 2 devices)
+        $sessionModel = new UserSession();
+        $sessionModel->enforceLimit($user['id'], 2); // Auto-logout oldest if 3rd device logs in
+        $sessionModel->create([
+            'user_id'    => $user['id'],
+            'session_id' => session_id(),
+            'ip_address' => $ip,
+            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+            'device'     => $device,
+            'location'   => trim(($geo['city'] ?? '') . ', ' . ($geo['country'] ?? ''), ', '),
+        ]);
+        
         require_once APP_ROOT . '/includes/mailer.php';
         if ($isNewIp) {
             sendNewLoginNotification($user['email'], $user['first_name'], $logData);
