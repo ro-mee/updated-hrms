@@ -17,7 +17,8 @@ class Job {
             FROM jobs j LEFT JOIN departments d ON j.department_id=d.id
             LEFT JOIN users u ON j.posted_by=u.id
             LEFT JOIN applicants a ON a.job_id=j.id
-            WHERE $whereStr GROUP BY j.id ORDER BY j.created_at DESC LIMIT ? OFFSET ?
+            WHERE $whereStr GROUP BY j.id 
+            ORDER BY (j.status IN ('closed', 'filled')) ASC, j.created_at DESC LIMIT ? OFFSET ?
         ");
         $stmt->execute([...$params, $limit, $offset]);
         return $stmt->fetchAll();
@@ -55,11 +56,11 @@ class Job {
 
     public function update(int $id, array $d): bool {
         $stmt = $this->db->prepare("
-            UPDATE jobs SET title=?,department_id=?,description=?,requirements=?,
+            UPDATE jobs SET title=?,department_id=?,position_id=?,description=?,requirements=?,
                 salary_min=?,salary_max=?,employment_type=?,vacancies=?,status=?,deadline=?
             WHERE id=?
         ");
-        return $stmt->execute([$d['title'],$d['department_id'],$d['description']??null,
+        return $stmt->execute([$d['title'],$d['department_id'],$d['position_id']??null,$d['description']??null,
             $d['requirements']??null,$d['salary_min']??null,$d['salary_max']??null,
             $d['employment_type']??'full_time',$d['vacancies']??1,$d['status']??'open',
             $d['deadline']??null,$id]);
@@ -72,6 +73,23 @@ class Job {
     public function openCount(): int {
         return (int)$this->db->query("SELECT COUNT(*) FROM jobs WHERE status='open'")->fetchColumn();
     }
+
+    /** Automatically close job if vacancies are filled */
+    public function checkAndAutoClose(int $id): bool {
+        $job = $this->findById($id);
+        if (!$job || $job['status'] !== 'open') return false;
+        
+        // Count hired applicants
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM applicants WHERE job_id=? AND status='hired'");
+        $stmt->execute([$id]);
+        $hired = (int)$stmt->fetchColumn();
+        
+        if ($hired >= $job['vacancies']) {
+            $this->db->prepare("UPDATE jobs SET status='closed' WHERE id=?")->execute([$id]);
+            return true;
+        }
+        return false;
+    }
 }
 
 class Applicant {
@@ -79,15 +97,18 @@ class Applicant {
     public function __construct() { $this->db = db(); }
 
     public function all(array $filters = [], int $limit = RECORDS_PER_PAGE, int $offset = 0): array {
-        $where = ['1=1']; $params = [];
+        $where = ['is_archived=0']; $params = [];
         if (!empty($filters['job_id']))   { $where[] = "a.job_id=?";   $params[] = $filters['job_id']; }
         if (!empty($filters['status']))   { $where[] = "a.status=?";   $params[] = $filters['status']; }
         if (!empty($filters['search']))   { $where[] = "(a.first_name LIKE ? OR a.last_name LIKE ? OR a.email LIKE ?)";
                                             $s="%{$filters['search']}%"; $params=array_merge($params,[$s,$s,$s]); }
         $whereStr = implode(' AND ', $where);
         $stmt = $this->db->prepare("
-            SELECT a.*, j.title AS job_title, d.name AS department_name
-            FROM applicants a LEFT JOIN jobs j ON a.job_id=j.id LEFT JOIN departments d ON j.department_id=d.id
+            SELECT a.*, j.title AS job_title, d.name AS department_name, u.id AS user_id
+            FROM applicants a 
+            LEFT JOIN jobs j ON a.job_id=j.id 
+            LEFT JOIN departments d ON j.department_id=d.id
+            LEFT JOIN users u ON a.email = u.email
             WHERE $whereStr ORDER BY a.created_at DESC LIMIT ? OFFSET ?
         ");
         $stmt->execute([...$params, $limit, $offset]);
@@ -95,7 +116,7 @@ class Applicant {
     }
 
     public function count(array $filters = []): int {
-        $where = ['1=1']; $params = [];
+        $where = ['is_archived=0']; $params = [];
         if (!empty($filters['job_id'])) { $where[] = "job_id=?"; $params[] = $filters['job_id']; }
         if (!empty($filters['status'])) { $where[] = "status=?"; $params[] = $filters['status']; }
         $stmt = $this->db->prepare("SELECT COUNT(*) FROM applicants WHERE " . implode(' AND ', $where));
@@ -104,15 +125,42 @@ class Applicant {
     }
 
     public function findById(int $id): ?array {
-        $stmt = $this->db->prepare("SELECT a.*, j.title AS job_title FROM applicants a LEFT JOIN jobs j ON a.job_id=j.id WHERE a.id=?");
+        $stmt = $this->db->prepare("
+            SELECT a.*, j.title AS job_title, j.department_id, j.position_id, 
+                   j.employment_type, j.salary_min, u.id AS user_id
+            FROM applicants a 
+            LEFT JOIN jobs j ON a.job_id = j.id 
+            LEFT JOIN users u ON a.email = u.email
+            WHERE a.id = ?
+        ");
         $stmt->execute([$id]);
         return $stmt->fetch() ?: null;
     }
 
     public function create(array $d): int {
-        $stmt = $this->db->prepare("INSERT INTO applicants (job_id,first_name,last_name,email,phone,cover_letter,source) VALUES (?,?,?,?,?,?,?)");
-        $stmt->execute([$d['job_id'],$d['first_name'],$d['last_name'],$d['email'],$d['phone']??null,$d['cover_letter']??null,$d['source']??null]);
+        $stmt = $this->db->prepare("
+            INSERT INTO applicants (job_id,first_name,last_name,email,phone,cover_letter,source,
+                birth_date,gender,civil_status,address,city,sss_number,philhealth_number,
+                pagibig_number,tin_number,emergency_contact_name,emergency_contact_phone)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        ");
+        $stmt->execute([
+            $d['job_id'],$d['first_name'],$d['last_name'],$d['email'],$d['phone']??null,
+            $d['cover_letter']??null,$d['source']??null,$d['birth_date']??null,
+            $d['gender']??null,$d['civil_status']??null,$d['address']??null,
+            $d['city']??null,$d['sss_number']??null,$d['philhealth_number']??null,
+            $d['pagibig_number']??null,$d['tin_number']??null,
+            $d['emergency_contact_name']??null,$d['emergency_contact_phone']??null
+        ]);
         return (int)$this->db->lastInsertId();
+    }
+
+    public function archive(int $id): bool {
+        return $this->db->prepare("UPDATE applicants SET is_archived=1 WHERE id=?")->execute([$id]);
+    }
+
+    public function delete(int $id): bool {
+        return $this->db->prepare("DELETE FROM applicants WHERE id=?")->execute([$id]);
     }
 
     public function updateStatus(int $id, string $status, array $extra = []): bool {

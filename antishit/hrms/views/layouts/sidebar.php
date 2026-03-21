@@ -40,11 +40,11 @@ $navItems = [
 ];
 
 $settings = new Setting();
-$companyName = $settings->get('company_name','HRMS Pro');
+$companyName = $settings->get('company_name','NexaHR');
 ?>
 <div class="sidebar-header">
     <div class="brand-logo">
-        <div class="brand-icon-box"><i class="bi bi-people-fill"></i></div>
+        <div class="brand-icon-box"><img src="assets/images/favicon.png" alt="Logo" style="width:100%;height:100%;object-fit:contain;"></div>
         <div class="brand-text">
             <span class="brand-name"><?= e($companyName) ?></span>
             <span class="brand-sub">HRMS</span>

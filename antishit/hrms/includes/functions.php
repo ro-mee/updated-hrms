@@ -112,8 +112,10 @@ function uploadFile(array $file, string $destDir, array $allowedTypes, int $maxS
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
     $mime  = finfo_file($finfo, $file['tmp_name']);
     finfo_close($finfo);
+    
     if (!in_array($mime, $allowedTypes, true)) {
-        return ['success' => false, 'message' => 'File type not allowed.'];
+        // Fallback or better error message
+        return ['success' => false, 'message' => "File type ($mime) not allowed. Please upload a PDF or Word document."];
     }
     $ext      = pathinfo($file['name'], PATHINFO_EXTENSION);
     $filename = bin2hex(random_bytes(16)) . '.' . strtolower($ext);
@@ -291,4 +293,20 @@ function decrypt_pii(?string $data): ?string {
     $ciphertext = substr($decoded, $ivLength);
     $decrypted = openssl_decrypt($ciphertext, $method, $key, 0, $iv);
     return $decrypted === false ? $data : $decrypted;
+}
+
+/**
+ * Generate a random temporary password.
+ */
+function generateRandomPassword(int $length = 12): string {
+    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
+    $pass = '';
+    for ($i = 0; $i < $length; $i++) {
+        $pass .= $chars[random_int(0, strlen($chars) - 1)];
+    }
+    // Ensure it meets basic complexity (at least one uppercase, lowercase, and number)
+    if (!preg_match('/[A-Z]/', $pass) || !preg_match('/[a-z]/', $pass) || !preg_match('/[0-9]/', $pass)) {
+        return generateRandomPassword($length);
+    }
+    return $pass;
 }

@@ -1,5 +1,5 @@
 /* ============================================================
-   HRMS Pro - Custom Stylesheet
+   NexaHR - Custom Stylesheet
    Stack: Bootstrap 5 base + custom variables + dark mode
    ============================================================ */
 
@@ -76,7 +76,7 @@ a:hover { color: var(--hrms-secondary); }
     min-height: var(--hrms-topbar-h);
 }
 .brand-logo { display:flex; align-items:center; gap:.7rem; overflow:hidden; }
-.brand-icon-box { width:36px;height:36px;min-width:36px; background:linear-gradient(135deg,#6366f1,#a855f7); border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; }
+.brand-icon-box { width:36px;height:36px;min-width:36px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; }
 .brand-name { font-weight:700; font-size:1rem; color:#fff; white-space:nowrap; }
 .brand-sub  { font-size:.65rem; color:rgba(255,255,255,.45); text-transform:uppercase; letter-spacing:.1em; display:block; }
 .btn-close-sidebar { background:none;border:none;color:rgba(255,255,255,.5);font-size:1rem; }

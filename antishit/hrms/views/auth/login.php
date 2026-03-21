@@ -10,16 +10,25 @@ if (isLoggedIn()) redirect('index.php?module=dashboard&action=index');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | HRMS Pro</title>
+    <title>Login | NexaHR</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="<?= APP_URL ?>/assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
     <style>
-        body { background: var(--hrms-login-bg); min-height: 100vh; display:flex; align-items:center; justify-content:center; font-family:'Inter',sans-serif; }
+        body { 
+            background: linear-gradient(rgba(30, 27, 75, 0.4), rgba(30, 27, 75, 0.4)), url('assets/images/background.jpg') no-repeat center center fixed; 
+            background-size: cover; 
+            min-height: 100vh; 
+            display:flex; 
+            align-items:center; 
+            justify-content:center; 
+            font-family:'Inter',sans-serif; 
+        }
         .login-card { width: 100%; max-width: 440px; border-radius: 20px; border:none; box-shadow: 0 24px 64px rgba(0,0,0,0.14); overflow:hidden; }
         .login-brand { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color:#fff; padding: 2.5rem 2rem 2rem; text-align:center; }
-        .login-brand .brand-icon { width:64px;height:64px;background:rgba(255,255,255,0.15);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:2rem; }
+        .login-brand .brand-icon { width:64px;height:64px;background:transparent;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:2rem; }
         .login-brand h1 { font-size:1.6rem;font-weight:700;margin:0; }
         .login-brand p  { font-size:.85rem;opacity:.8;margin:.3rem 0 0; }
         .login-body { padding: 2rem; }
@@ -37,8 +46,8 @@ if (isLoggedIn()) redirect('index.php?module=dashboard&action=index');
 <body>
 <div class="login-card card">
     <div class="login-brand">
-        <div class="brand-icon"><i class="bi bi-people-fill"></i></div>
-        <h1>HRMS Pro</h1>
+        <div class="brand-icon"><img src="assets/images/logo.png" alt="Logo" style="width:100%;height:100%;object-fit:contain;"></div>
+        <h1>NexaHR</h1>
         <p>Human Resource Management System</p>
     </div>
     <div class="login-body">
@@ -76,6 +85,9 @@ if (isLoggedIn()) redirect('index.php?module=dashboard&action=index');
                         <i class="bi bi-eye" id="pwIcon"></i>
                     </button>
                     <?php if (!empty($errors['password'])): ?><div class="invalid-feedback"><?= e($errors['password']) ?></div><?php endif; ?>
+                </div>
+                <div class="text-end mb-3">
+                    <a href="index.php?module=auth&action=forgotPassword" class="text-decoration-none small fw-bold">Forgot Password?</a>
                 </div>
                 <button type="submit" class="btn btn-primary btn-login w-100 text-white mb-3">
                     <span id="loginSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
@@ -124,19 +136,9 @@ if (isLoggedIn()) redirect('index.php?module=dashboard&action=index');
             </form>
         <?php endif; ?>
 
-        <?php if (!isset($_SESSION['pending_2fa_user_id'])): ?>
-            <div class="divider-text">Demo Credentials</div>
-            <div class="demo-creds">
-                <div class="row g-1">
-                    <div class="col-6"><strong>Super Admin:</strong><br>superadmin@hrms.com</div>
-                    <div class="col-6"><strong>Employee:</strong><br>employee@hrms.com</div>
-                    <div class="col-12 mt-1 pt-1 border-top"><strong>Password for all:</strong> Admin@1234</div>
-                </div>
-            </div>
-        <?php endif; ?>
         
         <p class="text-center text-muted mt-3 mb-0" style="font-size:.73rem">
-            &copy; <?= date('Y') ?> HRMS Pro. All rights reserved.
+            &copy; <?= date('Y') ?> NexaHR. All rights reserved.
         </p>
     </div>
 </div>

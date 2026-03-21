@@ -5,9 +5,9 @@
  */
 
 // ── Application ──────────────────────────────────────────────────
-define('APP_NAME',    'HRMS Pro');
+define('APP_NAME',    'NexaHR');
 define('APP_VERSION', '1.0.0');
-define('APP_URL',     'http://localhost/antishit/hrms');
+define('APP_URL',     'http://localhost/updated-hrms/antishit/hrms');
 if (!defined('APP_ROOT')) {
     define('APP_ROOT', dirname(__DIR__));   // /hrms directory
 }
@@ -36,6 +36,8 @@ define('MAX_FILE_SIZE',  5 * 1024 * 1024); // 5 MB
 define('ALLOWED_IMAGE_TYPES', ['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
 define('ALLOWED_DOC_TYPES',   ['application/pdf', 'application/msword',
                                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                'application/vnd.ms-word', 'application/vnd.ms-office',
+                                'application/octet-stream', 'application/zip',
                                 'image/jpeg', 'image/png']);
 define('UPLOAD_AVATAR_PATH',   APP_ROOT . '/uploads/avatars/');
 define('UPLOAD_DOCUMENT_PATH', APP_ROOT . '/uploads/documents/');

@@ -12,7 +12,15 @@ include APP_ROOT . '/views/layouts/header.php';
             <h4 class="fw-bold mb-1"><?= e($job['title']) ?></h4>
             <div class="text-muted"><i class="bi bi-building me-1"></i><?= e($job['department_name']) ?> &nbsp;&bull;&nbsp; <i class="bi bi-briefcase me-1"></i><?= ucfirst(str_replace('_',' ',$job['employment_type'])) ?></div>
         </div>
-        <span class="badge bg-<?= $job['status']==='open'?'success':($job['status']==='closed'?'secondary':'warning') ?> fs-6"><?= ucfirst(str_replace('_',' ',$job['status'])) ?></span>
+        <div class="d-flex gap-2 align-items-center">
+            <span class="badge bg-<?= $job['status']==='open'?'success':($job['status']==='closed'?'secondary':'warning') ?> fs-6 me-2"><?= ucfirst(str_replace('_',' ',$job['status'])) ?></span>
+            <a href="index.php?module=recruitment&action=editJob&id=<?= $job['id'] ?>" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil me-1"></i>Edit</a>
+            <form action="index.php?module=recruitment&action=deleteJob" method="POST" onsubmit="return confirm('Are you sure you want to delete this job posting?');" class="d-inline">
+                <?= csrfField() ?>
+                <input type="hidden" name="id" value="<?= $job['id'] ?>">
+                <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash me-1"></i>Delete</button>
+            </form>
+        </div>
     </div>
 
     <div class="row g-4">
@@ -60,23 +68,33 @@ include APP_ROOT . '/views/layouts/header.php';
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
-    <thead><tr><th>Applicant</th><th>Contact</th><th>Applied</th><th>Status</th><th>Actions</th></tr></thead>
+    <thead><tr><th>Applicant</th><th>Applied</th><th>Status</th><th>Actions</th></tr></thead>
                         <tbody>
-                        <?php if(empty($applicants)): ?><tr><td colspan="5"><div class="empty-state"><i class="bi bi-emoji-frown"></i>No applicants found</div></td></tr><?php endif; ?>
+                        <?php if(empty($applicants)): ?><tr><td colspan="4"><div class="empty-state"><i class="bi bi-emoji-frown"></i>No applicants found</div></td></tr><?php endif; ?>
                         <?php foreach($applicants as $app): ?>
                         <tr>
                             <td>
                                 <div class="fw-medium"><?= e($app['first_name'].' '.$app['last_name']) ?></div>
-                                <div class="small text-muted"><a href="mailto:<?= e($app['email']) ?>"><?= e($app['email']) ?></a></div>
+                                <div class="small text-muted"><i class="bi bi-envelope me-1"></i><?= e($app['email']) ?></div>
+                                <div class="small text-muted"><i class="bi bi-telephone me-1"></i><?= e($app['phone'] ?: 'N/A') ?></div>
+                                <div></div>
                             </td>
-                            <td class="small"><?= e($app['phone'] ?: 'N/A') ?></td>
                             <td class="small"><?= formatDate($app['created_at']) ?></td>
                             <td><?= statusBadge($app['status']) ?></td>
                             <td>
-                                <button class="btn btn-outline-primary btn-sm btn-update-status" data-id="<?= $app['id'] ?>" data-status="<?= $app['status'] ?>" title="Update Status"><i class="bi bi-pencil-square"></i></button>
-                                <?php if($app['resume']): ?>
-                                <a href="<?= APP_URL.'/uploads/resumes/'.urlencode($app['resume']) ?>" target="_blank" class="btn btn-outline-secondary btn-sm" title="View Resume"><i class="bi bi-file-earmark-person"></i></a>
-                                <?php endif; ?>
+                                <div class="d-flex gap-1">
+                                    <a href="index.php?module=recruitment&action=viewApplicant&id=<?= $app['id'] ?>" class="btn btn-outline-primary btn-sm" title="View Profile"><i class="bi bi-person-lines-fill"></i></a>
+                                    <button class="btn btn-outline-secondary btn-sm btn-update-status" data-id="<?= $app['id'] ?>" data-status="<?= $app['status'] ?>" title="Update Status"><i class="bi bi-pencil-square"></i></button>
+                                    <?php if(in_array($app['status'], ['offered', 'hired']) && empty($app['user_id'])): ?>
+                                    <a href="index.php?module=employees&action=add&from_applicant=<?= $app['id'] ?>" class="btn btn-outline-success btn-sm" title="Finalize Hiring"><i class="bi bi-person-plus-fill"></i></a>
+                                    <?php endif; ?>
+                                    <form action="index.php?module=recruitment&action=archiveApplicant" method="POST" onsubmit="return confirm('Archive this applicant?');" class="d-inline">
+                                        <?= csrfField() ?>
+                                        <input type="hidden" name="id" value="<?= $app['id'] ?>">
+                                        <input type="hidden" name="job_id" value="<?= $job['id'] ?>">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm" title="Archive Applicant"><i class="bi bi-archive"></i></button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         <?php endforeach; ?>

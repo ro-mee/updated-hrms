@@ -1,5 +1,5 @@
 /**
- * HRMS Pro - Main JavaScript
+ * NexaHR - Main JavaScript
  */
 'use strict';
 

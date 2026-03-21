@@ -33,15 +33,14 @@ function validateCsrf(): void {
         http_response_code(403);
         if (isAjax()) {
             header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'CSRF token mismatch. Please refresh and try again.']);
+            echo json_encode(['success' => false, 'message' => 'Security token expired. Please refresh and try again.']);
         } else {
             setFlash('error', 'Security token expired. Please try again.');
             redirect($_SERVER['HTTP_REFERER'] ?? 'index.php');
         }
         exit;
     }
-    // Rotate token after successful validation
-    $_SESSION[CSRF_TOKEN_KEY] = bin2hex(random_bytes(32));
+    // Token rotation disabled to prevent "Token Expired" on back button/multi-tab
 }
 
 /**

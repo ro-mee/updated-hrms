@@ -103,12 +103,18 @@ class Employee {
         return $this->db->query("SELECT * FROM departments WHERE is_active=1 ORDER BY name")->fetchAll();
     }
 
+    public function getDepartment(int $id): ?array {
+        $stmt = $this->db->prepare("SELECT * FROM departments WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch() ?: null;
+    }
+
     public function positions(int $deptId = 0): array {
         if ($deptId) {
-            $stmt = $this->db->prepare("SELECT * FROM positions WHERE department_id = ? AND is_active=1 ORDER BY title");
+            $stmt = $this->db->prepare("SELECT p.*, d.name AS department_name FROM positions p JOIN departments d ON p.department_id=d.id WHERE p.department_id = ? AND p.is_active=1 ORDER BY p.title");
             $stmt->execute([$deptId]);
         } else {
-            $stmt = $this->db->query("SELECT * FROM positions WHERE is_active=1 ORDER BY title");
+            $stmt = $this->db->query("SELECT p.*, d.name AS department_name FROM positions p JOIN departments d ON p.department_id=d.id WHERE p.is_active=1 ORDER BY p.title");
         }
         return $stmt->fetchAll();
     }

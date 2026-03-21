@@ -256,7 +256,7 @@ INSERT INTO notifications (user_id, title, message, type, module) VALUES
 
 -- ── Settings ──────────────────────────────────────────────────
 INSERT INTO settings (key_name, value, label, group_name) VALUES
-('company_name',      'HRMS Pro Corporation',   'Company Name',         'general'),
+('company_name',      'NexaHR Corporation',   'Company Name',         'general'),
 ('company_address',   '123 Business Ave, Makati City, Philippines', 'Company Address', 'general'),
 ('company_phone',     '+63 2 8888 0000',         'Company Phone',        'general'),
 ('company_email',     'info@hrmspro.com',         'Company Email',        'general'),

@@ -368,11 +368,14 @@ class RecruitmentController {
 
     public function addJob(): void {
         requirePermission('recruitment', 'manage');
-        $errors = []; $departments = (new Employee())->departments();
+        $errors = []; $empModel = new Employee();
+        $departments = $empModel->departments();
+        $positions   = $empModel->positions();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             validateCsrf();
             $data = [
                 'title'=>sanitizeInput(post('title')),'department_id'=>(int)post('department_id'),
+                'position_id'=>(int)post('position_id') ?: null,
                 'description'=>sanitizeInput(post('description')),'requirements'=>sanitizeInput(post('requirements')),
                 'salary_min'=>post('salary_min')?:(null),'salary_max'=>post('salary_max')?:null,
                 'employment_type'=>sanitizeInput(post('employment_type','full_time')),'vacancies'=>(int)post('vacancies',1),
@@ -413,7 +416,82 @@ class RecruitmentController {
         ];
         $this->appModel->updateStatus($id, $status, $extra);
         auditLog('update','recruitment',"Updated applicant #{$id} status to $status",$id);
-        jsonResponse(true,"Applicant status updated to $status.");
+
+        if ($status === 'hired') {
+            $app = $this->appModel->findById($id);
+            if ($app) {
+                $this->jobModel->checkAndAutoClose((int)$app['job_id']);
+            }
+        }
+        
+        if (isAjax()) {
+            jsonResponse(true,"Applicant status updated to $status.");
+        } else {
+            setFlash('success', "Applicant status updated to ".ucfirst($status).".");
+            redirect('index.php?module=recruitment&action=viewApplicant&id='.$id);
+        }
+    }
+
+    public function editJob(): void {
+        requirePermission('recruitment', 'manage');
+        $id = (int)get('id');
+        $job = $this->jobModel->findById($id);
+        if (!$job) { setFlash('error','Job not found.'); redirect('index.php?module=recruitment'); }
+        $errors = []; $empModel = new Employee();
+        $departments = $empModel->departments();
+        $positions   = $empModel->positions();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            validateCsrf();
+            $data = [
+                'title'=>sanitizeInput(post('title')),'department_id'=>(int)post('department_id'),
+                'position_id'=>(int)post('position_id') ?: null,
+                'description'=>sanitizeInput(post('description')),'requirements'=>sanitizeInput(post('requirements')),
+                'salary_min'=>post('salary_min')?:null,'salary_max'=>post('salary_max')?:null,
+                'employment_type'=>sanitizeInput(post('employment_type','full_time')),'vacancies'=>(int)post('vacancies',1),
+                'status'=>sanitizeInput(post('status','open')),'deadline'=>sanitizeInput(post('deadline'))?:null,
+            ];
+            $errors = validateRequired(['title','department_id'], $data);
+            if (empty($errors)) {
+                $this->jobModel->update($id, $data);
+                auditLog('edit','recruitment',"Updated job: {$data['title']}",$id);
+                setFlash('success','Job updated successfully!');
+                redirect('index.php?module=recruitment&action=viewJob&id='.$id);
+            }
+        }
+        include APP_ROOT . '/views/recruitment/edit_job.php';
+    }
+
+    public function deleteJob(): void {
+        requirePermission('recruitment', 'manage');
+        validateCsrf();
+        $id = (int)post('id');
+        $job = $this->jobModel->findById($id);
+        if ($job) {
+            $this->jobModel->delete($id);
+            auditLog('delete','recruitment',"Deleted job: {$job['title']}",$id);
+            setFlash('success','Job deleted successfully.');
+        }
+        redirect('index.php?module=recruitment');
+    }
+
+    public function viewApplicant(): void {
+        requirePermission('recruitment', 'manage');
+        $id = (int)get('id');
+        $applicant = $this->appModel->findById($id);
+        if (!$applicant) redirect('index.php?module=recruitment');
+        include APP_ROOT . '/views/recruitment/view_applicant.php';
+    }
+
+    public function archiveApplicant(): void {
+        requirePermission('recruitment', 'manage');
+        validateCsrf();
+        $id = (int)post('id');
+        $jobId = (int)post('job_id');
+        if ($this->appModel->archive($id)) {
+            auditLog('archive','recruitment',"Archived applicant #{$id}",$id);
+            setFlash('success','Applicant archived successfully!');
+        }
+        redirect('index.php?module=recruitment&action=viewJob&id='.$jobId);
     }
 }
 

@@ -56,22 +56,41 @@ class EmployeeController {
     public function add(): void {
         requirePermission('employees', 'manage');
         $errors = [];
+        $fromApplicantId = (int)get('from_applicant');
+        $applicantData = [];
+        if ($fromApplicantId) {
+            $applicantData = (new Applicant())->findById($fromApplicantId);
+        }
+
+        // Auto-find employee role
+        $roleId = 0;
+        $roles = $this->userModel->roles();
+        foreach($roles as $r) {
+            if ($r['slug'] === 'employee') { $roleId = $r['id']; break; }
+        }
+
+        $deptId = (int)get('department_id', post('department_id', $applicantData['department_id'] ?? 0));
+        $hiredDate = get('date_hired', post('date_hired', $applicantData['date_hired'] ?? date('Y-m-d')));
+        
         $departments = $this->model->departments();
-        $positions   = $this->model->positions();
+        $positions   = $this->model->positions($deptId);
         $roles       = $this->userModel->roles();
         $managers    = $this->model->managers();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             validateCsrf();
+            $deptIdPost = (int)post('department_id');
+            $deptData   = $this->model->getDepartment($deptIdPost);
+            
             $data = [
                 'first_name'     => sanitizeInput(post('first_name')),
                 'last_name'      => sanitizeInput(post('last_name')),
                 'email'          => sanitizeInput(post('email')),
-                'password'       => post('password'),
+                'password'       => post('password') ?: generateRandomPassword(),
                 'role_id'        => (int)post('role_id'),
-                'department_id'  => (int)post('department_id'),
+                'department_id'  => $deptIdPost,
                 'position_id'    => (int)post('position_id'),
-                'manager_id'     => post('manager_id') ?: null,
+                'manager_id'     => $deptData['manager_id'] ?? null,
                 'employment_type'=> sanitizeInput(post('employment_type', 'full_time')),
                 'date_hired'     => sanitizeInput(post('date_hired')),
                 'basic_salary'   => (float)post('basic_salary'),
@@ -88,10 +107,13 @@ class EmployeeController {
                 'emergency_contact_name' => sanitizeInput(post('emergency_contact_name')),
                 'emergency_contact_phone'=> sanitizeInput(post('emergency_contact_phone')),
             ];
-            $reqFields = ['first_name','last_name','email','password','department_id','position_id','date_hired'];
+            $reqFields = ['first_name','last_name','email','department_id','position_id','date_hired'];
             $errors = validateRequired($reqFields, $data);
             if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) $errors['email'] = 'Invalid email.';
-            if (strlen($data['password']) < 8) $errors['password'] = 'Password must be at least 8 characters.';
+            // Only validate password length if it was manually entered
+            if (!empty(post('password')) && strlen(post('password')) < 8) {
+                $errors['password'] = 'Password must be at least 8 characters.';
+            }
 
             if (empty($errors)) {
                 try {
@@ -107,8 +129,51 @@ class EmployeeController {
                             ->execute([$empId,$lt['id'],$lt['days_allowed'],$lt['days_allowed']]);
                     }
                     db()->commit();
+
+                    // Send Welcome Email if requested
+                    if (post('send_welcome_email') === '1') {
+                        $companyName = (new Setting())->get('company_name', APP_NAME);
+                        $subject = "Welcome to $companyName - Your Account Credentials";
+                        $loginUrl = APP_URL . "/index.php?module=auth&action=login";
+                        $body = "
+                            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;'>
+                                <div style='background: #0d6efd; color: white; padding: 20px; text-align: center;'>
+                                    <h2 style='margin: 0;'>Welcome to the Team!</h2>
+                                </div>
+                                <div style='padding: 20px; line-height: 1.6; color: #333;'>
+                                    <p>Hello <strong>{$data['first_name']}</strong>,</p>
+                                    <p>Your employee account at <strong>$companyName</strong> has been successfully created. You can now log in to the HRMS portal using the credentials below:</p>
+                                    <div style='background: #f8f9fa; padding: 15px; border-left: 4px solid #0d6efd; margin: 20px 0;'>
+                                        <p style='margin: 5px 0;'><strong>Login Link:</strong> <a href='$loginUrl' style='color: #0d6efd;'>$loginUrl</a></p>
+                                        <p style='margin: 5px 0;'><strong>Username/Email:</strong> {$data['email']}</p>
+                                        <p style='margin: 5px 0;'><strong>Temporary Password:</strong> <span style='background: #fff; padding: 2px 5px; border: 1px dashed #ccc;'>{$data['password']}</span></p>
+                                    </div>
+                                    <p style='font-size: 0.9em; color: #666;'>For security reasons, please change your password immediately after your first login.</p>
+                                    <p>Welcome aboard! We are excited to have you with us.</p>
+                                    <br>
+                                    <p style='margin-bottom: 0;'>Best Regards,</p>
+                                    <p style='margin-top: 0;'><strong>HR Department</strong><br>$companyName</p>
+                                </div>
+                                <div style='background: #f1f1f1; color: #777; padding: 10px; text-align: center; font-size: 0.8em;'>
+                                    This is an automated message. Please do not reply directly to this email.
+                                </div>
+                            </div>
+                        ";
+                        sendMail($data['email'], $subject, $body);
+                    }
+
+                    // Update applicant status if coming from recruitment
+                    if ($fromApplicantId) {
+                        $appModel = new Applicant();
+                        $appModel->updateStatus($fromApplicantId, 'hired');
+                        $app = $appModel->findById($fromApplicantId);
+                        if ($app) {
+                            (new Job())->checkAndAutoClose($app['job_id']);
+                        }
+                    }
+
                     auditLog('create', 'employees', "Added employee {$data['first_name']} {$data['last_name']}", $empId);
-                    setFlash('success', 'Employee added successfully!');
+                    setFlash('success', 'Employee added successfully!' . (post('send_welcome_email') === '1' ? ' Credentials sent to email.' : ''));
                     redirect('index.php?module=employees&action=view&id=' . $empId);
                 } catch (Exception $e) {
                     db()->rollBack();
@@ -132,10 +197,13 @@ class EmployeeController {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             validateCsrf();
+            $deptIdPost = (int)post('department_id');
+            $deptData   = $this->model->getDepartment($deptIdPost);
+
             $empData = [
-                'department_id'  => (int)post('department_id'),
+                'department_id'  => $deptIdPost,
                 'position_id'    => (int)post('position_id'),
-                'manager_id'     => post('manager_id') ?: null,
+                'manager_id'     => $deptData['manager_id'] ?? null,
                 'employment_type'=> sanitizeInput(post('employment_type')),
                 'status'         => sanitizeInput(post('status')),
                 'date_hired'     => sanitizeInput(post('date_hired')),
@@ -197,8 +265,14 @@ class EmployeeController {
     public function positions(): void {
         requireLogin();
         $deptId = (int)get('department_id');
+        $positions = $this->model->positions($deptId);
+        $dept = $this->model->getDepartment($deptId);
+        
         header('Content-Type: application/json');
-        echo json_encode($this->model->positions($deptId));
+        echo json_encode([
+            'positions' => $positions,
+            'manager_id' => $dept['manager_id'] ?? null
+        ]);
         exit;
     }
 

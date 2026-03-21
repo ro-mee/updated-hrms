@@ -34,6 +34,7 @@ $routes = [
     'settings'    => 'SettingsController',
     'profile'     => 'ProfileController',
     'roles'       => 'RoleController',
+    'jobs'        => 'JobsController',
 ];
 
 // ── Resolve Module & Action ────────────────────────────────────

@@ -210,6 +210,87 @@ class AuthController {
         redirect('index.php?module=auth&action=login');
     }
 
+    public function forgotPassword(): void {
+        if (isLoggedIn()) redirect('index.php?module=dashboard&action=index');
+        
+        $errors = [];
+        $success = false;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            validateCsrf();
+            $email = sanitizeInput(post('email'));
+
+            if (empty($email)) {
+                $errors['email'] = 'Email is required.';
+            } else {
+                $userModel = new User();
+                $user = $userModel->findByEmail($email);
+
+                if ($user) {
+                    $token = bin2hex(random_bytes(32));
+                    $expiresAt = date('Y-m-d H:i:s', strtotime('+1 hour'));
+                    $userModel->setResetToken($email, $token, $expiresAt);
+
+                    $resetLink = APP_URL . "/index.php?module=auth&action=resetPassword&token=" . $token;
+                    require_once APP_ROOT . '/includes/mailer.php';
+                    
+                    if (sendPasswordResetEmail($user['email'], $user['first_name'], $resetLink)) {
+                        $success = true;
+                        auditLog('forgot_password_request', 'auth', "Password reset requested for: $email");
+                    } else {
+                        $errors['general'] = 'Failed to send reset email. Please try again later.';
+                    }
+                } else {
+                    // For security, don't reveal if email exists, but we can be helpful for now or follow typical "if exists" pattern
+                    $success = true; // Still show success to prevent email harvesting
+                }
+            }
+        }
+        include APP_ROOT . '/views/auth/forgot_password.php';
+    }
+
+    public function resetPassword(): void {
+        if (isLoggedIn()) redirect('index.php?module=dashboard&action=index');
+
+        $token = get('token');
+        if (empty($token)) {
+            setFlash('error', 'Invalid or missing reset token.');
+            redirect('index.php?module=auth&action=login');
+        }
+
+        $userModel = new User();
+        $user = $userModel->verifyResetToken($token);
+
+        if (!$user) {
+            setFlash('error', 'Your reset link is invalid or has expired.');
+            redirect('index.php?module=auth&action=forgotPassword');
+        }
+
+        $errors = [];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            validateCsrf();
+            $password = post('password');
+            $confirm  = post('confirm_password');
+
+            if (!$this->validatePasswordPolicy($password, $errors)) {
+                // errors populated
+            } elseif ($password !== $confirm) {
+                $errors['confirm_password'] = 'Passwords do not match.';
+            } else {
+                $userModel->updatePassword($user['id'], $password);
+                $userModel->clearResetToken($user['id']);
+                
+                // Invalidate all sessions
+                $userModel->updateSessionToken($user['id'], bin2hex(random_bytes(32)));
+
+                auditLog('password_reset_success', 'auth', "Password reset successfully for: {$user['email']}", $user['id']);
+                setFlash('success', 'Your password has been reset successfully. You can now log in.');
+                redirect('index.php?module=auth&action=login');
+            }
+        }
+        include APP_ROOT . '/views/auth/reset_password.php';
+    }
+
     public function changePassword(): void {
         requireLogin();
         $errors  = [];

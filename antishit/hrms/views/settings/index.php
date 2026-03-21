@@ -10,7 +10,7 @@ include APP_ROOT.'/views/layouts/header.php';?>
 <div class="card">
     <div class="card-header py-3">Company Information</div>
     <div class="card-body">
-        <div class="mb-3"><label class="form-label">Company Name</label><input type="text" name="company_name" class="form-control" value="<?=e($settings->get('company_name','HRMS Pro'))?>"></div>
+        <div class="mb-3"><label class="form-label">Company Name</label><input type="text" name="company_name" class="form-control" value="<?=e($settings->get('company_name','NexaHR'))?>"></div>
         <div class="mb-3"><label class="form-label">Company Address</label><input type="text" name="company_address" class="form-control" value="<?=e($settings->get('company_address',''))?>"></div>
         <div class="mb-3"><label class="form-label">Company Phone</label><input type="text" name="company_phone" class="form-control" value="<?=e($settings->get('company_phone',''))?>"></div>
         <div class="mb-3"><label class="form-label">Company Email</label><input type="email" name="company_email" class="form-control" value="<?=e($settings->get('company_email',''))?>"></div>

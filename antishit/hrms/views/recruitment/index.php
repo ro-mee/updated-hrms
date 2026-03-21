@@ -30,11 +30,19 @@ include APP_ROOT . '/views/layouts/header.php';
         <p class="text-success small mb-2"><i class="bi bi-cash me-1"></i><?=formatCurrency($job['salary_min'])?> – <?=formatCurrency($job['salary_max'])?></p>
         <?php endif;?>
         <div class="d-flex justify-content-between align-items-center">
-            <small class="text-muted"><i class="bi bi-people me-1"></i><?=$job['application_count']??0?> applicant<?=($job['application_count']??0)!=1?'s':''?></small>
+            <small class="text-muted"><i class="bi bi-people me-1"></i><?=$job['applicant_count']??0?> applicant<?=($job['applicant_count']??0)!=1?'s':''?></small>
             <?php if($job['deadline']):?><small class="text-muted"><i class="bi bi-calendar me-1"></i><?=formatDate($job['deadline'])?></small><?php endif;?>
         </div>
     </div>
-    <div class="card-footer bg-transparent"><a href="index.php?module=recruitment&action=viewJob&id=<?=$job['id']?>" class="btn btn-outline-primary btn-sm w-100">View Applicants</a></div>
+    <div class="card-footer bg-transparent d-flex gap-2">
+        <a href="index.php?module=recruitment&action=viewJob&id=<?=$job['id']?>" class="btn btn-outline-primary btn-sm flex-grow-1">View Applicants</a>
+        <a href="index.php?module=recruitment&action=editJob&id=<?=$job['id']?>" class="btn btn-outline-secondary btn-sm" title="Edit Job"><i class="bi bi-pencil"></i></a>
+        <form action="index.php?module=recruitment&action=deleteJob" method="POST" onsubmit="return confirm('Delete this job?');" class="d-inline">
+            <?= csrfField() ?>
+            <input type="hidden" name="id" value="<?= $job['id'] ?>">
+            <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete Job"><i class="bi bi-trash"></i></button>
+        </form>
+    </div>
 </div>
 </div>
 <?php endforeach;?>

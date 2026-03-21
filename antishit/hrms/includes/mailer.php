@@ -86,3 +86,24 @@ function mailPayslipReady(array $employee, string $period): void {
     $body    = "<html><body style='font-family:sans-serif;'><p>Dear {$employee['full_name']},</p><p>Your payslip for <strong>$period</strong> is available in the HRMS portal.</p><p><a href='" . APP_URL . "'>Login to view your payslip</a></p><p>Regards,<br>" . APP_NAME . " Team</p></body></html>";
     sendMail($employee['email'], $subject, $body);
 }
+
+function sendPasswordResetEmail(string $to, string $name, string $link): bool {
+    $subject = "Password Reset Request";
+    $body = "
+    <div style='font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;'>
+        <h2 style='color: #4f46e5; text-align: center;'>Password Reset</h2>
+        <p>Hi {$name},</p>
+        <p>We received a request to reset your password. Click the button below to choose a new one:</p>
+        <div style='text-align: center; margin: 30px 0;'>
+            <a href='{$link}' style='background-color: #4f46e5; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;'>Reset Password</a>
+        </div>
+        <p>If the button doesn't work, copy and paste this link into your browser:</p>
+        <p style='font-size: 12px; color: #666; word-break: break-all;'>{$link}</p>
+        <p>This link will expire in 1 hour.</p>
+        <p>If you didn't request this, you can safely ignore this email.</p>
+        <hr style='border: none; border-top: 1px solid #eee; margin-top: 30px;'/>
+        <p style='font-size: 12px; color: #888; text-align: center;'>&copy; " . date('Y') . " " . APP_NAME . " Team</p>
+    </div>
+    ";
+    return sendMail($to, $subject, $body);
+}

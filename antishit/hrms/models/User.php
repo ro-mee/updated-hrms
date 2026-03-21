@@ -232,4 +232,24 @@ class User {
         $stmt->execute([$userId]);
         return $stmt->fetch() ?: null;
     }
+
+    // ── Password Reset ────────────────────────────────────────────────
+    public function setResetToken(string $email, string $token, string $expiresAt): bool {
+        $stmt = $this->db->prepare("UPDATE users SET password_reset_token = ?, password_reset_expiry = ? WHERE email = ?");
+        return $stmt->execute([$token, $expiresAt, $email]);
+    }
+
+    public function verifyResetToken(string $token): ?array {
+        $stmt = $this->db->prepare("
+            SELECT * FROM users 
+            WHERE password_reset_token = ? AND password_reset_expiry > NOW() AND is_active = 1
+        ");
+        $stmt->execute([$token]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public function clearResetToken(int $userId): bool {
+        $stmt = $this->db->prepare("UPDATE users SET password_reset_token = NULL, password_reset_expiry = NULL WHERE id = ?");
+        return $stmt->execute([$userId]);
+    }
 }
