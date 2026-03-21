@@ -168,6 +168,7 @@ class Applicant {
         if (!empty($extra['interview_date']))  { $fields .= ',interview_date=?'; $params[] = $extra['interview_date']; }
         if (!empty($extra['interviewed_by']))  { $fields .= ',interviewed_by=?'; $params[] = $extra['interviewed_by']; }
         if (!empty($extra['interview_notes'])) { $fields .= ',interview_notes=?'; $params[] = $extra['interview_notes']; }
+        if (!empty($extra['interview_location'])){ $fields .= ',interview_location=?'; $params[] = $extra['interview_location']; }
         $params[] = $id;
         return $this->db->prepare("UPDATE applicants SET $fields WHERE id=?")->execute($params);
     }

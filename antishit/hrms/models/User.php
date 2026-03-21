@@ -159,15 +159,21 @@ class User {
         }
     }
 
-    public function getLoginHistory(int $userId, int $limit = 15): array {
+    public function getLoginHistory(int $userId, int $limit = 10, int $offset = 0): array {
         $stmt = $this->db->prepare("
             SELECT * FROM login_logs
             WHERE user_id = ?
             ORDER BY login_time DESC
-            LIMIT ?
+            LIMIT ? OFFSET ?
         ");
-        $stmt->execute([$userId, $limit]);
+        $stmt->execute([$userId, $limit, $offset]);
         return $stmt->fetchAll();
+    }
+
+    public function getLoginHistoryCount(int $userId): int {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM login_logs WHERE user_id = ?");
+        $stmt->execute([$userId]);
+        return (int)$stmt->fetchColumn();
     }
 
     // ── 2-Step Verification (2FA) ─────────────────────────────────────

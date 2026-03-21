@@ -117,7 +117,7 @@ if (!empty($loginHistory)) {
         <div class="col-12">
             <div class="card shadow-sm border-0 mt-2">
                 <div class="card-header bg-white pt-3 pb-2 border-0 d-flex align-items-center justify-content-between">
-                    <h6 class="fw-bold text-muted mb-0"><i class="bi bi-clock-history text-primary me-2"></i>Login History <span class="badge bg-primary ms-1"><?= count($loginHistory ?? []) ?></span></h6>
+                    <h6 class="fw-bold text-muted mb-0"><i class="bi bi-clock-history text-primary me-2"></i>Login History <span class="badge bg-primary ms-1"><?= $pg['total'] ?></span></h6>
                     <?php if (!empty($mapPoints)): ?>
                     <button class="btn btn-sm btn-outline-secondary" id="toggleMapBtn" onclick="toggleMap()">
                         <i class="bi bi-map me-1"></i>Show Map
@@ -195,6 +195,12 @@ if (!empty($loginHistory)) {
                         </table>
                     </div>
                 </div>
+                <?php if ($pg['total_pages'] > 1): ?>
+                <div class="card-footer d-flex justify-content-between align-items-center bg-white border-top py-2">
+                    <small class="text-muted">Showing <?= count($loginHistory) ?> of <?= $pg['total'] ?> results</small>
+                    <?= paginationLinks($pg, 'index.php?module=profile&action=index') ?>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

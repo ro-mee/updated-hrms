@@ -29,7 +29,7 @@ define('ROLE_EMPLOYEE',          'employee');
 define('PERM_ALL', '*');
 
 // ── Pagination ──────────────────────────────────────────────────
-define('RECORDS_PER_PAGE', 15);
+define('RECORDS_PER_PAGE', 10);
 
 // ── Upload Limits ────────────────────────────────────────────────
 define('MAX_FILE_SIZE',  5 * 1024 * 1024); // 5 MB

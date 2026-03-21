@@ -409,13 +409,42 @@ class RecruitmentController {
         validateCsrf();
         $id     = (int)post('id');
         $status = sanitizeInput(post('status'));
+        
+        $interviewDate = sanitizeInput(post('interview_date'));
+        $interviewTime = sanitizeInput(post('interview_time'));
+        $interviewDateTime = null;
+        if (!empty($interviewDate) && !empty($interviewTime)) {
+            $formatted = strtotime($interviewDate . ' ' . $interviewTime);
+            if ($formatted) {
+                $interviewDateTime = date('Y-m-d H:i:s', $formatted);
+            }
+        } elseif (!empty($interviewDate)) {
+            $formatted = strtotime($interviewDate);
+            if ($formatted) {
+                $interviewDateTime = date('Y-m-d 00:00:00', $formatted);
+            }
+        }
+
         $extra  = [
-            'interview_date'  => sanitizeInput(post('interview_date')),
-            'interviewed_by'  => currentUserId(),
-            'interview_notes' => sanitizeInput(post('interview_notes')),
+            'interview_date'     => $interviewDateTime,
+            'interviewed_by'     => currentUserId(),
+            'interview_notes'    => sanitizeInput(post('interview_notes')),
+            'interview_location' => sanitizeInput(post('interview_location')),
         ];
         $this->appModel->updateStatus($id, $status, $extra);
         auditLog('update','recruitment',"Updated applicant #{$id} status to $status",$id);
+
+        if ($status === 'interview') {
+            $app = $this->appModel->findById($id);
+            if ($app && !empty($interviewDate)) {
+                require_once APP_ROOT . '/includes/mailer.php';
+                mailInterviewSchedule($app, [
+                    'date'     => $interviewDate,
+                    'time'     => $interviewTime,
+                    'location' => $extra['interview_location']
+                ]);
+            }
+        }
 
         if ($status === 'hired') {
             $app = $this->appModel->findById($id);
@@ -722,6 +751,7 @@ class AuditController {
             'module'    => sanitizeInput(get('log_module')),
             'date_from' => sanitizeInput(get('date_from', date('Y-m-01'))),
             'date_to'   => sanitizeInput(get('date_to', date('Y-m-d'))),
+            'search'    => sanitizeInput(get('search')),
         ];
         $total = $model->count($filters);
         $pg    = paginate($total, (int)get('page',1));

@@ -224,6 +224,11 @@ class AuditLog {
         if (!empty($filters['module']))  { $where[] = "al.module=?";   $params[] = $filters['module']; }
         if (!empty($filters['date_from'])){ $where[] = "DATE(al.created_at)>=?"; $params[] = $filters['date_from']; }
         if (!empty($filters['date_to'])) { $where[] = "DATE(al.created_at)<=?"; $params[] = $filters['date_to']; }
+        if (!empty($filters['search'])) {
+            $where[] = "(CONCAT(u.first_name,' ',u.last_name) LIKE ? OR u.email LIKE ?)";
+            $params[] = "%" . $filters['search'] . "%";
+            $params[] = "%" . $filters['search'] . "%";
+        }
         $whereStr = implode(' AND ', $where);
         $stmt = $this->db->prepare("
             SELECT al.*, CONCAT(u.first_name,' ',u.last_name) AS full_name, r.name AS role_name
@@ -237,10 +242,19 @@ class AuditLog {
 
     public function count(array $filters = []): int {
         $where = ['1=1']; $params = [];
-        if (!empty($filters['module'])) { $where[] = "module=?"; $params[] = $filters['module']; }
-        if (!empty($filters['date_from'])){ $where[] = "DATE(created_at)>=?"; $params[] = $filters['date_from']; }
-        if (!empty($filters['date_to'])) { $where[] = "DATE(created_at)<=?"; $params[] = $filters['date_to']; }
-        $stmt = $this->db->prepare("SELECT COUNT(*) FROM audit_logs WHERE " . implode(' AND ', $where));
+        if (!empty($filters['module']))  { $where[] = "al.module=?";   $params[] = $filters['module']; }
+        if (!empty($filters['date_from'])){ $where[] = "DATE(al.created_at)>=?"; $params[] = $filters['date_from']; }
+        if (!empty($filters['date_to'])) { $where[] = "DATE(al.created_at)<=?"; $params[] = $filters['date_to']; }
+        
+        $join = "";
+        if (!empty($filters['search'])) {
+            $join = "LEFT JOIN users u ON al.user_id=u.id";
+            $where[] = "(CONCAT(u.first_name,' ',u.last_name) LIKE ? OR u.email LIKE ?)";
+            $params[] = "%" . $filters['search'] . "%";
+            $params[] = "%" . $filters['search'] . "%";
+        }
+
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM audit_logs al $join WHERE " . implode(' AND ', $where));
         $stmt->execute($params);
         return (int)$stmt->fetchColumn();
     }

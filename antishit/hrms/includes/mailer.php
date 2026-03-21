@@ -107,3 +107,28 @@ function sendPasswordResetEmail(string $to, string $name, string $link): bool {
     ";
     return sendMail($to, $subject, $body);
 }
+
+function mailInterviewSchedule(array $applicant, array $details): bool {
+    $subject = "Interview Invitation - " . APP_NAME;
+    $body = "
+    <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;'>
+        <div style='background-color: #4f46e5; padding: 20px; text-align: center; border-radius: 10px 10px 0 0;'>
+            <h2 style='color: white; margin: 0;'>Interview Invitation</h2>
+        </div>
+        <div style='padding: 20px; color: #333;'>
+            <p>Dear <strong>{$applicant['first_name']} {$applicant['last_name']}</strong>,</p>
+            <p>We are pleased to invite you for an interview for the <strong>{$applicant['job_title']}</strong> position at " . APP_NAME . ".</p>
+            <div style='background-color: #f9fafb; padding: 15px; border-radius: 5px; margin: 20px 0;'>
+                <p style='margin: 5px 0;'><strong>Date:</strong> " . date('F j, Y', strtotime($details['date'])) . "</p>
+                <p style='margin: 5px 0;'><strong>Time:</strong> " . date('g:i A', strtotime($details['time'])) . "</p>
+                <p style='margin: 5px 0;'><strong>Location / Link:</strong> <a href='{$details['location']}'>{$details['location']}</a></p>
+            </div>
+            <p>Please confirm your availability by replying to this email.</p>
+            <p>We look forward to meeting you!</p>
+            <hr style='border: none; border-top: 1px solid #eee; margin: 30px 0;'>
+            <p style='font-size: 14px; color: #666;'>Best regards,<br>" . APP_NAME . " Recruitment Team</p>
+        </div>
+    </div>
+    ";
+    return sendMail($applicant['email'], $subject, $body);
+}

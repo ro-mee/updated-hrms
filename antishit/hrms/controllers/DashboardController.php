@@ -75,8 +75,10 @@ class ProfileController {
         $empModel     = new Employee();
         $user         = $userModel->findById(currentUserId());
         $employee     = currentUser()['employee_id'] ? $empModel->findById(currentUser()['employee_id']) : null;
-        $loginHistory = $userModel->getLoginHistory(currentUserId(), 20);
-        $lastLogin    = !empty($loginHistory) ? $loginHistory[0] : null;
+        $total        = $userModel->getLoginHistoryCount(currentUserId());
+        $pg           = paginate($total, (int)get('page', 1), 10);
+        $loginHistory = $userModel->getLoginHistory(currentUserId(), $pg['per_page'], $pg['offset']);
+        $lastLogin    = $userModel->getLastLogin(currentUserId());
 
         // Load active sessions
         $sessionModel = new UserSession();

@@ -1673,3 +1673,7 @@ Stack trace:
 [21-Mar-2026 08:19:07 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
 [21-Mar-2026 08:20:38 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 34
 [21-Mar-2026 08:20:59 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 34
+[21-Mar-2026 08:38:13 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 34
+[21-Mar-2026 08:38:32 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 34
+[21-Mar-2026 08:45:06 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 34
+[21-Mar-2026 08:50:57 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 34
