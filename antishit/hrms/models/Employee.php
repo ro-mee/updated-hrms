@@ -6,7 +6,7 @@ class Employee {
     private PDO $db;
     public function __construct() { $this->db = db(); }
 
-    public function all(array $filters = [], int $limit = RECORDS_PER_PAGE, int $offset = 0): array {
+    public function all(array $filters = [], int $limit = RECORDS_PER_PAGE, int $offset = 0, string $orderBy = 'last_name, first_name'): array {
         $where = ['1=1']; $params = [];
         if (!empty($filters['search'])) {
             $where[] = "(first_name LIKE ? OR last_name LIKE ? OR employee_number LIKE ? OR email LIKE ?)";
@@ -17,7 +17,7 @@ class Employee {
         if (!empty($filters['status']))         { $where[] = "status = ?";         $params[] = $filters['status']; }
         if (!empty($filters['employment_type']))  { $where[] = "employment_type = ?"; $params[] = $filters['employment_type']; }
         $whereStr = implode(' AND ', $where);
-        $stmt = $this->db->prepare("SELECT * FROM v_employees WHERE $whereStr ORDER BY last_name, first_name LIMIT ? OFFSET ?");
+        $stmt = $this->db->prepare("SELECT * FROM v_employees WHERE $whereStr ORDER BY $orderBy LIMIT ? OFFSET ?");
         $stmt->execute([...$params, $limit, $offset]);
         $rows = $stmt->fetchAll();
         foreach ($rows as &$r) $r = $this->decryptRecord($r);

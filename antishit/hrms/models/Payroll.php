@@ -210,10 +210,16 @@ class Payroll {
 
     public function summary(): array {
         return $this->db->query("
-            SELECT pp.period_name, pp.pay_date, pp.status,
-                   COUNT(p.id) AS employees, SUM(p.gross_pay) AS total_gross, SUM(p.net_pay) AS total_net
-            FROM payroll_periods pp LEFT JOIN payroll p ON p.period_id=pp.id
-            GROUP BY pp.id ORDER BY pp.pay_date DESC LIMIT 12
+            SELECT pp.id, pp.period_name, pp.start_date, pp.end_date, pp.pay_date, pp.status,
+                   COUNT(p.id) AS employees, 
+                   SUM(p.gross_pay) AS total_gross, 
+                   SUM(p.total_deductions) AS total_deductions,
+                   SUM(p.net_pay) AS total_net
+            FROM payroll_periods pp 
+            LEFT JOIN payroll p ON p.period_id = pp.id
+            GROUP BY pp.id 
+            ORDER BY pp.pay_date DESC 
+            LIMIT 12
         ")->fetchAll();
     }
 }

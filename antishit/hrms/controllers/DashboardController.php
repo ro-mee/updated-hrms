@@ -23,7 +23,7 @@ class DashboardController {
         if (in_array($role, [ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR, ROLE_HR_SPECIALIST])) {
             $roleData['by_department'] = $empModel->countByDepartment();
             $roleData['by_status']     = $empModel->countByStatus();
-            $roleData['recent_employees'] = $empModel->all([], 5, 0);
+            $roleData['recent_employees'] = $empModel->all([], 5, 0, 'date_hired DESC');
             $roleData['recent_leaves']    = $leaveModel->all(['status'=>'pending'], 5, 0);
         }
         if (in_array($role, [ROLE_FINANCE_MANAGER, ROLE_HR_DIRECTOR, ROLE_SUPER_ADMIN])) {

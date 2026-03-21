@@ -1677,3 +1677,69 @@ Stack trace:
 [21-Mar-2026 08:38:32 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 34
 [21-Mar-2026 08:45:06 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 34
 [21-Mar-2026 08:50:57 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 34
+[21-Mar-2026 08:57:47 Asia/Manila] PHP Warning:  Undefined array key "start_date" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php on line 38
+[21-Mar-2026 08:57:47 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php on line 38 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php(38): formatDate(NULL)
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(892): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): ReportController->payroll()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[21-Mar-2026 08:58:01 Asia/Manila] PHP Warning:  Undefined array key "start_date" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php on line 38
+[21-Mar-2026 08:58:01 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php on line 38 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php(38): formatDate(NULL)
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(892): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): ReportController->payroll()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[21-Mar-2026 08:59:16 Asia/Manila] PHP Warning:  Undefined array key "start_date" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php on line 38
+[21-Mar-2026 08:59:16 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php on line 38 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php(38): formatDate(NULL)
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(892): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): ReportController->payroll()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[21-Mar-2026 08:59:17 Asia/Manila] PHP Warning:  Undefined array key "start_date" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php on line 38
+[21-Mar-2026 08:59:17 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php on line 38 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php(38): formatDate(NULL)
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(892): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): ReportController->payroll()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[21-Mar-2026 08:59:17 Asia/Manila] PHP Warning:  Undefined array key "start_date" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php on line 38
+[21-Mar-2026 08:59:17 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php on line 38 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\reports\payroll.php(38): formatDate(NULL)
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(892): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): ReportController->payroll()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "address" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 38
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "city" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 39
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "sss_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 43
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "philhealth_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 44
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "pagibig_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 45
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "tin_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 46
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_name" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 49
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_phone" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 50
+[21-Mar-2026 09:16:31 Asia/Manila] PHP Warning:  Undefined array key "notes" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 51
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "address" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 38
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "city" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 39
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "sss_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 43
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "philhealth_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 44
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "pagibig_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 45
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "tin_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 46
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_name" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 49
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_phone" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 50
+[21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "notes" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 51

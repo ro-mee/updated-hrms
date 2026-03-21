@@ -68,19 +68,27 @@ include APP_ROOT . '/views/layouts/header.php';
 
     <!-- ── Charts Row ─────────────────────────────────────── -->
     <div class="row g-3 mb-4">
-        <div class="col-lg-7">
+        <div class="col-lg-4">
             <div class="card h-100">
                 <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <span><i class="bi bi-bar-chart-line text-primary me-2"></i>Employees by Department</span>
+                    <span><i class="bi bi-bar-chart-line text-primary me-2"></i>Employees by Dept</span>
                 </div>
-                <div class="card-body"><canvas id="deptChart" height="200"></canvas></div>
+                <div class="card-body py-2" style="height: 240px;"><canvas id="deptChart"></canvas></div>
             </div>
         </div>
-        <div class="col-lg-5">
+        <div class="col-lg-4">
             <div class="card h-100">
                 <div class="card-header py-3"><i class="bi bi-pie-chart text-primary me-2"></i>Attendance Today</div>
-                <div class="card-body d-flex align-items-center justify-content-center"><canvas id="attChart" height="200"></canvas></div>
+                <div class="card-body py-2 d-flex align-items-center justify-content-center" style="height: 240px;"><canvas id="attChart"></canvas></div>
             </div>
+        </div>
+        <div class="col-lg-4">
+            <?php if (in_array($role, [ROLE_RECRUITMENT_OFFICER, ROLE_HR_DIRECTOR, ROLE_SUPER_ADMIN])): ?>
+            <div class="card h-100">
+                <div class="card-header py-3"><i class="bi bi-person-plus text-primary me-2"></i>Recruitment Pipeline</div>
+                <div class="card-body py-2 d-flex align-items-center justify-content-center" style="height: 240px;"><canvas id="recChart"></canvas></div>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -323,52 +331,71 @@ include APP_ROOT . '/views/layouts/header.php';
 $deptLabels = array_column($roleData['by_department']??[], 'name');
 $deptData   = array_column($roleData['by_department']??[], 'cnt');
 $att = $stats['today_attendance'] ?? [];
+$recStatusData = $roleData['applicants_by_status'] ?? [];
 ?>
 <script>
-// ── Department Chart ─────────────────────────────────────
-const deptCtx = document.getElementById('deptChart');
-if (deptCtx) {
-    new Chart(deptCtx, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode($deptLabels) ?>,
-            datasets: [{ label: 'Employees', data: <?= json_encode($deptData) ?>,
-                backgroundColor: '#4f46e5', borderRadius: 6, barThickness: 30 }]
-        },
-        options: { responsive: true, plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true, ticks: { stepSize:1 } } } }
-    });
-}
-// ── Attendance Doughnut ──────────────────────────────────
-const attCtx = document.getElementById('attChart');
-if (attCtx) {
-    new Chart(attCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Present','Absent','Late','On Leave'],
-            datasets: [{ data: [
-                <?= (int)($att['present']??0) ?>,<?= (int)($att['absent']??0) ?>,
-                <?= (int)($att['late']??0) ?>,<?= (int)($att['on_leave']??0) ?>
-            ], backgroundColor: ['#059669','#e11d48','#d97706','#0284c7'], borderWidth: 0, hoverOffset:6 }]
-        },
-        options: { responsive:true, cutout:'65%', plugins:{ legend:{ position:'bottom', labels:{ font:{size:11} } } } }
-    });
-}
-// ── Dept Attendance Doughnut ──────────────────────────────
-const deptAttCtx = document.getElementById('deptAttChart');
-if (deptAttCtx) {
-    <?php $datt = $roleData['dept_attendance'] ?? []; ?>
-    new Chart(deptAttCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Present','Absent','Late','On Leave'],
-            datasets: [{ data: [
-                <?= (int)($datt['present']??0) ?>,<?= (int)($datt['absent']??0) ?>,
-                <?= (int)($datt['late']??0) ?>,<?= (int)($datt['on_leave']??0) ?>
-            ], backgroundColor: ['#059669','#e11d48','#d97706','#0284c7'], borderWidth: 0, hoverOffset:6 }]
-        },
-        options: { responsive:true, cutout:'65%', plugins:{ legend:{ position:'bottom', labels:{ font:{size:11} } } } }
-    });
-}
+window.addEventListener('load', function() {
+    // ── Department Chart ─────────────────────────────────────
+    const deptCtx = document.getElementById('deptChart');
+    if (deptCtx) {
+        new Chart(deptCtx, {
+            type: 'bar',
+            data: {
+                labels: <?= json_encode($deptLabels) ?>,
+                datasets: [{ label: 'Employees', data: <?= json_encode($deptData) ?>,
+                    backgroundColor: '#4f46e5', borderRadius: 6, barThickness: 30 }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, ticks: { stepSize:1 } } } }
+        });
+    }
+    // ── Attendance Doughnut ──────────────────────────────────
+    const attCtx = document.getElementById('attChart');
+    if (attCtx) {
+        new Chart(attCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Present','Absent','Late','On Leave'],
+                datasets: [{ data: [
+                    <?= (int)($att['present']??0) ?>,<?= (int)($att['absent']??0) ?>,
+                    <?= (int)($att['late']??0) ?>,<?= (int)($att['on_leave']??0) ?>
+                ], backgroundColor: ['#059669','#e11d48','#d97706','#0284c7'], borderWidth: 0, hoverOffset:6 }]
+            },
+            options: { responsive:true, cutout:'65%', plugins:{ legend:{ position:'bottom', labels:{ font:{size:11} } } } }
+        });
+    }
+    // ── Recruitment Pipeline Chart ───────────────────────────
+    const recCtx = document.getElementById('recChart');
+    if (recCtx) {
+        new Chart(recCtx, {
+            type: 'doughnut',
+            data: {
+                labels: <?= json_encode(array_map('ucwords', array_keys($recStatusData))) ?>,
+                datasets: [{ 
+                    data: <?= json_encode(array_values($recStatusData)) ?>,
+                    backgroundColor: ['#6366f1','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'],
+                    borderWidth: 0, hoverOffset:6 
+                }]
+            },
+            options: { responsive:true, cutout:'65%', plugins:{ legend:{ position:'bottom', labels:{ font:{size:11} } } } }
+        });
+    }
+    // ── Dept Attendance Doughnut ──────────────────────────────
+    const deptAttCtx = document.getElementById('deptAttChart');
+    if (deptAttCtx) {
+        <?php $datt = $roleData['dept_attendance'] ?? []; ?>
+        new Chart(deptAttCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Present','Absent','Late','On Leave'],
+                datasets: [{ data: [
+                    <?= (int)($datt['present']??0) ?>,<?= (int)($datt['absent']??0) ?>,
+                    <?= (int)($datt['late']??0) ?>,<?= (int)($datt['on_leave']??0) ?>
+                ], backgroundColor: ['#059669','#e11d48','#d97706','#0284c7'], borderWidth: 0, hoverOffset:6 }]
+            },
+            options: { responsive:true, cutout:'65%', plugins:{ legend:{ position:'bottom', labels:{ font:{size:11} } } } }
+        });
+    }
+});
 </script>
 <?php include APP_ROOT . '/views/layouts/footer.php'; ?>
