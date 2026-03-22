@@ -553,10 +553,10 @@ class PerformanceController {
             ];
             $errors = validateRequired(['employee_id','review_period'], $data);
             if (empty($errors)) {
+                $data['status'] = 'submitted';
                 $id = $this->model->create($data);
                 $scores = $_POST['kpi_scores'] ?? [];
                 if (!empty($scores)) $this->model->saveKpiScores($id, $scores);
-                $this->model->update($id, ['status'=>'submitted']);
                 auditLog('create','performance',"Created performance review #{$id}",$id);
                 setFlash('success','Performance review saved!');
                 redirect('index.php?module=performance');
@@ -569,7 +569,43 @@ class PerformanceController {
         requireLogin();
         $review = $this->model->findById((int)get('id'));
         if (!$review) { setFlash('error','Review not found.'); redirect('index.php?module=performance'); }
+        $scores = $this->model->getScores($review['id']);
         include APP_ROOT . '/views/performance/view.php';
+    }
+
+    public function kpis(): void {
+        requirePermission('performance', 'manage');
+        $errors = [];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            validateCsrf();
+            $data = [
+                'name'        => sanitizeInput(post('name')),
+                'description' => sanitizeInput(post('description')),
+                'weight'      => (float)post('weight', 1.0),
+                'department_id'=> post('department_id') ?: null,
+            ];
+            $errors = validateRequired(['name'], $data);
+            if (empty($errors)) {
+                $this->model->createKpi($data);
+                auditLog('create_kpi','performance',"Created KPI: {$data['name']}");
+                setFlash('success','KPI created successfully!');
+                redirect('index.php?module=performance&action=kpis');
+            }
+        }
+        $kpis = $this->model->kpis();
+        $departments = (new Employee())->departments();
+        include APP_ROOT . '/views/performance/kpis.php';
+    }
+
+    public function deleteKpi(): void {
+        requirePermission('performance', 'manage');
+        validateCsrf();
+        $id = (int)post('id');
+        if ($this->model->deleteKpi($id)) {
+            auditLog('delete_kpi','performance',"Deleted KPI #{$id}",$id);
+            setFlash('success','KPI deleted.');
+        }
+        redirect('index.php?module=performance&action=kpis');
     }
 }
 
@@ -581,6 +617,19 @@ class TrainingController {
     public function index(): void {
         requireLogin();
         $filters = ['status'=>sanitizeInput(get('status'))];
+        
+        if (!hasRole('super_admin') && !hasRole('hr_director') && !hasRole('hr_specialist')) {
+            $empId = currentUser()['employee_id'];
+            if ($empId) {
+                $stmt = db()->prepare("SELECT department_id FROM employees WHERE id=?");
+                $stmt->execute([$empId]);
+                $deptId = $stmt->fetchColumn();
+                $filters['department_id'] = $deptId ?: -1;
+            } else {
+                $filters['department_id'] = -1;
+            }
+        }
+
         $trainings = $this->model->all($filters);
         $myEnrollments = currentUser()['employee_id'] ? $this->model->employeeTrainings(currentUser()['employee_id']) : [];
         include APP_ROOT . '/views/training/index.php';
@@ -589,6 +638,8 @@ class TrainingController {
     public function create(): void {
         requirePermission('training', 'manage');
         $errors = [];
+        $departments = db()->query("SELECT id, name FROM departments WHERE is_active=1 ORDER BY name ASC")->fetchAll();
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             validateCsrf();
             $data = [
@@ -596,17 +647,25 @@ class TrainingController {
                 'description'=>sanitizeInput(post('description')),
                 'trainer'  => sanitizeInput(post('trainer')),
                 'start_date'=> sanitizeInput(post('start_date')),
-                'end_date'  => sanitizeInput(post('end_date')),
+                'start_time'=> sanitizeInput(post('start_time')),
+                'end_time'  => sanitizeInput(post('end_time')),
+                'end_date'  => sanitizeInput(post('end_date')) ?: null,
                 'location'  => sanitizeInput(post('location')),
                 'max_participants'=>post('max_participants')?:null,
+                'department_id'=>post('department_id')?:null,
+                'is_required'  => post('is_required') ? 1 : 0,
                 'cost'      => (float)post('cost',0),
                 'created_by'=> currentUserId(),
             ];
-            $errors = validateRequired(['title','start_date','end_date'], $data);
+            $errors = validateRequired(['title','start_date','start_time','end_time'], $data);
             if (empty($errors)) {
                 $id = $this->model->create($data);
+                // Auto-enroll all eligible employees if training is required
+                if ($data['is_required']) {
+                    $this->model->autoEnrollDepartment($id, $data['department_id'] ? (int)$data['department_id'] : null);
+                }
                 auditLog('create','training',"Created training: {$data['title']}",$id);
-                setFlash('success','Training created!');
+                setFlash('success', $data['is_required'] ? 'Required training created and employees auto-enrolled!' : 'Training created!');
                 redirect('index.php?module=training');
             }
         }
@@ -622,6 +681,35 @@ class TrainingController {
         $this->model->enroll($trainingId, $empId);
         auditLog('enroll','training',"Enrolled in training #{$trainingId}",$empId);
         jsonResponse(true,'Enrolled successfully!');
+    }
+
+    public function feedback(): void {
+        requireLogin();
+        validateCsrf();
+        $trainingId = (int)post('training_id');
+        $empId      = currentUser()['employee_id'];
+        $rating     = (int)post('rating');
+        $feedback   = sanitizeInput(post('feedback'));
+        if (!$empId) { jsonResponse(false,'No employee profile.'); }
+        if ($rating < 1 || $rating > 5) { jsonResponse(false,'Rating must be between 1 and 5.'); }
+        $stmt = db()->prepare("UPDATE training_enrollments SET rating=?, feedback=? WHERE training_id=? AND employee_id=?");
+        $stmt->execute([$rating, $feedback, $trainingId, $empId]);
+        auditLog('feedback','training',"Submitted feedback for training #{$trainingId}",$empId);
+        jsonResponse(true,'Feedback submitted! Thank you.');
+    }
+
+    public function viewFeedback(): void {
+        requireLogin();
+        if (!hasRole('super_admin') && !hasRole('hr_director') && !hasRole('hr_specialist') &&
+            !hasRole('department_manager') && !hasRole('finance_manager') && !hasRole('recruitment_officer')) {
+            http_response_code(403); include APP_ROOT.'/views/errors/403.php'; exit;
+        }
+        $trainingId = (int)get('id');
+        $training   = $this->model->findById($trainingId);
+        if (!$training) { setFlash('error','Training not found.'); redirect('index.php?module=training'); }
+        $feedbacks  = $this->model->getFeedback($trainingId);
+        $avgRating  = count($feedbacks) ? round(array_sum(array_column($feedbacks,'rating')) / count($feedbacks), 1) : null;
+        include APP_ROOT . '/views/training/feedback.php';
     }
 }
 

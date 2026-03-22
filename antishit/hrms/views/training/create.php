@@ -24,6 +24,16 @@ include APP_ROOT . '/views/layouts/header.php';
                             <label class="form-label">Description</label>
                             <textarea name="description" class="form-control" rows="3"></textarea>
                         </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Target Department</label>
+                            <select name="department_id" class="form-select">
+                                <option value="">All Departments</option>
+                                <?php foreach($departments ?? [] as $d): ?>
+                                    <option value="<?=$d['id']?>"><?=e($d['name'])?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <div class="form-text">Leave as "All Departments" to make this training visible to everyone.</div>
+                        </div>
                         <div class="col-md-6">
                             <label class="form-label">Trainer / Instructor</label>
                             <input type="text" name="trainer" class="form-control">
@@ -32,21 +42,40 @@ include APP_ROOT . '/views/layouts/header.php';
                             <label class="form-label">Location / Platform</label>
                             <input type="text" name="location" class="form-control" placeholder="e.g. Conference Room A or Zoom Link">
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Start Date <span class="text-danger">*</span></label>
+                        <div class="col-md-4">
+                            <label class="form-label">Date <span class="text-danger">*</span></label>
                             <input type="date" name="start_date" class="form-control <?= isset($errors['start_date']) ? 'is-invalid' : '' ?>" required>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">End Date <span class="text-danger">*</span></label>
-                            <input type="date" name="end_date" class="form-control <?= isset($errors['end_date']) ? 'is-invalid' : '' ?>" required>
+                        <div class="col-md-4">
+                            <label class="form-label">Start Time <span class="text-danger">*</span></label>
+                            <input type="time" name="start_time" class="form-control <?= isset($errors['start_time']) ? 'is-invalid' : '' ?>" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">End Time <span class="text-danger">*</span></label>
+                            <input type="time" name="end_time" class="form-control <?= isset($errors['end_time']) ? 'is-invalid' : '' ?>" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Max Participants</label>
                             <input type="number" name="max_participants" class="form-control" min="1" placeholder="Leave blank for unlimited">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Cost per Participant ($)</label>
-                            <input type="number" name="cost" class="form-control" step="0.01" value="0.00">
+                            <label class="form-label">Enrollment Type <span class="text-danger">*</span></label>
+                            <div class="d-flex gap-3 mt-1">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="is_required" id="typeOptional" value="0" checked>
+                                    <label class="form-check-label" for="typeOptional">
+                                        <i class="bi bi-person-plus text-primary me-1"></i>Optional
+                                        <small class="text-muted d-block">Employees enroll manually</small>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="is_required" id="typeRequired" value="1">
+                                    <label class="form-check-label" for="typeRequired">
+                                        <i class="bi bi-shield-check text-danger me-1"></i>Required
+                                        <small class="text-muted d-block">All employees auto-enrolled</small>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     

@@ -1743,3 +1743,179 @@ Stack trace:
 [21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_name" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 49
 [21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_phone" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 50
 [21-Mar-2026 09:16:36 Asia/Manila] PHP Warning:  Undefined array key "notes" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 51
+[21-Mar-2026 17:45:06 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "address" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 38
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "city" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 39
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "sss_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 43
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "philhealth_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 44
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "pagibig_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 45
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "tin_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 46
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_name" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 49
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_phone" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 50
+[21-Mar-2026 17:46:00 Asia/Manila] PHP Warning:  Undefined array key "notes" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 51
+[21-Mar-2026 17:46:50 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 34
+[21-Mar-2026 21:05:47 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[21-Mar-2026 21:06:22 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[21-Mar-2026 21:15:59 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[21-Mar-2026 21:19:06 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[21-Mar-2026 21:20:19 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[21-Mar-2026 21:21:22 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[21-Mar-2026 21:24:21 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "address" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 38
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "city" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 39
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "sss_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 43
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "philhealth_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 44
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "pagibig_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 45
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "tin_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 46
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_name" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 49
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_phone" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 50
+[21-Mar-2026 21:25:41 Asia/Manila] PHP Warning:  Undefined array key "notes" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 51
+[21-Mar-2026 21:26:13 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "address" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 38
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "city" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 39
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "sss_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 43
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "philhealth_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 44
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "pagibig_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 45
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "tin_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 46
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_name" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 49
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_phone" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 50
+[21-Mar-2026 21:26:21 Asia/Manila] PHP Warning:  Undefined array key "notes" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 51
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "address" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 38
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "city" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 39
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "sss_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 43
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "philhealth_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 44
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "pagibig_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 45
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "tin_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 46
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_name" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 49
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_phone" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 50
+[21-Mar-2026 21:27:03 Asia/Manila] PHP Warning:  Undefined array key "notes" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 51
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "address" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 38
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "city" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 39
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "sss_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 43
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "philhealth_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 44
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "pagibig_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 45
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "tin_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 46
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_name" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 49
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_phone" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 50
+[21-Mar-2026 21:27:27 Asia/Manila] PHP Warning:  Undefined array key "notes" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 51
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "address" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 38
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "city" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 39
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "sss_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 43
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "philhealth_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 44
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "pagibig_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 45
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "tin_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 46
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_name" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 49
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_phone" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 50
+[21-Mar-2026 21:27:42 Asia/Manila] PHP Warning:  Undefined array key "notes" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 51
+[21-Mar-2026 21:28:04 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[21-Mar-2026 21:31:42 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[21-Mar-2026 21:56:29 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[21-Mar-2026 21:59:08 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 34
+[22-Mar-2026 07:54:55 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[22-Mar-2026 07:55:25 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "address" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 38
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "city" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 39
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "sss_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 43
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "philhealth_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 44
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "pagibig_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 45
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "tin_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 46
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_name" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 49
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_phone" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 50
+[22-Mar-2026 07:56:10 Asia/Manila] PHP Warning:  Undefined array key "notes" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 51
+[22-Mar-2026 07:56:32 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "address" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 38
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "city" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 39
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "sss_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 43
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "philhealth_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 44
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "pagibig_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 45
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "tin_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 46
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_name" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 49
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_phone" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 50
+[22-Mar-2026 08:02:22 Asia/Manila] PHP Warning:  Undefined array key "notes" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 51
+[22-Mar-2026 08:04:42 Asia/Manila] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'e.avatar' in 'field list' in C:\xampp\htdocs\updated-hrms\antishit\hrms\models\Attendance.php:58
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\models\Attendance.php(58): PDO->prepare('\r\n            S...')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(22): Attendance->list(Array, 10, 0)
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): AttendanceController->index()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\models\Attendance.php on line 58
+[22-Mar-2026 08:20:05 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[22-Mar-2026 08:29:41 Asia/Manila] PHP Warning:  require_once(C:\xampp\htdocs\updated-hrms\antishit\hrms/models/Department.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php on line 605
+[22-Mar-2026 08:29:41 Asia/Manila] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\updated-hrms\antishit\hrms/models/Department.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php:605
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->create()
+#1 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php on line 605
+[22-Mar-2026 08:29:44 Asia/Manila] PHP Warning:  require_once(C:\xampp\htdocs\updated-hrms\antishit\hrms/models/Department.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php on line 605
+[22-Mar-2026 08:29:44 Asia/Manila] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\updated-hrms\antishit\hrms/models/Department.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php:605
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->create()
+#1 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php on line 605
+[22-Mar-2026 08:29:54 Asia/Manila] PHP Warning:  require_once(C:\xampp\htdocs\updated-hrms\antishit\hrms/models/Department.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php on line 605
+[22-Mar-2026 08:29:54 Asia/Manila] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\updated-hrms\antishit\hrms/models/Department.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php:605
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->create()
+#1 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php on line 605
+[22-Mar-2026 08:30:02 Asia/Manila] PHP Warning:  require_once(C:\xampp\htdocs\updated-hrms\antishit\hrms/models/Department.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php on line 605
+[22-Mar-2026 08:30:02 Asia/Manila] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\updated-hrms\antishit\hrms/models/Department.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php:605
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->create()
+#1 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php on line 605
+[22-Mar-2026 08:30:53 Asia/Manila] PHP Warning:  require_once(C:\xampp\htdocs\updated-hrms\antishit\hrms/models/Department.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php on line 605
+[22-Mar-2026 08:30:53 Asia/Manila] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\updated-hrms\antishit\hrms/models/Department.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php:605
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->create()
+#1 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php on line 605
+[22-Mar-2026 08:33:33 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[22-Mar-2026 08:37:28 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[22-Mar-2026 08:40:59 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[22-Mar-2026 08:47:15 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 08:47:37 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 08:47:51 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 08:47:57 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 08:48:37 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 08:48:54 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 08:49:14 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 08:49:29 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 08:49:43 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 08:53:45 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 09:15:49 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 09:28:15 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 09:28:20 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[22-Mar-2026 09:28:24 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18

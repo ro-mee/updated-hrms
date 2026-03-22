@@ -8,17 +8,18 @@ include APP_ROOT . '/views/layouts/header.php';
 ?>
 
 <style>
-.perm-matrix-container { background: #f8f9fa; border-radius: 8px; padding: 20px; }
-.role-section { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-.role-header { background: #fff; padding: 15px 20px; border-bottom: 1px solid #eee; font-weight: 700; font-size: 1.1rem; color: #444; border-radius: 8px 8px 0 0; }
-.module-row { padding: 15px 20px; border-bottom: 1px solid #f0f0f0; }
+.perm-matrix-container { background: var(--hrms-body-bg); border-radius: 8px; padding: 20px; }
+.role-section { background: var(--hrms-card-bg); border: 1px solid var(--hrms-card-border); border-radius: 8px; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.role-header { background: var(--hrms-card-bg); padding: 15px 20px; border-bottom: 1px solid var(--hrms-card-border); font-weight: 700; font-size: 1.1rem; color: var(--hrms-text-main); border-radius: 8px 8px 0 0; }
+.module-row { padding: 15px 20px; border-bottom: 1px solid var(--hrms-card-border); }
 .module-row:last-child { border-bottom: none; }
-.module-name { font-weight: 800; font-size: 0.85rem; color: #666; margin-bottom: 10px; letter-spacing: 0.5px; }
+.module-name { font-weight: 800; font-size: 0.85rem; color: var(--hrms-text-muted); margin-bottom: 10px; letter-spacing: 0.5px; text-transform: uppercase; }
 .perm-list { display: flex; flex-wrap: wrap; gap: 10px; }
-.perm-item { display: flex; align-items: center; background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 5px 12px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
-.perm-item:hover { border-color: #007bff; background: #f0f7ff; }
+.perm-item { display: flex; align-items: center; background: var(--hrms-card-bg); border: 1px solid var(--hrms-card-border); border-radius: 6px; padding: 5px 12px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; color: var(--hrms-text-main); }
+.perm-item:hover { border-color: var(--hrms-primary); background: rgba(79, 70, 229, 0.05); }
 .perm-item input[type="checkbox"] { margin-right: 8px; width: 16px; height: 16px; cursor: pointer; }
-.perm-item.checked { border-color: #0d6efd; color: #0d6efd; background-color: #f0f7ff; }
+.perm-item.checked { border-color: var(--hrms-primary); color: var(--hrms-primary); background-color: rgba(79, 70, 229, 0.1); }
+[data-bs-theme="dark"] .perm-item.checked { background-color: rgba(99, 102, 241, 0.2); border-color: var(--hrms-primary-light); color: #fff; }
 .update-btn-container { position: sticky; bottom: 20px; z-index: 100; text-align: right; padding-right: 20px; }
 .role-selector { max-width: 300px; }
 </style>

@@ -17,7 +17,7 @@ include APP_ROOT . '/views/layouts/header.php';
 <a href="index.php?module=notifications&action=read&id=<?= $n['id'] ?>" class="list-group-item list-group-item-action px-4 py-3 <?=$n['is_read']==0?'bg-primary bg-opacity-05':'';?> text-decoration-none">
     <div class="d-flex justify-content-between align-items-start">
         <div>
-            <div class="fw-600 mb-1 text-dark"><?=e($n['title'])?></div>
+            <div class="fw-600 mb-1 text-main"><?=e($n['title'])?></div>
             <div class="text-muted small"><?=e($n['message'])?></div>
         </div>
         <span class="text-muted small ms-3 text-nowrap"><?=timeAgo($n['created_at'])?></span>

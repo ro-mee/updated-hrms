@@ -43,7 +43,15 @@ include APP_ROOT . '/views/layouts/header.php';
                 <?php if(empty($records)): ?><tr><td colspan="9"><div class="empty-state"><i class="bi bi-clock-history"></i>No attendance records found</div></td></tr><?php endif; ?>
                 <?php foreach($records as $r): ?>
                 <tr>
-                    <td><div class="fw-medium small"><?= e($r['full_name']) ?></div><div class="text-muted" style="font-size:.72rem"><?= e($r['employee_number']) ?></div></td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="<?= avatarUrl($r['avatar']) ?>" class="avatar-sm" alt="">
+                            <div>
+                                <div class="fw-medium small"><?= e($r['full_name']) ?></div>
+                                <div class="text-muted" style="font-size:.72rem"><?= e($r['employee_number']) ?></div>
+                            </div>
+                        </div>
+                    </td>
                     <td class="small"><?= e($r['department_name']) ?></td>
                     <td class="small"><?= formatDate($r['date'],'M d, Y') ?></td>
                     <td class="small"><?= $r['clock_in'] ? date('h:i A',strtotime($r['clock_in'])) : '—' ?></td>

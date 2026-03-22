@@ -6,47 +6,86 @@ $breadcrumb = [
 ];
 include APP_ROOT . '/views/layouts/header.php';
 ?>
-<div class="container-fluid px-4 py-3">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="fw-bold mb-1">Performance Review: <?= e($review['employee_name']) ?></h4>
-            <div class="text-muted small"><strong>Period:</strong> <?= e($review['review_period']) ?> &nbsp;&bull;&nbsp; <strong>Date:</strong> <?= formatDate($review['review_date']) ?></div>
-        </div>
-        <div>
-            <?= statusBadge($review['status']) ?>
+    <div class="mb-3">
+        <a href="index.php?module=performance" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i>Back to List
+        </a>
+    </div>
+
+    <!-- Header with Profile & Score Combined -->
+    <div class="card border-0 shadow-sm mb-3" style="border-radius:16px; background: var(--hrms-card-bg);">
+        <div class="card-body p-3 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <img src="<?=avatarUrl($review['avatar'])?>" class="rounded-circle me-3 border shadow-sm" width="60" height="60" style="object-fit:cover;">
+                <div>
+                    <h5 class="fw-bold mb-0"><?= e($review['employee_name']) ?></h5>
+                    <div class="text-muted small">#<?= e($review['employee_number']) ?> &nbsp;&bull;&nbsp; <?= e($review['review_period']) ?></div>
+                    <div class="mt-1"><?= statusBadge($review['status']) ?></div>
+                </div>
+            </div>
+            
+            <div class="d-flex gap-4 border-start ps-4">
+                <div class="text-center">
+                    <div class="text-muted" style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;">Average Score</div>
+                    <div class="h3 fw-bold text-primary mb-0"><?= $review['overall_rating'] ? number_format($review['overall_rating'], 1) : '—' ?></div>
+                </div>
+                <div class="text-start">
+                    <div class="text-muted small"><i class="bi bi-person-check me-1"></i><?= e($review['reviewer_name']) ?></div>
+                    <div class="text-muted small"><i class="bi bi-calendar3 me-1"></i><?= formatDate($review['review_date']) ?></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="row border-top pt-4">
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm h-100 border-0 bg-light">
-                <div class="card-body text-center p-4">
-                    <h6 class="text-muted text-uppercase fw-bold mb-3">Overall Rating</h6>
-                    <div class="display-3 fw-bold text-primary mb-2"><?= $review['overall_rating'] ? number_format($review['overall_rating'], 1) : 'N/A' ?></div>
-                    <div class="text-muted">Out of 5.0</div>
-                    <hr class="my-4">
-                    <div class="text-start small">
-                        <p class="mb-1 text-muted">Reviewer:</p>
-                        <p class="fw-medium mb-3"><i class="bi bi-person me-2"></i><?= e($review['reviewer_name']) ?></p>
-                        <p class="mb-1 text-muted">Employee No:</p>
-                        <p class="fw-medium mb-0"><i class="bi bi-hash me-2"></i><?= e($review['employee_number']) ?></p>
+    <div class="row g-3">
+        <!-- KPI Grid (Left/Middle) -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100" style="border-radius:16px;">
+                <div class="card-header bg-transparent border-0 pt-3 pb-0">
+                    <h6 class="fw-bold text-muted small mb-0"><i class="bi bi-grid-3x3-gap-fill text-primary me-2"></i>KPI SCORES</h6>
+                </div>
+                <div class="card-body p-3">
+                    <div class="row g-2">
+                        <?php foreach($scores as $s): ?>
+                        <div class="col-md-6">
+                            <div class="p-2 h-100 bg-light rounded-3 border" style="border-color: var(--hrms-card-border) !important;">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="min-w-0 me-2">
+                                        <div class="fw-bold text-truncate" style="font-size:0.8rem;"><?= e($s['name']) ?></div>
+                                        <div class="text-muted" style="font-size:0.65rem;">W: <?= $s['weight'] ?></div>
+                                    </div>
+                                    <div class="fw-bold text-primary" style="font-size:1.1rem;"><?= number_format($s['score'], 1) ?></div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                        <?php if(empty($scores)): ?>
+                            <div class="col-12 text-center py-4 text-muted small">No scores records found.</div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-8">
-            <h6 class="fw-bold text-muted border-bottom pb-2 mb-3"><i class="bi bi-chat-quote text-primary me-2"></i>Qualitative Assessment</h6>
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body">
-                    <h6 class="fw-bold mt-2">Key Strengths & Achievements</h6>
-                    <p class="text-muted text-pre-wrap"><?= e($review['strengths'] ?: 'No details provided.') ?></p>
-                    
-                    <h6 class="fw-bold mt-4">Areas for Improvement</h6>
-                    <p class="text-muted text-pre-wrap"><?= e($review['improvements'] ?: 'No details provided.') ?></p>
-                    
-                    <h6 class="fw-bold mt-4">Goals for Next Period</h6>
-                    <p class="text-muted text-pre-wrap"><?= e($review['goals_next_period'] ?: 'No details provided.') ?></p>
+        <!-- Qualitative (Right) -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100" style="border-radius:16px;">
+                <div class="card-header bg-transparent border-0 pt-3 pb-0">
+                    <h6 class="fw-bold text-muted small mb-0"><i class="bi bi-clipboard-data-fill text-primary me-2"></i>QUALITATIVE ASSESSMENT</h6>
+                </div>
+                <div class="card-body p-3 d-flex flex-column gap-2">
+                    <div class="p-2 border-start border-4 border-success bg-success-subtle rounded-3" style="border-radius: 4px 8px 8px 4px;">
+                        <div class="fw-bold text-success" style="font-size:0.75rem;"><i class="bi bi-star-fill me-1"></i>STRENGTHS</div>
+                        <div class="py-1 text-pre-wrap" style="font-size:0.82rem; line-height:1.4;"><?= e($review['strengths'] ?: 'None recorded.') ?></div>
+                    </div>
+                    <div class="p-2 border-start border-4 border-warning bg-warning-subtle rounded-3" style="border-radius: 4px 8px 8px 4px;">
+                        <div class="fw-bold text-warning-emphasis" style="font-size:0.75rem;"><i class="bi bi-arrow-up-circle-fill me-1"></i>IMPROVEMENTS</div>
+                        <div class="py-1 text-pre-wrap" style="font-size:0.82rem; line-height:1.4;"><?= e($review['improvements'] ?: 'None recorded.') ?></div>
+                    </div>
+                    <div class="p-2 border-start border-4 border-info bg-info-subtle rounded-3" style="border-radius: 4px 8px 8px 4px;">
+                        <div class="fw-bold text-info" style="font-size:0.75rem;"><i class="bi bi-flag-fill me-1"></i>GOALS</div>
+                        <div class="py-1 text-pre-wrap" style="font-size:0.82rem; line-height:1.4;"><?= e($review['goals_next_period'] ?: 'None recorded.') ?></div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -12,7 +12,7 @@ class Performance {
         if (!empty($filters['status']))       { $where[] = "pr.status=?"; $params[] = $filters['status']; }
         $whereStr = implode(' AND ', $where);
         $stmt = $this->db->prepare("
-            SELECT pr.*, CONCAT(u.first_name,' ',u.last_name) AS employee_name,
+            SELECT pr.*, u.avatar, CONCAT(u.first_name,' ',u.last_name) AS employee_name,
                    CONCAT(r.first_name,' ',r.last_name) AS reviewer_name,
                    e.employee_number, d.name AS department_name
             FROM performance_reviews pr
@@ -26,7 +26,7 @@ class Performance {
 
     public function findById(int $id): ?array {
         $stmt = $this->db->prepare("
-            SELECT pr.*, CONCAT(u.first_name,' ',u.last_name) AS employee_name,
+            SELECT pr.*, u.avatar, CONCAT(u.first_name,' ',u.last_name) AS employee_name,
                    CONCAT(r.first_name,' ',r.last_name) AS reviewer_name, e.employee_number
             FROM performance_reviews pr
             JOIN employees e ON pr.employee_id=e.id JOIN users u ON e.user_id=u.id
@@ -39,19 +39,26 @@ class Performance {
     public function create(array $d): int {
         $stmt = $this->db->prepare("
             INSERT INTO performance_reviews (employee_id,reviewer_id,review_period,review_date,strengths,improvements,goals_next_period,status)
-            VALUES (?,?,?,?,?,?,?,'draft')
+            VALUES (?,?,?,?,?,?,?,?)
         ");
         $stmt->execute([$d['employee_id'],$d['reviewer_id'],$d['review_period'],$d['review_date'],
-            $d['strengths']??null,$d['improvements']??null,$d['goals_next_period']??null]);
+            $d['strengths']??null,$d['improvements']??null,$d['goals_next_period']??null, $d['status']??'draft']);
         return (int)$this->db->lastInsertId();
     }
 
     public function update(int $id, array $d): bool {
-        $stmt = $this->db->prepare("
-            UPDATE performance_reviews SET overall_rating=?,strengths=?,improvements=?,goals_next_period=?,status=? WHERE id=?
-        ");
-        return $stmt->execute([$d['overall_rating']??null,$d['strengths']??null,$d['improvements']??null,
-            $d['goals_next_period']??null,$d['status']??'draft',$id]);
+        $fields = []; $params = [];
+        $allowed = ['overall_rating', 'strengths', 'improvements', 'goals_next_period', 'status', 'employee_ack'];
+        foreach ($allowed as $f) {
+            if (array_key_exists($f, $d)) {
+                $fields[] = "$f=?";
+                $params[] = $d[$f];
+            }
+        }
+        if (empty($fields)) return false;
+        $params[] = $id;
+        $stmt = $this->db->prepare("UPDATE performance_reviews SET " . implode(',', $fields) . " WHERE id=?");
+        return $stmt->execute($params);
     }
 
     public function kpis(): array {
@@ -73,6 +80,39 @@ class Performance {
         $avg = $stmt->fetchColumn();
         $this->db->prepare("UPDATE performance_reviews SET overall_rating=? WHERE id=?")->execute([$avg, $reviewId]);
     }
+
+    public function getScores(int $reviewId): array {
+        $stmt = $this->db->prepare("
+            SELECT pks.*, k.name, k.description, k.weight
+            FROM performance_kpi_scores pks
+            JOIN kpis k ON pks.kpi_id=k.id
+            WHERE pks.review_id=?
+            ORDER BY k.name ASC
+        ");
+        $stmt->execute([$reviewId]);
+        return $stmt->fetchAll();
+    }
+
+    public function findKpiById(int $id): ?array {
+        $stmt = $this->db->prepare("SELECT * FROM kpis WHERE id=?");
+        $stmt->execute([$id]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public function createKpi(array $d): int {
+        $stmt = $this->db->prepare("INSERT INTO kpis (name, description, department_id, weight, is_active) VALUES (?,?,?,?,?)");
+        $stmt->execute([$d['name'], $d['description']??null, $d['department_id']??null, $d['weight']??1.0, $d['is_active']??1]);
+        return (int)$this->db->lastInsertId();
+    }
+
+    public function updateKpi(int $id, array $d): bool {
+        $stmt = $this->db->prepare("UPDATE kpis SET name=?, description=?, department_id=?, weight=?, is_active=? WHERE id=?");
+        return $stmt->execute([$d['name'], $d['description']??null, $d['department_id']??null, $d['weight']??1.0, $d['is_active']??1, $id]);
+    }
+
+    public function deleteKpi(int $id): bool {
+        return $this->db->prepare("DELETE FROM kpis WHERE id=?")->execute([$id]);
+    }
 }
 
 class Training {
@@ -80,12 +120,31 @@ class Training {
     public function __construct() { $this->db = db(); }
 
     public function all(array $filters = [], int $limit = RECORDS_PER_PAGE, int $offset = 0): array {
+        // Auto-update statuses based on date AND time
+        $this->db->exec("
+            UPDATE trainings SET status='ongoing' 
+            WHERE status='scheduled' 
+            AND NOW() >= CONCAT(start_date, ' ', COALESCE(start_time, '00:00:00'))
+            AND (end_date IS NULL OR NOW() <= CONCAT(end_date, ' ', COALESCE(end_time, '23:59:59')))
+        ");
+        $this->db->exec("
+            UPDATE trainings SET status='completed' 
+            WHERE status IN ('scheduled','ongoing') 
+            AND NOW() > CONCAT(COALESCE(end_date, start_date), ' ', COALESCE(end_time, '23:59:59'))
+        ");
+
         $where = ['1=1']; $params = [];
         if (!empty($filters['status'])) { $where[] = "t.status=?"; $params[] = $filters['status']; }
+        if (isset($filters['department_id']) && $filters['department_id'] !== null) { 
+            $where[] = "(t.department_id IS NULL OR t.department_id=?)"; 
+            $params[] = $filters['department_id']; 
+        }
         $stmt = $this->db->prepare("
             SELECT t.*, CONCAT(u.first_name,' ',u.last_name) AS created_by_name,
+                   d.name AS department_name,
                    COUNT(te.id) AS enrolled_count
             FROM trainings t LEFT JOIN users u ON t.created_by=u.id
+            LEFT JOIN departments d ON t.department_id=d.id
             LEFT JOIN training_enrollments te ON te.training_id=t.id
             WHERE " . implode(' AND ', $where) . " GROUP BY t.id ORDER BY t.start_date DESC LIMIT ? OFFSET ?
         ");
@@ -100,10 +159,22 @@ class Training {
     }
 
     public function create(array $d): int {
-        $stmt = $this->db->prepare("INSERT INTO trainings (title,description,trainer,start_date,end_date,location,max_participants,cost,status,created_by) VALUES (?,?,?,?,?,?,?,?,'scheduled',?)");
+        $stmt = $this->db->prepare("INSERT INTO trainings (title,description,trainer,start_date,start_time,end_time,end_date,location,max_participants,department_id,is_required,cost,status,created_by) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'scheduled',?)");
         $stmt->execute([$d['title'],$d['description']??null,$d['trainer']??null,$d['start_date'],
-            $d['end_date'],$d['location']??null,$d['max_participants']??null,$d['cost']??0,$d['created_by']]);
+            $d['start_time']??null,$d['end_time']??null,$d['end_date']??null,$d['location']??null,$d['max_participants']??null,
+            $d['department_id']??null,$d['is_required']??0,$d['cost']??0,$d['created_by']]);
         return (int)$this->db->lastInsertId();
+    }
+
+    public function autoEnrollDepartment(int $trainingId, ?int $departmentId): void {
+        // Enroll all active employees of the target department (or all if no dept)
+        if ($departmentId) {
+            $stmt = $this->db->prepare("INSERT IGNORE INTO training_enrollments (training_id, employee_id) SELECT ?, id FROM employees WHERE status='active' AND department_id=?");
+            $stmt->execute([$trainingId, $departmentId]);
+        } else {
+            $stmt = $this->db->prepare("INSERT IGNORE INTO training_enrollments (training_id, employee_id) SELECT ?, id FROM employees WHERE status='active'");
+            $stmt->execute([$trainingId]);
+        }
     }
 
     public function enroll(int $trainingId, int $employeeId): bool {
@@ -124,11 +195,27 @@ class Training {
 
     public function employeeTrainings(int $employeeId): array {
         $stmt = $this->db->prepare("
-            SELECT t.*, te.status AS enroll_status, te.score, te.certificate
+            SELECT t.*, te.training_id, te.status AS enroll_status, te.score, te.certificate
             FROM training_enrollments te JOIN trainings t ON te.training_id=t.id
             WHERE te.employee_id=? ORDER BY t.start_date DESC
         ");
         $stmt->execute([$employeeId]);
+        return $stmt->fetchAll();
+    }
+
+    public function getFeedback(int $trainingId): array {
+        $stmt = $this->db->prepare("
+            SELECT te.rating, te.feedback, te.enrolled_at,
+                   CONCAT(u.first_name,' ',u.last_name) AS employee_name,
+                   d.name AS department_name
+            FROM training_enrollments te
+            JOIN employees e ON te.employee_id=e.id
+            JOIN users u ON e.user_id=u.id
+            LEFT JOIN departments d ON e.department_id=d.id
+            WHERE te.training_id=? AND te.rating IS NOT NULL
+            ORDER BY te.enrolled_at DESC
+        ");
+        $stmt->execute([$trainingId]);
         return $stmt->fetchAll();
     }
 }

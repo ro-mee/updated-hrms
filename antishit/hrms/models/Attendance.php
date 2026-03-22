@@ -57,7 +57,7 @@ class Attendance {
         $whereStr = implode(' AND ', $where);
         $stmt = $this->db->prepare("
             SELECT a.*, CONCAT(u.first_name,' ',u.last_name) AS full_name,
-                   d.name AS department_name, e.employee_number
+                   d.name AS department_name, e.employee_number, u.avatar
             FROM attendance a
             JOIN employees e ON a.employee_id=e.id
             JOIN users u ON e.user_id=u.id

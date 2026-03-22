@@ -86,15 +86,36 @@ function paginate(int $total, int $page, int $perPage = RECORDS_PER_PAGE): array
 
 function paginationLinks(array $pg, string $baseUrl): string {
     if ($pg['total_pages'] <= 1) return '';
-    $html = '<nav><ul class="pagination pagination-sm mb-0">';
+    $current = $pg['current'];
+    $total   = $pg['total_pages'];
+    $range   = 3;
+    
+    $html = '<nav><ul class="pagination pagination-sm mb-0 shadow-sm">';
     $html .= '<li class="page-item ' . (!$pg['has_prev'] ? 'disabled' : '') . '">'
-           . '<a class="page-link" href="' . $baseUrl . '&page=' . ($pg['current'] - 1) . '">‹</a></li>';
-    for ($i = 1; $i <= $pg['total_pages']; $i++) {
-        $active = ($i === $pg['current']) ? ' active' : '';
-        $html  .= '<li class="page-item' . $active . '"><a class="page-link" href="' . $baseUrl . '&page=' . $i . '">' . $i . '</a></li>';
+           . '<a class="page-link" href="' . $baseUrl . '&page=' . ($current - 1) . '"><i class="bi bi-chevron-left"></i></a></li>';
+    
+    if ($total <= 10) {
+        for ($i = 1; $i <= $total; $i++) {
+            $active = ($i === $current) ? ' active' : '';
+            $html .= '<li class="page-item' . $active . '"><a class="page-link" href="' . $baseUrl . '&page=' . $i . '">' . $i . '</a></li>';
+        }
+    } else {
+        if ($current > $range + 1) {
+            $html .= '<li class="page-item"><a class="page-link" href="' . $baseUrl . '&page=1">1</a></li>';
+            if ($current > $range + 2) $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+        }
+        for ($i = max(1, $current - $range); $i <= min($total, $current + $range); $i++) {
+            $active = ($i === $current) ? ' active' : '';
+            $html .= '<li class="page-item' . $active . '"><a class="page-link" href="' . $baseUrl . '&page=' . $i . '">' . $i . '</a></li>';
+        }
+        if ($current < $total - $range) {
+            if ($current < $total - $range - 1) $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+            $html .= '<li class="page-item"><a class="page-link" href="' . $baseUrl . '&page=' . $total . '">' . $total . '</a></li>';
+        }
     }
+    
     $html .= '<li class="page-item ' . (!$pg['has_next'] ? 'disabled' : '') . '">'
-           . '<a class="page-link" href="' . $baseUrl . '&page=' . ($pg['current'] + 1) . '">›</a></li>';
+           . '<a class="page-link" href="' . $baseUrl . '&page=' . ($current + 1) . '"><i class="bi bi-chevron-right"></i></a></li>';
     $html .= '</ul></nav>';
     return $html;
 }
@@ -162,15 +183,37 @@ function jsonResponse(bool $success, string $message = '', mixed $data = null, i
 function statusBadge(string $status): string {
     $map = [
         'active'    => 'success', 'approved'  => 'success', 'paid'       => 'success',
-        'present'   => 'success', 'hired'      => 'success',
+        'present'   => 'success', 'hired'      => 'success', 'scheduled'  => 'warning',
         'inactive'  => 'secondary', 'rejected' => 'danger', 'absent'     => 'danger',
         'pending'   => 'warning',  'draft'     => 'secondary',
         'processing'=> 'info',    'late'       => 'warning', 'reviewing'  => 'info',
         'interview' => 'primary',  'offered'   => 'primary', 'cancelled'  => 'secondary',
         'on_leave'  => 'info',    'half_day'   => 'warning',
     ];
+    // Special badge styles for training-specific statuses
+    if ($status === 'ongoing') {
+        return '<span class="badge px-2" style="background:rgba(230,126,34,0.15);color:#e67e22;border:1px solid rgba(230,126,34,0.3);">Ongoing</span>';
+    }
+    if ($status === 'completed') {
+        return '<span class="badge px-2" style="background:rgba(91,143,168,0.15);color:#5b8fa8;border:1px solid rgba(91,143,168,0.3);">Completed</span>';
+    }
     $color = $map[strtolower($status)] ?? 'secondary';
-    return '<span class="badge bg-' . $color . '">' . ucwords(str_replace('_', ' ', $status)) . '</span>';
+    return '<span class="badge bg-' . $color . '-subtle text-' . $color . ' border border-' . $color . '-subtle px-2">' . ucwords(str_replace('_', ' ', $status)) . '</span>';
+}
+
+function logActionBadge(string $action): string {
+    $action = strtolower($action);
+    $color = 'secondary';
+    if (strpos($action, 'create') !== false || strpos($action, 'add') !== false || $action === 'login' || $action === 'clock_in' || $action === 'approve') {
+        $color = 'success';
+    } elseif (strpos($action, 'update') !== false || strpos($action, 'edit') !== false || $action === 'sync') {
+        $color = 'info';
+    } elseif (strpos($action, 'delete') !== false || $action === 'login_fail' || $action === 'reject') {
+        $color = 'danger';
+    } elseif ($action === 'logout' || $action === 'clock_out' || $action === 'archive') {
+        $color = 'warning';
+    }
+    return '<span class="badge bg-' . $color . '-subtle text-' . $color . ' border border-' . $color . '-subtle px-2" style="font-size:0.7rem; letter-spacing:0.5px;">' . strtoupper(str_replace('_', ' ', $action)) . '</span>';
 }
 
 // ── String Helpers ────────────────────────────────────────────────
