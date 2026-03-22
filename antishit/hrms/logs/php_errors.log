@@ -1919,3 +1919,5 @@ Stack trace:
 [22-Mar-2026 09:28:15 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
 [22-Mar-2026 09:28:20 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
 [22-Mar-2026 09:28:24 Asia/Manila] PHP Warning:  Undefined array key "overall_score" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\index.php on line 18
+[23-Mar-2026 07:51:38 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[23-Mar-2026 07:52:23 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250

@@ -49,31 +49,91 @@ if (isLoggedIn()) redirect('index.php?module=dashboard&action=index');
             <div class="alert alert-danger py-2 small"><?= e($errors['general']) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="index.php?module=auth&action=resetPassword&token=<?= e($token) ?>" novalidate id="resetForm">
-            <?= csrfField() ?>
-            <div class="form-floating mb-3">
-                <input type="password" class="form-control <?= !empty($errors['new_password']) ? 'is-invalid' : '' ?>"
-                       id="password" name="password" placeholder="New Password" required autocomplete="new-password">
-                <label for="password"><i class="bi bi-lock me-1"></i>New Password</label>
-                <?php if (!empty($errors['new_password'])): ?><div class="invalid-feedback"><?= e($errors['new_password']) ?></div><?php endif; ?>
-            </div>
-            <div class="form-floating mb-4">
-                <input type="password" class="form-control <?= !empty($errors['confirm_password']) ? 'is-invalid' : '' ?>"
-                       id="confirm_password" name="confirm_password" placeholder="Confirm Password" required autocomplete="new-password">
-                <label for="confirm_password"><i class="bi bi-shield-lock me-1"></i>Confirm Password</label>
-                <?php if (!empty($errors['confirm_password'])): ?><div class="invalid-feedback"><?= e($errors['confirm_password']) ?></div><?php endif; ?>
-            </div>
-            <button type="submit" class="btn btn-primary btn-login w-100 text-white mb-3">
-                <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
-                Update Password
-            </button>
-        </form>
+            <form method="POST" action="index.php?module=auth&action=resetPassword&token=<?= e($token) ?>" novalidate id="resetForm">
+                <?= csrfField() ?>
+                <div class="form-floating mb-2">
+                    <input type="password" class="form-control <?= !empty($errors['new_password']) ? 'is-invalid' : '' ?>"
+                           id="password" name="password" placeholder="New Password" required autocomplete="new-password">
+                    <label for="password"><i class="bi bi-lock me-1"></i>New Password</label>
+                    <?php if (!empty($errors['new_password'])): ?><div class="invalid-feedback"><?= e($errors['new_password']) ?></div><?php endif; ?>
+                </div>
+                
+                <!-- Strength Indicator -->
+                <div id="password-requirements" class="password-requirements mb-3">
+                    <span class="requirement" id="req-length"><i class="bi"></i>8+ chars</span>
+                    <span class="requirement" id="req-upper"><i class="bi"></i>Uppercase</span>
+                    <span class="requirement" id="req-number"><i class="bi"></i>Number</span>
+                    <span class="requirement" id="req-special"><i class="bi"></i>Special char</span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control <?= !empty($errors['confirm_password']) ? 'is-invalid' : '' ?>"
+                           id="confirm_password" name="confirm_password" placeholder="Confirm Password" required autocomplete="new-password">
+                    <label for="confirm_password"><i class="bi bi-shield-lock me-1"></i>Confirm Password</label>
+                    <div id="match-feedback" class="form-text mt-1 d-none" style="font-size: 0.75rem;"></div>
+                    <?php if (!empty($errors['confirm_password'])): ?><div class="invalid-feedback"><?= e($errors['confirm_password']) ?></div><?php endif; ?>
+                </div>
+                <button type="submit" class="btn btn-primary btn-login w-100 text-white mb-3" id="submitBtn">
+                    <span id="spinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
+                    Update Password
+                </button>
+            </form>
+        </div>
     </div>
-</div>
-<script>
-document.getElementById('resetForm')?.addEventListener('submit', function() {
-    document.getElementById('spinner').classList.remove('d-none');
-});
-</script>
+    <script>
+    function validateReset() {
+        const pw = document.getElementById('password').value;
+        const confirm = document.getElementById('confirm_password').value;
+        const feedback = document.getElementById('match-feedback');
+        const confirmInput = document.getElementById('confirm_password');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Strength validation
+        const requirements = [
+            { id: 'req-length',  met: pw.length >= 8 },
+            { id: 'req-upper',   met: /[A-Z]/.test(pw) },
+            { id: 'req-number',  met: /[0-9]/.test(pw) },
+            { id: 'req-special', met: /[\W_]/.test(pw) }
+        ];
+        let allMet = true;
+        requirements.forEach(req => {
+            const el = document.getElementById(req.id);
+            if (el) {
+                el.classList.toggle('valid', req.met);
+                el.classList.toggle('invalid', !req.met && pw.length > 0);
+                if (!req.met) allMet = false;
+            }
+        });
+
+        // Match validation
+        if (confirm.length > 0) {
+            feedback.classList.remove('d-none');
+            if (pw === confirm) {
+                feedback.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Passwords match';
+                feedback.className = 'form-text mt-1 text-success small';
+                confirmInput.classList.remove('is-invalid');
+                confirmInput.classList.add('is-valid');
+            } else {
+                feedback.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>Passwords do not match';
+                feedback.className = 'form-text mt-1 text-danger small';
+                confirmInput.classList.remove('is-valid');
+                confirmInput.classList.add('is-invalid');
+                allMet = false;
+            }
+        } else {
+            feedback.classList.add('d-none');
+            confirmInput.classList.remove('is-valid', 'is-invalid');
+        }
+
+        submitBtn.disabled = !allMet || confirm !== pw || pw.length === 0;
+    }
+
+    document.getElementById('password')?.addEventListener('input', validateReset);
+    document.getElementById('confirm_password')?.addEventListener('input', validateReset);
+
+    document.getElementById('resetForm')?.addEventListener('submit', function() {
+        document.getElementById('spinner').classList.remove('d-none');
+    });
+    </script>
 </body>
 </html>

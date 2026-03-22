@@ -38,7 +38,8 @@ include APP_ROOT . '/views/layouts/header.php';
                         </div>
                         <div class="mb-4">
                             <label class="form-label fw-medium">Confirm New Password</label>
-                            <input type="password" name="confirm_password" class="form-control" required>
+                            <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
+                            <div id="match-feedback" class="form-text mt-1 d-none"></div>
                         </div>
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Update Password</button>
@@ -51,8 +52,14 @@ include APP_ROOT . '/views/layouts/header.php';
     </div>
 </div>
 <script>
-document.getElementById('new_password')?.addEventListener('input', function() {
-    const pw = this.value;
+function validatePassword() {
+    const pw = document.getElementById('new_password').value;
+    const confirm = document.getElementById('confirm_password').value;
+    const feedback = document.getElementById('match-feedback');
+    const confirmInput = document.getElementById('confirm_password');
+    const submitBtn = document.querySelector('button[type="submit"]');
+
+    // Strength validation
     const requirements = [
         { id: 'req-length',  met: pw.length >= 8 },
         { id: 'req-upper',   met: /[A-Z]/.test(pw) },
@@ -60,13 +67,41 @@ document.getElementById('new_password')?.addEventListener('input', function() {
         { id: 'req-number',  met: /[0-9]/.test(pw) },
         { id: 'req-special', met: /[\W_]/.test(pw) }
     ];
+    let allMet = true;
     requirements.forEach(req => {
         const el = document.getElementById(req.id);
         if (el) {
             el.classList.toggle('valid', req.met);
             el.classList.toggle('invalid', !req.met && pw.length > 0);
+            if (!req.met) allMet = false;
         }
     });
-});
+
+    // Match validation
+    if (confirm.length > 0) {
+        feedback.classList.remove('d-none');
+        if (pw === confirm) {
+            feedback.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Passwords match';
+            feedback.className = 'form-text mt-1 text-success small';
+            confirmInput.classList.remove('is-invalid');
+            confirmInput.classList.add('is-valid');
+        } else {
+            feedback.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>Passwords do not match';
+            feedback.className = 'form-text mt-1 text-danger small';
+            confirmInput.classList.remove('is-valid');
+            confirmInput.classList.add('is-invalid');
+            allMet = false;
+        }
+    } else {
+        feedback.classList.add('d-none');
+        confirmInput.classList.remove('is-valid', 'is-invalid');
+    }
+
+    // Enable/Disable submit
+    submitBtn.disabled = !allMet || confirm !== pw || pw.length === 0;
+}
+
+document.getElementById('new_password')?.addEventListener('input', validatePassword);
+document.getElementById('confirm_password')?.addEventListener('input', validatePassword);
 </script>
 <?php include APP_ROOT . '/views/layouts/footer.php'; ?>

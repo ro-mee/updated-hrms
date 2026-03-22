@@ -17,30 +17,111 @@ if (isLoggedIn()) redirect('index.php?module=dashboard&action=index');
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <style>
+        :root {
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --glass-bg: rgba(255, 255, 255, 0.82);
+            --glass-border: rgba(255, 255, 255, 0.35);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
         body { 
-            background: linear-gradient(rgba(30, 27, 75, 0.4), rgba(30, 27, 75, 0.4)), url('assets/images/background.jpg') no-repeat center center fixed; 
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(88, 28, 135, 0.6)), url('assets/images/background.jpg') no-repeat center center fixed; 
             background-size: cover; 
             min-height: 100vh; 
             display:flex; 
             align-items:center; 
             justify-content:center; 
-            font-family:'Inter',sans-serif; 
+            font-family:'Inter', sans-serif;
+            padding: 20px;
         }
-        .login-card { width: 100%; max-width: 440px; border-radius: 20px; border:none; box-shadow: 0 24px 64px rgba(0,0,0,0.14); overflow:hidden; }
-        .login-brand { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color:#fff; padding: 2.5rem 2rem 2rem; text-align:center; }
-        .login-brand .brand-icon { width:64px;height:64px;background:transparent;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:2rem; }
-        .login-brand h1 { font-size:1.6rem;font-weight:700;margin:0; }
-        .login-brand p  { font-size:.85rem;opacity:.8;margin:.3rem 0 0; }
-        .login-body { padding: 2rem; }
-        .form-floating .form-control { border-radius: 10px; border-color: #e2e8f0; font-size:.95rem; }
-        .form-floating .form-control:focus { border-color:#4f46e5;box-shadow:0 0 0 .2rem rgba(79,70,229,.15); }
-        .btn-login { background: linear-gradient(135deg,#4f46e5,#7c3aed); border:none;border-radius:10px;font-weight:600;padding:.75rem;font-size:1rem;letter-spacing:.4px;transition:all .25s; }
-        .btn-login:hover { transform:translateY(-1px);box-shadow:0 8px 24px rgba(79,70,229,.4); }
-        .divider-text { position:relative;text-align:center;color:#94a3b8;font-size:.78rem;margin:1.2rem 0; }
-        .divider-text::before,.divider-text::after { content:'';position:absolute;top:50%;width:42%;height:1px;background:#e2e8f0; }
-        .divider-text::before { left:0; } .divider-text::after { right:0; }
-        .demo-creds { background:#f8faff;border:1px solid #e0e7ff;border-radius:10px;padding:1rem;font-size:.78rem;color:#4338ca; }
-        .demo-creds strong { color:#3730a3; }
+        .login-card { 
+            width: 100%; 
+            max-width: 420px; 
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px; 
+            border: 1px solid var(--glass-border); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden; 
+            animation: fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .login-brand { 
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%); 
+            color: #fff; 
+            padding: 3rem 2rem 2.5rem; 
+            text-align: center;
+            position: relative;
+        }
+        .login-brand::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid var(--accent-secondary);
+        }
+        .login-brand .brand-icon { 
+            width: 72px; height: 72px; 
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border-radius: 18px; 
+            display: flex; align-items: center; justify-content: center; 
+            margin: 0 auto 1.25rem; 
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .login-brand h1 { font-size: 1.8rem; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
+        .login-brand p { font-size: 0.85rem; opacity: 0.9; margin: 0.4rem 0 0; font-weight: 400; }
+        
+        .login-body { padding: 3rem 2.25rem 2.5rem; }
+        
+        .form-floating > .form-control { 
+            border-radius: 12px; 
+            border: 1px solid #e2e8f0; 
+            background: rgba(255, 255, 255, 0.5);
+            padding-left: 1rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .form-floating > .form-control:focus { 
+            background: #fff;
+            border-color: var(--accent-primary); 
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12); 
+        }
+        .form-floating > label { padding-left: 1rem; color: var(--text-muted); }
+        
+        .btn-login { 
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%); 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: 600; 
+            padding: 0.9rem; 
+            font-size: 1rem; 
+            letter-spacing: 0.01em;
+            color: #fff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+        }
+        .btn-login:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
+            filter: brightness(1.1);
+        }
+        .btn-login:active { transform: translateY(0); }
+
+        .forgot-link { color: var(--accent-primary); font-weight: 600; font-size: 0.85rem; transition: color 0.2s; }
+        .forgot-link:hover { color: var(--accent-secondary); }
+        
     </style>
 </head>
 <body>
@@ -74,22 +155,22 @@ if (isLoggedIn()) redirect('index.php?module=dashboard&action=index');
                     <input type="email" class="form-control <?= !empty($errors['email']) ? 'is-invalid' : '' ?>"
                            id="email" name="email" placeholder="you@company.com"
                            value="<?= e(post('email')) ?>" required autocomplete="email">
-                    <label for="email"><i class="bi bi-envelope me-1"></i>Email address</label>
+                    <label for="email"><i class="bi bi-envelope-at me-2 text-primary opacity-50"></i>Email address</label>
                     <?php if (!empty($errors['email'])): ?><div class="invalid-feedback"><?= e($errors['email']) ?></div><?php endif; ?>
                 </div>
                 <div class="form-floating mb-3 position-relative">
                     <input type="password" class="form-control <?= !empty($errors['password']) ? 'is-invalid' : '' ?>"
                            id="password" name="password" placeholder="Password" required autocomplete="current-password">
-                    <label for="password"><i class="bi bi-lock me-1"></i>Password</label>
+                    <label for="password"><i class="bi bi-shield-lock me-2 text-primary opacity-50"></i>Password</label>
                     <button type="button" class="btn btn-sm position-absolute end-0 top-50 translate-middle-y me-2 px-2 text-muted" id="togglePw" style="z-index:10;background:none;border:none">
                         <i class="bi bi-eye" id="pwIcon"></i>
                     </button>
                     <?php if (!empty($errors['password'])): ?><div class="invalid-feedback"><?= e($errors['password']) ?></div><?php endif; ?>
                 </div>
-                <div class="text-end mb-3">
-                    <a href="index.php?module=auth&action=forgotPassword" class="text-decoration-none small fw-bold">Forgot Password?</a>
+                <div class="text-end mb-4">
+                    <a href="index.php?module=auth&action=forgotPassword" class="forgot-link">Forgot Password?</a>
                 </div>
-                <button type="submit" class="btn btn-primary btn-login w-100 text-white mb-3">
+                <button type="submit" class="btn btn-login w-100 mb-3 shadow-lg">
                     <span id="loginSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
                     Sign In
                 </button>
@@ -102,36 +183,36 @@ if (isLoggedIn()) redirect('index.php?module=dashboard&action=index');
             $domain = $parts[1] ?? '';
             $maskedEmail = substr($name, 0, 1) . str_repeat('•', min(12, strlen($name)-1)) . substr($name, -1, 1) . '@' . $domain;
         ?>
-            <div class="d-flex align-items-start mb-4 p-3 bg-light rounded-3 border">
+            <div class="d-flex align-items-start mb-4 p-3 bg-primary bg-opacity-10 rounded-4 border border-primary border-opacity-10">
                 <div class="text-primary me-3 mt-1" style="font-size: 1.5rem;">
                     <i class="bi bi-envelope-check-fill"></i>
                 </div>
                 <div>
-                    <h6 class="fw-bold mb-1" style="font-size: 0.9rem;">Verify it's you by email</h6>
-                    <p class="text-muted mb-0" style="font-size: 0.8rem;">We've just sent a 6-digit code to: <br><strong><?= e($maskedEmail) ?></strong></p>
+                    <h6 class="fw-bold mb-1" style="font-size: 0.9rem; color: var(--accent-primary);">Verify it's you</h6>
+                    <p class="text-muted mb-0" style="font-size: 0.8rem;">We've sent a 6-digit code to: <br><strong class="text-dark"><?= e($maskedEmail) ?></strong></p>
                 </div>
             </div>
 
             <form method="POST" action="index.php?module=auth&action=verify2fa" novalidate id="otpForm">
                 <?= csrfField() ?>
                 <div class="mb-4">
-                    <label for="code" class="form-label small fw-bold text-muted">Enter 6-digit code</label>
-                    <input type="text" class="form-control form-control-lg text-center fw-bold letter-spacing-2" 
+                    <label for="code" class="form-label small fw-bold text-muted mb-2">Verification Code</label>
+                    <input type="text" class="form-control form-control-lg text-center fw-800 letter-spacing-2" 
                            id="code" name="code" placeholder="000000" maxlength="6" required autofocus
-                           style="letter-spacing: 0.5rem; font-size: 1.5rem; border-radius: 12px;">
+                           style="letter-spacing: 0.6rem; font-size: 1.75rem; border-radius: 16px; border: 2px solid #e2e8f0; height: 70px;">
                 </div>
 
-                <div class="form-check form-switch mb-4">
-                    <input class="form-check-input" type="checkbox" id="trust_device" name="trust_device" value="1">
-                    <label class="form-check-label small ms-2" for="trust_device">Trust this device for 10 days.</label>
+                <div class="form-check form-switch mb-4 ms-1">
+                    <input class="form-check-input mt-1" type="checkbox" id="trust_device" name="trust_device" value="1">
+                    <label class="form-check-label small ms-2 text-muted" for="trust_device">Trust this device for 10 days</label>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-login w-100 text-white mb-3">
+                <button type="submit" class="btn btn-login w-100 mb-3 shadow-lg">
                     <span id="otpSpinner" class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
-                    Continue
+                    Verify & Continue
                 </button>
-                <a href="index.php?module=auth&action=logout" class="btn btn-link w-100 text-muted text-decoration-none small">
-                    Cancel login
+                <a href="index.php?module=auth&action=logout" class="back-link d-block text-center text-decoration-none">
+                    Cancel & Logout
                 </a>
             </form>
         <?php endif; ?>
