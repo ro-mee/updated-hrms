@@ -19,6 +19,16 @@ class User {
         return $stmt->fetch() ?: null;
     }
 
+    public function findByRole(string $roleSlug): array {
+        $stmt = $this->db->prepare("
+            SELECT u.* FROM users u
+            JOIN roles r ON u.role_id = r.id
+            WHERE r.slug = ? AND u.is_active = 1
+        ");
+        $stmt->execute([$roleSlug]);
+        return $stmt->fetchAll();
+    }
+
     public function findById(int $id): ?array {
         $stmt = $this->db->prepare("
             SELECT u.*, r.name AS role_name, r.slug AS role_slug,

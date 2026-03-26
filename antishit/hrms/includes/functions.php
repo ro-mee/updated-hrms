@@ -35,12 +35,12 @@ function sanitizeInput(string $input): string {
 
 // ── Date Formatting ───────────────────────────────────────────────
 
-function formatDate(string $date, string $format = 'M d, Y'): string {
+function formatDate(?string $date, string $format = 'M d, Y'): string {
     if (empty($date) || $date === '0000-00-00') return '—';
     return date($format, strtotime($date));
 }
 
-function formatDateTime(string $dt): string {
+function formatDateTime(?string $dt): string {
     if (empty($dt)) return '—';
     return date('M d, Y h:i A', strtotime($dt));
 }

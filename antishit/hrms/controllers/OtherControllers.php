@@ -125,15 +125,18 @@ class LeaveController {
     public function __construct() { $this->model = new Leave(); }
 
     public function index(): void {
-        requirePermission('leaves', 'manage');
+        if (!can('leaves', 'manage')) {
+            redirect('index.php?module=leaves&action=my');
+        }
         $filters = ['status' => sanitizeInput(get('status'))];
         $me = (new Employee())->findById(currentUser()['employee_id']);
-        if (currentRole() === ROLE_DEPT_MANAGER && $me) {
+        if (currentRole() === ROLE_DEPT_MANAGER && $me && !hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)) {
             $filters['department_id'] = $me['department_id'];
         }
         $total  = $this->model->count($filters);
         $pg     = paginate($total, (int)get('page', 1));
         $leaves = $this->model->all($filters, $pg['per_page'], $pg['offset']);
+        
         $leaveTypes = $this->model->leaveTypes();
         include APP_ROOT . '/views/leaves/index.php';
     }
@@ -208,7 +211,7 @@ class LeaveController {
                 $notif->create(currentUserId(), 'Leave Request Submitted', 'Your leave request is pending review.', 'info', 'leaves');
                 auditLog('request_leave','leaves','Submitted leave request',$id);
                 setFlash('success','Leave request submitted successfully.');
-                redirect('index.php?module=leaves');
+                redirect('index.php?module=leaves&action=my');
             }
         }
         include APP_ROOT . '/views/leaves/request.php';
@@ -220,6 +223,14 @@ class LeaveController {
         validateCsrf();
         $leave = $this->model->findById($id);
         if (!$leave) { jsonResponse(false,'Leave request not found.'); }
+        
+        if (currentRole() === ROLE_DEPT_MANAGER && !hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)) {
+            $me = (new Employee())->findById(currentUser()['employee_id']);
+            if ($me && $leave['department_id'] != $me['department_id']) {
+                jsonResponse(false, 'Unauthorized: You can only approve leaves for your own department.');
+            }
+        }
+
         $this->model->approve($id, currentUserId(), sanitizeInput(post('remarks','')));
         auditLog('approve','leaves',"Approved leave request #{$id}",$id);
         // Notify employee
@@ -234,6 +245,16 @@ class LeaveController {
         requirePermission('leaves', 'approve');
         validateCsrf();
         $id = (int)post('id');
+        $leave = $this->model->findById($id);
+        if (!$leave) { jsonResponse(false,'Leave request not found.'); }
+        
+        if (currentRole() === ROLE_DEPT_MANAGER && !hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)) {
+            $me = (new Employee())->findById(currentUser()['employee_id']);
+            if ($me && $leave['department_id'] != $me['department_id']) {
+                jsonResponse(false, 'Unauthorized: You can only reject leaves for your own department.');
+            }
+        }
+
         $this->model->reject($id, currentUserId(), sanitizeInput(post('remarks','')));
         
         $leave = $this->model->findById($id);
@@ -255,7 +276,7 @@ class LeaveController {
         $empId = currentUser()['employee_id'];
         $this->model->cancel($id, $empId);
         setFlash('info','Leave request cancelled.');
-        redirect('index.php?module=leaves');
+        redirect('index.php?module=leaves&action=my');
     }
 
     public function balance(): void {
@@ -273,6 +294,10 @@ class PayrollController {
     public function __construct() { $this->model = new Payroll(); }
 
     public function index(): void {
+        if (!hasRole(ROLE_SUPER_ADMIN, ROLE_FINANCE_MANAGER, ROLE_HR_DIRECTOR)) {
+            redirect('index.php?module=payroll&action=myPayslips');
+            return;
+        }
         requirePermission('payroll', 'manage');
         $periods = $this->model->periods();
         include APP_ROOT . '/views/payroll/index.php';
@@ -396,13 +421,31 @@ class RecruitmentController {
                 'description'=>sanitizeInput(post('description')),'requirements'=>sanitizeInput(post('requirements')),
                 'salary_min'=>post('salary_min')?:(null),'salary_max'=>post('salary_max')?:null,
                 'employment_type'=>sanitizeInput(post('employment_type','full_time')),'vacancies'=>(int)post('vacancies',1),
-                'status'=>sanitizeInput(post('status','open')),'deadline'=>sanitizeInput(post('deadline'))?:null,
+                'status' => (hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR) ? sanitizeInput(post('status', 'open')) : 'pending_approval'),
                 'posted_by'=>currentUserId(),
+                'deadline'=>sanitizeInput(post('deadline'))?:null,
             ];
             $errors = validateRequired(['title','department_id'], $data);
             if (empty($errors)) {
                 $id = $this->jobModel->create($data);
                 auditLog('create','recruitment',"Posted job: {$data['title']}",$id);
+
+                if ($data['status'] === 'pending_approval') {
+                    $userModel = new User();
+                    $notifModel = new Notification();
+                    $hrDirectors = $userModel->findByRole(ROLE_HR_DIRECTOR);
+                    foreach ($hrDirectors as $hr) {
+                        $notifModel->create(
+                            (int)$hr['id'],
+                            'New Job Posting Request',
+                            "A new job posting '{$data['title']}' has been submitted for approval.",
+                            'info',
+                            'recruitment',
+                            $id
+                        );
+                    }
+                }
+
                 setFlash('success','Job posted successfully!');
                 redirect('index.php?module=recruitment&action=viewJob&id='.$id);
             }
@@ -426,6 +469,10 @@ class RecruitmentController {
         validateCsrf();
         $id     = (int)post('id');
         $status = sanitizeInput(post('status'));
+        
+        if ($status === 'hired' && !hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)) {
+            jsonResponse(false, 'Unauthorized: Only HR Management can finalize a hire.');
+        }
         
         $interviewDate = sanitizeInput(post('interview_date'));
         $interviewTime = sanitizeInput(post('interview_time'));
@@ -463,6 +510,25 @@ class RecruitmentController {
             }
         }
 
+        if ($status === 'offered') {
+            $app = $this->appModel->findById($id);
+            if ($app) {
+                $userModel = new User();
+                $notifModel = new Notification();
+                $hrDirectors = $userModel->findByRole(ROLE_HR_DIRECTOR);
+                foreach ($hrDirectors as $hr) {
+                    $notifModel->create(
+                        (int)$hr['id'],
+                        'Applicant Offered',
+                        "Applicant {$app['first_name']} {$app['last_name']} has been offered. Please finalize the hiring process.",
+                        'info',
+                        'recruitment',
+                        $id
+                    );
+                }
+            }
+        }
+
         if ($status === 'hired') {
             $app = $this->appModel->findById($id);
             if ($app) {
@@ -479,46 +545,69 @@ class RecruitmentController {
     }
 
     public function editJob(): void {
-        requirePermission('recruitment', 'manage');
+        requirePermission('recruitment.edit');
+        if (currentRole() === ROLE_RECRUITMENT_OFFICER) {
+            setFlash('error', 'You do not have permission to edit jobs.');
+            redirect('index.php?module=recruitment');
+        }
         $id = (int)get('id');
         $job = $this->jobModel->findById($id);
         if (!$job) { setFlash('error','Job not found.'); redirect('index.php?module=recruitment'); }
-        $errors = []; $empModel = new Employee();
-        $departments = $empModel->departments();
-        $positions   = $empModel->positions();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             validateCsrf();
             $data = [
-                'title'=>sanitizeInput(post('title')),'department_id'=>(int)post('department_id'),
-                'position_id'=>(int)post('position_id') ?: null,
-                'description'=>sanitizeInput(post('description')),'requirements'=>sanitizeInput(post('requirements')),
-                'salary_min'=>post('salary_min')?:null,'salary_max'=>post('salary_max')?:null,
-                'employment_type'=>sanitizeInput(post('employment_type','full_time')),'vacancies'=>(int)post('vacancies',1),
-                'status'=>sanitizeInput(post('status','open')),'deadline'=>sanitizeInput(post('deadline'))?:null,
+                'title' => sanitizeInput(post('title')),
+                'department_id' => (int)post('department_id'),
+                'job_type' => sanitizeInput(post('job_type')),
+                'location' => sanitizeInput(post('location')),
+                'experience_level' => sanitizeInput(post('experience_level')),
+                'salary_range' => sanitizeInput(post('salary_range')),
+                'description' => post('description'), // Keep HTML
+                'requirements' => post('requirements'),
+                'status' => sanitizeInput(post('status'))
             ];
-            $errors = validateRequired(['title','department_id'], $data);
-            if (empty($errors)) {
-                $this->jobModel->update($id, $data);
-                auditLog('edit','recruitment',"Updated job: {$data['title']}",$id);
-                setFlash('success','Job updated successfully!');
-                redirect('index.php?module=recruitment&action=viewJob&id='.$id);
-            }
+            $this->jobModel->update($id, $data);
+            auditLog('update','recruitment',"Updated job: {$data['title']}",$id);
+            setFlash('success','Job updated successfully.');
+            redirect('index.php?module=recruitment&action=viewJob&id='.$id);
         }
+
+        $empModel = new Employee();
+        $departments = $empModel->departments();
         include APP_ROOT . '/views/recruitment/edit_job.php';
     }
 
     public function deleteJob(): void {
-        requirePermission('recruitment', 'manage');
-        validateCsrf();
-        $id = (int)post('id');
-        $job = $this->jobModel->findById($id);
-        if ($job) {
-            $this->jobModel->delete($id);
-            auditLog('delete','recruitment',"Deleted job: {$job['title']}",$id);
-            setFlash('success','Job deleted successfully.');
+        requirePermission('recruitment.delete');
+        if (currentRole() === ROLE_RECRUITMENT_OFFICER) {
+            setFlash('error', 'You do not have permission to delete jobs.');
+            redirect('index.php?module=recruitment');
         }
+        $id = (int)post('id');
+        $this->jobModel->delete($id);
+        auditLog('delete','recruitment',"Deleted job #{$id}",$id);
+        setFlash('success','Job deleted successfully.');
         redirect('index.php?module=recruitment');
     }
+
+    public function approveJob(): void {
+        requirePermission('recruitment', 'manage');
+        if (!hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)) {
+            setFlash('error', 'Unauthorized: Only HR Management can approve job postings.');
+            redirect('index.php?module=recruitment');
+        }
+        validateCsrf();
+        $id = (int)post('id');
+        if ($this->jobModel->update($id, ['status' => 'open'])) {
+            auditLog('update', 'recruitment', "Approved job posting #$id", $id);
+            setFlash('success', 'Job posting approved and published.');
+        } else {
+            setFlash('error', 'Failed to approve job posting.');
+        }
+        redirect('index.php?module=recruitment&action=viewJob&id=' . $id);
+    }
+
 
     public function viewApplicant(): void {
         requirePermission('recruitment', 'manage');
@@ -549,18 +638,76 @@ class PerformanceController {
     public function index(): void {
         requireLogin();
         $filters = [];
-        if (currentRole() === ROLE_EMPLOYEE) $filters['employee_id'] = currentUser()['employee_id'];
+        if (hasRole(ROLE_EMPLOYEE)) {
+            // If they are strictly employee, redirect to 'my'
+            redirect('index.php?module=performance&action=my');
+            return;
+        } elseif (hasRole(ROLE_DEPT_MANAGER)) {
+        $me = (new Employee())->findById(currentUser()['employee_id']);
+        if (currentRole() === ROLE_DEPT_MANAGER && $me && !hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)) {
+            $filters['department_id'] = $me['department_id'];
+        }
+        }
         $reviews = $this->model->all($filters);
         include APP_ROOT . '/views/performance/index.php';
     }
 
+    public function my(): void {
+        requirePermission('performance', 'self');
+        $empId = currentUser()['employee_id'];
+        if (!$empId) { setFlash('error','Employee profile not found.'); redirect('index.php?module=dashboard'); }
+        // For employees, we usually only show 'published' or 'completed' reviews
+        $reviews = $this->model->all(['employee_id' => $empId]);
+        include APP_ROOT . '/views/performance/my.php';
+    }
+
     public function create(): void {
-        requirePermission('performance', 'manage');
-        $errors=[]; $employees=(new Employee())->all(); $kpis=$this->model->kpis();
+        requirePermission('performance', 'review');
+        $errors=[]; 
+        $empModel = new Employee();
+        $empFilters = [];
+        $isHR = hasRole(ROLE_HR_DIRECTOR, ROLE_HR_SPECIALIST);
+        $isManager = hasRole(ROLE_DEPT_MANAGER);
+        $me = $empModel->findById(currentUser()['employee_id']);
+
+        if (hasRole(ROLE_SUPER_ADMIN)) {
+            // Super Admin sees everyone
+            $empFilters = [];
+        } elseif ($isHR) {
+            // HR Directors/Specialists see all supervisors/managers but not regular employees
+            $empFilters['exclude_role_slug'] = [ROLE_EMPLOYEE, ROLE_SUPER_ADMIN];
+        } elseif ($isManager && $me) {
+            // Managers only see regular employees in their own department
+            $empFilters['department_id'] = $me['department_id'];
+            $empFilters['role_slug'] = ROLE_EMPLOYEE;
+        }
+        
+        $employees = $empModel->all($empFilters, 1000); 
+        
+        $kpis = $this->model->kpis();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             validateCsrf();
+            $empId = (int)post('employee_id');
+            
+            // Security: Enforce same visibility rules on POST
+            $targetEmp = $empModel->findById($empId);
+            if (!$targetEmp) { jsonResponse(false, 'Employee not found.'); }
+
+            if (hasRole(ROLE_SUPER_ADMIN)) {
+                // No additional checks for Super Admin
+            } elseif ($isHR) {
+                if ($targetEmp['role_slug'] === ROLE_EMPLOYEE || $targetEmp['role_slug'] === ROLE_SUPER_ADMIN) {
+                    jsonResponse(false, 'Unauthorized: You can only review management-level positions.');
+                }
+            } elseif ($isManager && $me) {
+                if ($targetEmp['department_id'] != $me['department_id'] || $targetEmp['role_slug'] !== ROLE_EMPLOYEE) {
+                    jsonResponse(false, 'Unauthorized: You can only review employees in your department.');
+                }
+            }
+
             $data = [
-                'employee_id'   => (int)post('employee_id'),
+                'employee_id'   => $empId,
                 'reviewer_id'   => currentUserId(),
                 'review_period' => sanitizeInput(post('review_period')),
                 'review_date'   => sanitizeInput(post('review_date', date('Y-m-d'))),
@@ -574,6 +721,17 @@ class PerformanceController {
                 $id = $this->model->create($data);
                 $scores = $_POST['kpi_scores'] ?? [];
                 if (!empty($scores)) $this->model->saveKpiScores($id, $scores);
+                
+                // Notify Employee
+                (new Notification())->create(
+                    $targetEmp['user_id'],
+                    'New Performance Review',
+                    'A new performance review has been created for you. Please check "My Performance" to view your feedback.',
+                    'info',
+                    'performance',
+                    $id
+                );
+
                 auditLog('create','performance',"Created performance review #{$id}",$id);
                 setFlash('success','Performance review saved!');
                 redirect('index.php?module=performance');
@@ -586,6 +744,16 @@ class PerformanceController {
         requireLogin();
         $review = $this->model->findById((int)get('id'));
         if (!$review) { setFlash('error','Review not found.'); redirect('index.php?module=performance'); }
+        // Security: Employee only own, Manager only dept
+        if (currentRole() === ROLE_EMPLOYEE && $review['employee_id'] != currentUser()['employee_id']) {
+            http_response_code(403); include APP_ROOT.'/views/errors/403.php'; exit;
+        }
+        if (currentRole() === ROLE_DEPT_MANAGER && !hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)) {
+            $me = (new Employee())->findById(currentUser()['employee_id']);
+            if ($me && $review['department_id'] !== $me['department_id'] && $review['employee_id'] !== $me['id']) {
+                http_response_code(403); include APP_ROOT.'/views/errors/403.php'; exit;
+            }
+        }
         $scores = $this->model->getScores($review['id']);
         include APP_ROOT . '/views/performance/view.php';
     }
@@ -624,6 +792,20 @@ class PerformanceController {
         }
         redirect('index.php?module=performance&action=kpis');
     }
+
+    public function acknowledge(): void {
+        requirePermission('performance', 'self');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') { redirect('index.php?module=performance&action=my'); }
+        validateCsrf();
+        $id = (int)post('id');
+        $empId = currentUser()['employee_id'];
+        $review = $this->model->findById($id);
+        if (!$review || $review['employee_id'] != $empId) { jsonResponse(false, 'Unauthorized.'); }
+        
+        $this->model->update($id, ['employee_ack' => 1]);
+        auditLog('acknowledge', 'performance', "Employee acknowledged review #$id", $id);
+        jsonResponse(true, 'Review acknowledged.');
+    }
 }
 
 /** Training Controller */
@@ -632,7 +814,7 @@ class TrainingController {
     public function __construct() { $this->model = new Training(); }
 
     public function index(): void {
-        requireLogin();
+        requirePermission('training', 'view');
         $filters = ['status'=>sanitizeInput(get('status'))];
         
         if (!hasRole('super_admin') && !hasRole('hr_director') && !hasRole('hr_specialist')) {
@@ -655,10 +837,24 @@ class TrainingController {
     public function create(): void {
         requirePermission('training', 'manage');
         $errors = [];
-        $departments = db()->query("SELECT id, name FROM departments WHERE is_active=1 ORDER BY name ASC")->fetchAll();
+        $isManager = hasRole(ROLE_DEPT_MANAGER);
+        $me = $isManager ? (new Employee())->findById(currentUser()['employee_id']) : null;
+
+        if ($isManager && $me) {
+            $departments = db()->query("SELECT id, name FROM departments WHERE id = {$me['department_id']} AND is_active=1")->fetchAll();
+        } else {
+            $departments = db()->query("SELECT id, name FROM departments WHERE is_active=1 ORDER BY name ASC")->fetchAll();
+        }
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             validateCsrf();
+            $deptId = post('department_id') ?: null;
+            
+            // Security: Enforce manager's department
+            if ($isManager && $me) {
+                $deptId = $me['department_id'];
+            }
+
             $data = [
                 'title'    => sanitizeInput(post('title')),
                 'description'=>sanitizeInput(post('description')),
@@ -669,7 +865,7 @@ class TrainingController {
                 'end_date'  => sanitizeInput(post('end_date')) ?: null,
                 'location'  => sanitizeInput(post('location')),
                 'max_participants'=>post('max_participants')?:null,
-                'department_id'=>post('department_id')?:null,
+                'department_id'=>$deptId,
                 'is_required'  => post('is_required') ? 1 : 0,
                 'cost'      => (float)post('cost',0),
                 'created_by'=> currentUserId(),
@@ -708,6 +904,14 @@ class TrainingController {
         $rating     = (int)post('rating');
         $feedback   = sanitizeInput(post('feedback'));
         if (!$empId) { jsonResponse(false,'No employee profile.'); }
+        
+        // One-time feedback constraint
+        $existing = db()->prepare("SELECT rating FROM training_enrollments WHERE training_id=? AND employee_id=?");
+        $existing->execute([$trainingId, $empId]);
+        if ($existing->fetchColumn()) {
+            jsonResponse(false, 'You have already submitted feedback for this training.');
+        }
+
         if ($rating < 1 || $rating > 5) { jsonResponse(false,'Rating must be between 1 and 5.'); }
         $stmt = db()->prepare("UPDATE training_enrollments SET rating=?, feedback=? WHERE training_id=? AND employee_id=?");
         $stmt->execute([$rating, $feedback, $trainingId, $empId]);
@@ -868,7 +1072,7 @@ class AuditController {
 /** Settings Controller */
 class SettingsController {
     public function index(): void {
-        requirePermission('settings', 'view');
+        requirePermission('settings', 'manage');
         $model    = new Setting();
         $settings = $model->all();
         $backups  = glob(APP_ROOT . '/uploads/backups/*.sql');

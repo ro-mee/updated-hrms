@@ -50,6 +50,11 @@ class DashboardController {
             $roleData['open_jobs']     = $jobModel->openCount();
             $roleData['total_applicants']= $appModel->totalCount();
             $roleData['applicants_by_status']= $appModel->countByStatus();
+            $roleData['hired_this_month'] = $appModel->hiredThisMonth();
+            $roleData['upcoming_interviews'] = $appModel->upcomingInterviews(5);
+            $roleData['recent_applicants'] = $appModel->all([], 5, 0);
+            $roleData['job_status_dist'] = $jobModel->countByStatus();
+            $roleData['applicant_source_dist'] = $appModel->countBySource();
         }
         if ($role === ROLE_DEPT_MANAGER) {
             $empId = currentUser()['employee_id'] ?? 0;
@@ -62,6 +67,35 @@ class DashboardController {
                     $roleData['dept_attendance'] = $attModel->todayStats($deptId);
                     $roleData['dept_pending_leaves'] = $leaveModel->count(['department_id' => $deptId, 'status' => 'pending']);
                     $roleData['recent_dept_leaves'] = $leaveModel->all(['department_id' => $deptId], 5, 0);
+
+                    // --- New Manager Analytics ---
+                    // 1. Attendance Trend (Last 7 Days)
+                    $roleData['dept_attendance_trend'] = db()->query("
+                        SELECT a.date, 
+                               SUM(CASE WHEN a.status IN ('present', 'late', 'half_day') THEN 1 ELSE 0 END) as present,
+                               SUM(CASE WHEN a.status='absent' THEN 1 ELSE 0 END) as absent
+                        FROM attendance a JOIN employees e ON a.employee_id = e.id
+                        WHERE e.department_id = $deptId AND a.date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+                        GROUP BY a.date ORDER BY a.date ASC
+                    ")->fetchAll();
+
+                    // 2. Performance Distribution (Dept)
+                    $roleData['dept_perf_dist'] = db()->query("
+                        SELECT ROUND(overall_rating) as rating, COUNT(*) as cnt
+                        FROM performance_reviews pr JOIN employees e ON pr.employee_id = e.id
+                        WHERE e.department_id = $deptId AND pr.status = 'approved' AND overall_rating IS NOT NULL
+                        GROUP BY rating ORDER BY rating DESC
+                    ")->fetchAll();
+
+                    // 3. Upcoming Trainings for Dept
+                    $trainModel = new Training();
+                    $roleData['dept_trainings'] = $trainModel->all(['department_id' => $deptId, 'status' => 'scheduled'], 5, 0);
+
+                    // 4. Attendance Rate (Today)
+                    $todayStats = $roleData['dept_attendance'];
+                    $totalEmp = $roleData['dept_employees_count'];
+                    $presentCount = ($todayStats['present']??0) + ($todayStats['late']??0);
+                    $roleData['dept_attendance_rate'] = ($totalEmp > 0) ? round(($presentCount / $totalEmp) * 100) : 0;
                 }
             }
         }
@@ -71,8 +105,38 @@ class DashboardController {
                 $roleData['today_record']   = $attModel->todayRecord($empId);
                 $roleData['my_leaves']       = $leaveModel->all(['employee_id'=>$empId], 5, 0);
                 $roleData['leave_balance']   = $leaveModel->getBalance($empId, date('Y'));
+                
                 $payrollModel = new Payroll();
                 $roleData['my_payslips'] = $payrollModel->employeePayslips($empId);
+                
+                // Attendance Analytics (Monthly)
+                $monthStats = $attModel->monthlySummary($empId, (int)date('Y'), (int)date('n'));
+                $roleData['attendance_summary'] = $monthStats;
+                
+                // Attendance Rate %
+                $presentCount = 0;
+                foreach ($monthStats as $ms) {
+                    if (in_array($ms['status'], ['present', 'late', 'half_day'])) $presentCount += $ms['cnt'];
+                }
+                $workDaysSoFar = workingDaysBetween(date('Y-m-01'), date('Y-m-d'));
+                $roleData['attendance_rate'] = ($workDaysSoFar > 0) ? round(($presentCount / $workDaysSoFar) * 100) : 100;
+
+                // Training Progress
+                $trainModel = new Training();
+                $myTrainings = $trainModel->employeeTrainings($empId);
+                $roleData['training_stats'] = [
+                    'total'     => count($myTrainings),
+                    'completed' => count(array_filter($myTrainings, fn($t) => $t['enroll_status'] === 'completed')),
+                    'enrolled'  => count(array_filter($myTrainings, fn($t) => $t['enroll_status'] !== 'completed'))
+                ];
+
+                // Latest Performance
+                $perfModel = new Performance();
+                $latestPerf = $perfModel->all(['employee_id' => $empId, 'status' => 'approved'], 1, 0);
+                $roleData['latest_performance'] = $latestPerf[0] ?? null;
+
+                // Next Payday
+                $roleData['next_payday'] = db()->query("SELECT pay_date FROM payroll_periods WHERE pay_date >= CURDATE() AND status != 'cancelled' ORDER BY pay_date ASC LIMIT 1")->fetchColumn();
             }
         }
 

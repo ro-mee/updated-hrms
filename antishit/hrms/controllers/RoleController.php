@@ -85,6 +85,7 @@ class RoleController {
             ['payroll', 'self', 'My Payslips'],
             ['performance', 'manage', 'Manage Performance'],
             ['performance', 'review', 'Review Performance'],
+            ['performance', 'self', 'My Performance'],
             ['profile', 'self', 'My Profile'],
             ['recruitment', 'manage_onboarding', 'Manage Onboarding'],
             ['recruitment', 'manage', 'Manage Recruitment'],
@@ -96,6 +97,7 @@ class RoleController {
             ['settings', 'policy', 'Policy Settings'],
             ['settings', 'tax', 'Tax Settings'],
             ['training', 'manage', 'Manage Training'],
+            ['training', 'view', 'View Training'],
             ['users', 'manage_roles', 'Manage Roles'],
             ['users', 'manage_users', 'Manage Users'],
         ];

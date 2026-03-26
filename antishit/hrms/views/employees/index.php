@@ -7,7 +7,7 @@ include APP_ROOT . '/views/layouts/header.php';
 <div class="container-fluid px-4 py-3">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h5 class="fw-700 mb-0"><i class="bi bi-people text-primary me-2"></i>Employees</h5>
-        <?php if (can('employees','create')): ?>
+        <?php if (can('employees','manage')): ?>
         <a href="index.php?module=employees&action=add" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Add Employee</a>
         <?php endif; ?>
     </div>

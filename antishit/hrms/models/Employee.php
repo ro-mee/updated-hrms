@@ -16,6 +16,24 @@ class Employee {
         if (!empty($filters['department_id'])) { $where[] = "department_id = ?"; $params[] = $filters['department_id']; }
         if (!empty($filters['status']))         { $where[] = "status = ?";         $params[] = $filters['status']; }
         if (!empty($filters['employment_type']))  { $where[] = "employment_type = ?"; $params[] = $filters['employment_type']; }
+        if (!empty($filters['role_slug'])) {
+            if (is_array($filters['role_slug'])) {
+                $placeholders = implode(',', array_fill(0, count($filters['role_slug']), '?'));
+                $where[] = "role_slug IN ($placeholders)";
+                $params = array_merge($params, $filters['role_slug']);
+            } else {
+                $where[] = "role_slug = ?"; $params[] = $filters['role_slug'];
+            }
+        }
+        if (!empty($filters['exclude_role_slug'])) {
+            if (is_array($filters['exclude_role_slug'])) {
+                $placeholders = implode(',', array_fill(0, count($filters['exclude_role_slug']), '?'));
+                $where[] = "role_slug NOT IN ($placeholders)";
+                $params = array_merge($params, $filters['exclude_role_slug']);
+            } else {
+                $where[] = "role_slug != ?"; $params[] = $filters['exclude_role_slug'];
+            }
+        }
         $whereStr = implode(' AND ', $where);
         $stmt = $this->db->prepare("SELECT * FROM v_employees WHERE $whereStr ORDER BY $orderBy LIMIT ? OFFSET ?");
         $stmt->execute([...$params, $limit, $offset]);
@@ -33,6 +51,25 @@ class Employee {
         }
         if (!empty($filters['department_id'])) { $where[] = "department_id = ?"; $params[] = $filters['department_id']; }
         if (!empty($filters['status']))         { $where[] = "status = ?";         $params[] = $filters['status']; }
+        if (!empty($filters['employment_type']))  { $where[] = "employment_type = ?"; $params[] = $filters['employment_type']; }
+        if (!empty($filters['role_slug'])) {
+            if (is_array($filters['role_slug'])) {
+                $placeholders = implode(',', array_fill(0, count($filters['role_slug']), '?'));
+                $where[] = "role_slug IN ($placeholders)";
+                $params = array_merge($params, $filters['role_slug']);
+            } else {
+                $where[] = "role_slug = ?"; $params[] = $filters['role_slug'];
+            }
+        }
+        if (!empty($filters['exclude_role_slug'])) {
+            if (is_array($filters['exclude_role_slug'])) {
+                $placeholders = implode(',', array_fill(0, count($filters['exclude_role_slug']), '?'));
+                $where[] = "role_slug NOT IN ($placeholders)";
+                $params = array_merge($params, $filters['exclude_role_slug']);
+            } else {
+                $where[] = "role_slug != ?"; $params[] = $filters['exclude_role_slug'];
+            }
+        }
         $whereStr = implode(' AND ', $where);
         $stmt = $this->db->prepare("SELECT COUNT(*) FROM v_employees WHERE $whereStr");
         $stmt->execute($params);

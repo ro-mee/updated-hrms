@@ -84,11 +84,14 @@ class Job {
         $stmt->execute([$id]);
         $hired = (int)$stmt->fetchColumn();
         
-        if ($hired >= $job['vacancies']) {
-            $this->db->prepare("UPDATE jobs SET status='closed' WHERE id=?")->execute([$id]);
-            return true;
-        }
         return false;
+    }
+
+    public function countByStatus(): array {
+        $rows = $this->db->query("SELECT status, COUNT(*) AS cnt FROM jobs GROUP BY status")->fetchAll();
+        $r = [];
+        foreach ($rows as $row) $r[$row['status']] = $row['cnt'];
+        return $r;
     }
 }
 
@@ -185,6 +188,36 @@ class Applicant {
         $rows = $this->db->query("SELECT status, COUNT(*) AS cnt FROM applicants GROUP BY status")->fetchAll();
         $r = [];
         foreach ($rows as $row) $r[$row['status']] = $row['cnt'];
+        return $r;
+    }
+
+    public function hiredThisMonth(): int {
+        return (int)$this->db->query("
+            SELECT COUNT(*) FROM applicants 
+            WHERE status='hired' 
+            AND MONTH(created_at) = MONTH(CURRENT_DATE()) 
+            AND YEAR(created_at) = YEAR(CURRENT_DATE())
+        ")->fetchColumn();
+    }
+
+    public function upcomingInterviews(int $limit = 5): array {
+        $stmt = $this->db->prepare("
+            SELECT a.*, j.title AS job_title 
+            FROM applicants a 
+            JOIN jobs j ON a.job_id = j.id 
+            WHERE a.status = 'interview' 
+            AND a.interview_date >= CURRENT_DATE() 
+            ORDER BY a.interview_date ASC 
+            LIMIT ?
+        ");
+        $stmt->execute([$limit]);
+        return $stmt->fetchAll();
+    }
+
+    public function countBySource(): array {
+        $rows = $this->db->query("SELECT source, COUNT(*) AS cnt FROM applicants WHERE source IS NOT NULL GROUP BY source")->fetchAll();
+        $r = [];
+        foreach ($rows as $row) $r[$row['source']] = $row['cnt'];
         return $r;
     }
 }

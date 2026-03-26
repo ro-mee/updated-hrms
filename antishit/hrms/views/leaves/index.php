@@ -7,14 +7,18 @@ include APP_ROOT . '/views/layouts/header.php';
 <div class="container-fluid px-4 py-3">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h5 class="fw-700 mb-0"><i class="bi bi-calendar-check text-primary me-2"></i>Leave Management</h5>
-        <?php if(currentRole()===ROLE_EMPLOYEE): ?>
+        <?php if(currentUser()['employee_id']): ?>
         <a href="index.php?module=leaves&action=request" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Request Leave</a>
         <?php endif; ?>
     </div>
     <!-- Status filter pill -->
     <div class="d-flex gap-2 mb-3 flex-wrap">
-        <?php foreach([''=> 'All','pending'=>'Pending','approved'=>'Approved','rejected'=>'Rejected','cancelled'=>'Cancelled'] as $s=>$l): ?>
-        <a href="index.php?module=leaves<?= $s ? '&status='.$s : '' ?>" class="btn btn-sm <?= get('status')===$s ? 'btn-primary' : 'btn-outline-secondary' ?>"><?= $l ?></a>
+        <?php 
+        $currAction = get('action', 'index');
+        foreach([''=> 'All','pending'=>'Pending','approved'=>'Approved','rejected'=>'Rejected','cancelled'=>'Cancelled'] as $s=>$l): 
+            $url = "index.php?module=leaves&action=$currAction" . ($s ? "&status=$s" : "");
+        ?>
+        <a href="<?= $url ?>" class="btn btn-sm <?= get('status')===$s ? 'btn-primary' : 'btn-outline-secondary' ?>"><?= $l ?></a>
         <?php endforeach; ?>
     </div>
     <div class="card table-card">
@@ -43,7 +47,7 @@ include APP_ROOT . '/views/layouts/header.php';
                         <button class="btn btn-sm btn-danger me-1" onclick="reviewLeave(<?= $lv['id'] ?>,'reject')" title="Reject"><i class="bi bi-x-lg"></i></button>
                         <?php endif; ?>
                         
-                        <?php if($lv['status']==='pending' && currentRole()===ROLE_EMPLOYEE): ?>
+                        <?php if($lv['status']==='pending' && $lv['employee_id'] === currentUser()['employee_id']): ?>
                         <form method="POST" action="index.php?module=leaves&action=cancel" class="d-inline">
                             <?= csrfField() ?><input type="hidden" name="id" value="<?= $lv['id'] ?>">
                             <button class="btn btn-sm btn-outline-danger" data-confirm="Cancel request?"><i class="bi bi-trash"></i></button>

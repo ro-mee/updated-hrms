@@ -10,6 +10,7 @@ class Performance {
         if (!empty($filters['employee_id'])) { $where[] = "pr.employee_id=?"; $params[] = $filters['employee_id']; }
         if (!empty($filters['reviewer_id'])) { $where[] = "pr.reviewer_id=?"; $params[] = $filters['reviewer_id']; }
         if (!empty($filters['status']))       { $where[] = "pr.status=?"; $params[] = $filters['status']; }
+        if (!empty($filters['department_id'])) { $where[] = "e.department_id=?"; $params[] = $filters['department_id']; }
         $whereStr = implode(' AND ', $where);
         $stmt = $this->db->prepare("
             SELECT pr.*, u.avatar, CONCAT(u.first_name,' ',u.last_name) AS employee_name,
@@ -195,7 +196,7 @@ class Training {
 
     public function employeeTrainings(int $employeeId): array {
         $stmt = $this->db->prepare("
-            SELECT t.*, te.training_id, te.status AS enroll_status, te.score, te.certificate
+            SELECT t.*, te.training_id, te.status AS enroll_status, te.score, te.certificate, te.rating, te.feedback
             FROM training_enrollments te JOIN trainings t ON te.training_id=t.id
             WHERE te.employee_id=? ORDER BY t.start_date DESC
         ");

@@ -26,13 +26,21 @@ include APP_ROOT . '/views/layouts/header.php';
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Target Department</label>
-                            <select name="department_id" class="form-select">
-                                <option value="">All Departments</option>
+                            <?php $isManager = hasRole(ROLE_DEPT_MANAGER); ?>
+                            <select name="department_id" class="form-select" <?= $isManager ? 'disabled' : '' ?>>
+                                <?php if (!$isManager): ?>
+                                    <option value="">All Departments</option>
+                                <?php endif; ?>
                                 <?php foreach($departments ?? [] as $d): ?>
-                                    <option value="<?=$d['id']?>"><?=e($d['name'])?></option>
+                                    <option value="<?=$d['id']?>" selected><?=e($d['name'])?></option>
                                 <?php endforeach; ?>
                             </select>
-                            <div class="form-text">Leave as "All Departments" to make this training visible to everyone.</div>
+                            <?php if ($isManager): ?>
+                                <input type="hidden" name="department_id" value="<?= $departments[0]['id'] ?? '' ?>">
+                            <?php endif; ?>
+                            <div class="form-text">
+                                <?= $isManager ? 'Training will be restricted to your department.' : 'Leave as "All Departments" to make this training visible to everyone.' ?>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Trainer / Instructor</label>

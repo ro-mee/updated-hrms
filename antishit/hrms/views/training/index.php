@@ -68,7 +68,7 @@ include APP_ROOT.'/views/layouts/header.php';?>
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="fw-700 mb-0"><i class="bi bi-mortarboard text-primary me-2"></i>Training Programs</h5>
-        <?php if(can('training','create')):?>
+        <?php if(can('training','manage')):?>
         <a href="index.php?module=training&action=create" class="btn btn-primary">
             <i class="bi bi-plus-lg me-1"></i>Create Training
         </a>
@@ -148,49 +148,53 @@ include APP_ROOT.'/views/layouts/header.php';?>
                     </div>
                 </div>
                 <div class="training-card-footer">
-                    <?php
+                    <?php 
+                    $isAdminManager = hasRole('super_admin','hr_director','hr_specialist','department_manager');
                     $myEnroll = null;
                     foreach($myEnrollments as $me) { if($me['training_id']==$t['id']) { $myEnroll=$me; break; } }
                     $hasFeedback = !empty($myEnroll['rating']);
                     ?>
-                    <?php if($enrolled && $t['status']==='completed'):?>
-                        <?php if($hasFeedback):?>
-                        <div class="d-flex align-items-center justify-content-center gap-2 small fw-600" style="color:#5b8fa8">
-                            <i class="bi bi-star-fill"></i>
-                            Feedback submitted (<?= $myEnroll['rating'] ?>/5)
+                    <?php if($t['status']==='completed'):?>
+                        <div class="d-flex flex-column gap-2">
+                        <?php if($isAdminManager): ?>
+                            <!-- Admin/HR/Managers always see View Feedbacks for completed programs -->
+                            <a href="index.php?module=training&action=viewFeedback&id=<?=$t['id']?>" class="btn btn-sm w-100 fw-600"
+                                style="background:rgba(var(--bs-primary-rgb),0.1);color:var(--bs-primary);border:1px solid rgba(var(--bs-primary-rgb),0.25);border-radius:8px;">
+                                <i class="bi bi-bar-chart me-1"></i>View Feedbacks
+                            </a>
+                        <?php elseif($enrolled): ?>
+                            <!-- Regular Employees see Leave Feedback if enrolled and not yet submitted -->
+                            <?php if($hasFeedback):?>
+                                <div class="d-flex align-items-center justify-content-center gap-2 small fw-600" style="color:#5b8fa8">
+                                    <i class="bi bi-star-fill"></i>
+                                    Feedback submitted (<?= $myEnroll['rating'] ?>/5)
+                                </div>
+                            <?php else:?>
+                                <button class="btn btn-sm w-100 fw-600" style="background:rgba(91,143,168,0.12);color:#5b8fa8;border:1px solid rgba(91,143,168,0.3);border-radius:8px;"
+                                    onclick="openFeedback(<?=$t['id']?>, '<?=e($t['title'])?>')"> 
+                                    <i class="bi bi-chat-left-text me-1"></i>Leave Feedback
+                                </button>
+                            <?php endif;?>
+                        <?php else: ?>
+                            <div class="d-flex align-items-center justify-content-center gap-2 text-muted fw-600 small">
+                                <i class="bi bi-check2-all"></i> Training Completed
+                            </div>
+                        <?php endif; ?>
                         </div>
-                        <?php else:?>
-                        <button class="btn btn-sm w-100 fw-600" style="background:rgba(91,143,168,0.12);color:#5b8fa8;border:1px solid rgba(91,143,168,0.3);border-radius:8px;"
-                            onclick="openFeedback(<?=$t['id']?>, '<?=e($t['title'])?>')"> 
-                            <i class="bi bi-chat-left-text me-1"></i>Leave Feedback
-                        </button>
-                        <?php endif;?>
                     <?php elseif($enrolled):?>
-                    <div class="d-flex align-items-center justify-content-center gap-2 text-success fw-600 small">
-                        <i class="bi bi-check-circle-fill"></i> You are enrolled
-                    </div>
-                    <?php elseif($t['status']==='scheduled' && currentUser()['employee_id']):?>
-                    <button class="btn btn-primary btn-sm enroll-btn w-100" onclick="enrollTraining(<?=$t['id']?>)">
-                        <i class="bi bi-person-plus me-1"></i>Enroll Now
-                    </button>
-                    <?php elseif($t['status']==='ongoing'):?>
-                    <div class="d-flex align-items-center justify-content-center gap-2 text-warning fw-600 small">
-                        <i class="bi bi-play-circle-fill"></i> Currently Ongoing
-                    </div>
-                    <?php elseif($t['status']==='completed'):?>
-                    <div class="d-flex flex-column gap-2">
-                        <div class="d-flex align-items-center justify-content-center gap-2 text-muted fw-600 small">
-                            <i class="bi bi-check2-all"></i> Training Completed
+                        <div class="d-flex align-items-center justify-content-center gap-2 text-success fw-600 small">
+                            <i class="bi bi-check-circle-fill"></i> You are enrolled
                         </div>
-                        <?php if(hasRole('super_admin','hr_director','hr_specialist','department_manager')):?>
-                        <a href="index.php?module=training&action=viewFeedback&id=<?=$t['id']?>" class="btn btn-sm w-100 fw-600"
-                            style="background:rgba(var(--bs-primary-rgb),0.1);color:var(--bs-primary);border:1px solid rgba(var(--bs-primary-rgb),0.25);border-radius:8px;">
-                            <i class="bi bi-bar-chart me-1"></i>View Feedbacks
-                        </a>
-                        <?php endif;?>
-                    </div>
+                    <?php elseif($t['status']==='scheduled' && currentUser()['employee_id']):?>
+                        <button class="btn btn-primary btn-sm enroll-btn w-100" onclick="enrollTraining(<?=$t['id']?>)">
+                            <i class="bi bi-person-plus me-1"></i>Enroll Now
+                        </button>
+                    <?php elseif($t['status']==='ongoing'):?>
+                        <div class="d-flex align-items-center justify-content-center gap-2 text-warning fw-600 small">
+                            <i class="bi bi-play-circle-fill"></i> Currently Ongoing
+                        </div>
                     <?php else:?>
-                    <div class="text-muted small text-center">Enrollment not available</div>
+                        <div class="text-muted small text-center">Enrollment not available</div>
                     <?php endif;?>
                 </div>
             </div>
@@ -232,7 +236,7 @@ include APP_ROOT.'/views/layouts/header.php';?>
       </div>
       <div class="modal-footer border-0 pt-0">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" onclick="submitFeedback()">
+        <button type="button" class="btn btn-primary" onclick="submitFeedback(event)">
           <i class="bi bi-send me-1"></i>Submit
         </button>
       </div>
@@ -256,16 +260,34 @@ function setRating(val) {
         b.style.color = parseInt(b.dataset.val) <= val ? '#f4a819' : '#ccc';
     });
 }
-async function submitFeedback() {
+async function submitFeedback(event) {
+    const btn = event.target.closest('button');
     const rating = document.getElementById('fbRating').value;
     if (!rating) { showToast('warning', 'Please select a rating.'); return; }
-    const res = await postJson('index.php?module=training&action=feedback', {
-        training_id: _fbTrainingId,
-        rating: rating,
-        feedback: document.getElementById('fbText').value
-    });
-    showToast(res.success ? 'success' : 'danger', res.message);
-    if (res.success) { bootstrap.Modal.getInstance(document.getElementById('feedbackModal')).hide(); setTimeout(()=>location.reload(),1000); }
+    
+    const originalHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Submitting...';
+
+    try {
+        const res = await postJson('index.php?module=training&action=feedback', {
+            training_id: _fbTrainingId,
+            rating: rating,
+            feedback: document.getElementById('fbText').value
+        });
+        showToast(res.success ? 'success' : 'danger', res.message);
+        if (res.success) { 
+            bootstrap.Modal.getInstance(document.getElementById('feedbackModal')).hide(); 
+            setTimeout(()=>location.reload(), 1000); 
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        }
+    } catch (e) {
+        showToast('danger', 'Request failed. Please try again.');
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+    }
 }
 async function enrollTraining(id){
     const res = await postJson('index.php?module=training&action=enroll',{training_id:id});

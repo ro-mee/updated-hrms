@@ -18,7 +18,7 @@ class EmployeeController {
             'status'        => sanitizeInput(get('status')),
         ];
         // Dept manager sees only their dept
-        if (currentRole() === ROLE_DEPT_MANAGER) {
+        if (currentRole() === ROLE_DEPT_MANAGER && !hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)) {
             $me = $this->model->findById(currentUser()['employee_id']);
             if ($me) $filters['department_id'] = $me['department_id'];
         }
@@ -37,6 +37,13 @@ class EmployeeController {
         // Employee can only view own profile
         if (currentRole() === ROLE_EMPLOYEE && $employee['user_id'] !== currentUserId()) {
             http_response_code(403); include APP_ROOT.'/views/errors/403.php'; exit;
+        }
+        // Dept manager can only view staff in their department
+        if (currentRole() === ROLE_DEPT_MANAGER && !hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)) {
+            $me = $this->model->findById(currentUser()['employee_id']);
+            if ($me && $employee['department_id'] !== $me['department_id'] && $employee['id'] !== $me['id']) {
+                http_response_code(403); include APP_ROOT.'/views/errors/403.php'; exit;
+            }
         }
         $leaveModel  = new Leave();
         $attModel    = new Attendance();

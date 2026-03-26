@@ -47,7 +47,6 @@ include APP_ROOT . '/views/layouts/header.php';
                     <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabLeaves">Leaves</button></li>
                     <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabAtt">Attendance</button></li>
                     <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabDocs">Documents</button></li>
-                    <li class="nav-item"><button class="nav-link text-danger" data-bs-toggle="tab" data-bs-target="#tabSessions"><i class="bi bi-shield-lock me-1"></i>Sessions</button></li>
                 </ul>
             </div>
             <div class="tab-content p-3">
@@ -114,69 +113,13 @@ include APP_ROOT . '/views/layouts/header.php';
                         <?php if(empty($documents)): ?><tr><td colspan="4" class="text-center text-muted py-3">No documents uploaded</td></tr><?php endif; ?>
                         </tbody>
                     </table>
-                </div>
-                <!-- Sessions -->
-                <div class="tab-pane fade" id="tabSessions">
-                    <div class="alert alert-info py-2 small">
-                        <i class="bi bi-info-circle me-2"></i>These are the devices that are currently logged into your account. You can revoke any session to log it out immediately.
-                    </div>
-                    <div class="table-responsive">
-                    <table class="table table-sm table-hover align-middle">
-                        <thead class="table-light"><tr><th>Device / Browser</th><th>IP & Location</th><th>Last Activity</th><th></th></tr></thead>
-                        <tbody>
-                        <?php foreach($activeSessions as $s): 
-                            $isCurrent = ($s['session_id'] === session_id());
-                        ?>
-                        <tr class="<?= $isCurrent ? 'table-primary-subtle' : '' ?>">
-                            <td>
-                                <div class="fw-700 small"><?= e($s['device'] ?: 'Unknown Device') ?></div>
-                                <div class="text-muted" style="font-size:.7rem"><?= truncate($s['user_agent'], 60) ?></div>
-                                <?php if($isCurrent): ?><span class="badge bg-primary px-2" style="font-size:.65rem">Current Session</span><?php endif; ?>
-                            </td>
-                            <td>
-                                <div class="small"><?= e($s['ip_address']) ?></div>
-                                <div class="text-muted" style="font-size:.7rem"><?= e($s['location'] ?: 'Unknown Location') ?></div>
-                            </td>
-                            <td class="small text-muted"><?= timeAgo($s['last_activity']) ?></td>
-                            <td class="text-end">
-                                <?php if(!$isCurrent): ?>
-                                <button type="button" class="btn btn-outline-danger btn-xs revoke-session-btn" 
-                                        data-id="<?= $s['id'] ?>" data-emp-id="<?= $employee['id'] ?>">
-                                    Revoke
-                                </button>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
-<!-- Revoke Session Confirmation Modal -->
-<div class="modal fade" id="revokeSessionModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
-            <div class="modal-body p-4 text-center">
-                <div class="mb-3">
-                    <i class="bi bi-shield-lock-fill text-danger" style="font-size: 3rem;"></i>
-                </div>
-                <h5 class="fw-bold mb-2">Logout this Device?</h5>
-                <p class="text-muted small px-3">Are you sure you want to log out this device? The user will be immediately disconnected.</p>
-                
-                <div class="d-grid gap-2 mt-4">
-                    <button type="button" class="btn btn-danger py-2 fw-bold" id="confirmRevokeBtn">Yes, Logout Device</button>
-                    <button type="button" class="btn btn-light py-2 text-muted" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Upload Doc Modal -->
 <div class="modal fade" id="uploadDocModal" tabindex="-1">
@@ -196,62 +139,4 @@ include APP_ROOT . '/views/layouts/header.php';
 </div>
 <?php include APP_ROOT . '/views/layouts/footer.php'; ?>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Revoke Session Handler (MODAL)
-    let sessionToRevoke = null;
-    let empIdToRevoke = null;
-    let rowToRevoke = null;
-    const revokeModal = new bootstrap.Modal(document.getElementById('revokeSessionModal'));
-    const confirmBtn = document.getElementById('confirmRevokeBtn');
-
-    document.querySelectorAll('.revoke-session-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            sessionToRevoke = this.dataset.id;
-            empIdToRevoke = this.dataset.empId;
-            rowToRevoke = this.closest('tr');
-            revokeModal.show();
-        });
-    });
-
-    confirmBtn.addEventListener('click', function() {
-        if (!sessionToRevoke) return;
-        
-        const btn = this;
-        btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging out...';
-        
-        const formData = new FormData();
-        formData.append('session_db_id', sessionToRevoke);
-        formData.append('employee_id', empIdToRevoke);
-        formData.append('csrf_token', '<?= csrfToken() ?>');
-
-        fetch('index.php?module=employees&action=revokeSession', {
-            method: 'POST',
-            body: formData,
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                revokeModal.hide();
-                rowToRevoke.style.transition = 'all 0.5s ease';
-                rowToRevoke.style.background = '#ffebeb';
-                rowToRevoke.style.opacity = '0';
-                rowToRevoke.style.transform = 'translateX(20px)';
-                setTimeout(() => rowToRevoke.remove(), 500);
-            } else {
-                alert(data.message || 'Failed to revoke session.');
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert('An error occurred.');
-        })
-        .finally(() => {
-            btn.disabled = false;
-            btn.innerHTML = 'Yes, Logout Device';
-            sessionToRevoke = null;
-        });
-    });
-});
 </script>

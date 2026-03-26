@@ -9,11 +9,11 @@ include APP_ROOT . '/views/layouts/header.php';
 <div class="container-fluid px-4 py-3">
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="fw-700 mb-0"><i class="bi bi-briefcase text-primary me-2"></i>Jobs & Applicants</h5>
-    <?php if(can('recruitment','post')):?><a href="index.php?module=recruitment&action=addJob" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Post Job</a><?php endif;?>
+    <?php if(can('recruitment','manage')):?><a href="index.php?module=recruitment&action=addJob" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Post Job</a><?php endif;?>
 </div>
 <!-- Status pills -->
 <div class="d-flex gap-2 mb-3 flex-wrap">
-    <?php foreach([''=> 'All','open'=>'Open','closed'=>'Closed','draft'=>'Draft'] as $s=>$l):?>
+    <?php foreach([''=> 'All','open'=>'Open','pending_approval'=>'Pending Approval','closed'=>'Closed','draft'=>'Draft'] as $s=>$l):?>
     <a href="index.php?module=recruitment<?=$s?'&status='.$s:''?>" class="btn btn-sm <?=get('status')===$s?'btn-primary':'btn-outline-secondary'?>"><?=$l?></a>
     <?php endforeach;?>
 </div>
@@ -36,12 +36,23 @@ include APP_ROOT . '/views/layouts/header.php';
     </div>
     <div class="card-footer bg-transparent d-flex gap-2">
         <a href="index.php?module=recruitment&action=viewJob&id=<?=$job['id']?>" class="btn btn-outline-primary btn-sm flex-grow-1">View Applicants</a>
+        
+        <?php if($job['status'] === 'pending_approval' && hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)): ?>
+            <form action="index.php?module=recruitment&action=approveJob" method="POST" class="d-inline">
+                <?= csrfField() ?>
+                <input type="hidden" name="id" value="<?= $job['id'] ?>">
+                <button type="submit" class="btn btn-outline-success btn-sm" title="Approve Job"><i class="bi bi-check-lg"></i></button>
+            </form>
+        <?php endif; ?>
+
+        <?php if(currentRole() !== ROLE_RECRUITMENT_OFFICER): ?>
         <a href="index.php?module=recruitment&action=editJob&id=<?=$job['id']?>" class="btn btn-outline-secondary btn-sm" title="Edit Job"><i class="bi bi-pencil"></i></a>
         <form action="index.php?module=recruitment&action=deleteJob" method="POST" onsubmit="return confirm('Delete this job?');" class="d-inline">
             <?= csrfField() ?>
             <input type="hidden" name="id" value="<?= $job['id'] ?>">
             <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete Job"><i class="bi bi-trash"></i></button>
         </form>
+        <?php endif; ?>
     </div>
 </div>
 </div>

@@ -6,7 +6,7 @@ include APP_ROOT.'/views/layouts/header.php';?>
 <h5 class="fw-700 mb-0"><i class="bi bi-graph-up-arrow text-primary me-2"></i>Performance Reviews</h5>
 <div>
 <?php if(can('performance','manage')):?><a href="index.php?module=performance&action=kpis" class="btn btn-outline-primary me-2"><i class="bi bi-list-check me-1"></i>Manage KPIs</a><?php endif;?>
-<?php if(can('performance','create')):?><a href="index.php?module=performance&action=create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Create Review</a><?php endif;?>
+<?php if(can('performance','review')):?><a href="index.php?module=performance&action=create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Create Review</a><?php endif;?>
 </div>
 </div>
 <div class="card table-card"><div class="table-responsive"><table class="table table-hover mb-0">

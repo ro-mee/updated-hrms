@@ -2304,3 +2304,269 @@ Stack trace:
 [26-Mar-2026 11:22:32 Asia/Manila] PHP Warning:  Undefined array key "avg_salary" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\dashboard\index.php on line 87
 [26-Mar-2026 11:22:54 Asia/Manila] PHP Parse error:  syntax error, unexpected token "endif", expecting end of file in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\dashboard\index.php on line 186
 [26-Mar-2026 11:22:55 Asia/Manila] PHP Parse error:  syntax error, unexpected token "endif", expecting end of file in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\dashboard\index.php on line 186
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "civil_status" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 37
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "address" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 38
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "city" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 39
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "sss_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 43
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "philhealth_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 44
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "pagibig_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 45
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "tin_number" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 46
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_name" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 49
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "emergency_contact_phone" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 50
+[26-Mar-2026 11:50:21 Asia/Manila] PHP Warning:  Undefined array key "notes" in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\employees\edit.php on line 51
+[26-Mar-2026 12:30:22 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 12:33:09 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 12:46:53 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 43
+[26-Mar-2026 12:47:58 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 43
+[26-Mar-2026 12:48:19 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 43
+[26-Mar-2026 12:48:49 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 43
+[26-Mar-2026 12:49:00 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 43
+[26-Mar-2026 12:50:54 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 12:50:58 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 43
+[26-Mar-2026 12:51:05 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 43
+[26-Mar-2026 12:53:31 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 43
+[26-Mar-2026 12:54:15 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 43
+[26-Mar-2026 13:05:42 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 45
+[26-Mar-2026 13:05:51 Asia/Manila] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\recruitment\view_job.php on line 45
+[26-Mar-2026 13:06:10 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 13:07:16 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 13:23:37 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 13:24:47 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:24:47 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:24:47 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:24:47 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:24:47 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:24:47 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:24:47 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:24:47 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:24:47 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:24:47 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:24:47 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:24:47 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:32 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:25:32 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:32 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:32 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:32 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:32 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:32 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:25:32 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:32 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:32 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:32 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:32 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:36 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:25:36 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:36 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:36 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:36 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:36 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:36 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:25:36 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:36 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:36 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:36 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:36 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:25:58 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 13:29:23 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:29:23 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:29:23 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:29:23 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:29:23 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:29:23 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:29:23 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:29:23 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:29:23 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:29:23 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:29:23 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:29:23 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:36:04 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:36:04 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:36:04 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:36:04 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:36:04 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:36:04 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:36:04 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:36:04 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:36:04 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:36:04 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:36:04 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:36:04 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:06 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:37:06 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:06 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:06 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:06 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:06 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:06 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:37:06 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:06 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:06 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:06 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:06 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:54 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:37:54 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:54 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:54 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:54 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:54 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:54 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 13:37:54 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:54 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:54 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:54 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:37:54 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 13:59:23 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 14:13:40 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 14:19:41 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 14:25:25 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 14:29:13 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 14:41:41 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 14:45:59 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 14:51:30 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 14:54:48 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 14:56:18 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 14:58:37 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 15:10:37 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 15:10:37 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:10:37 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:10:37 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:10:37 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:10:37 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:10:37 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 15:10:37 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:10:37 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:10:37 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:10:37 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:10:37 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:15:15 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php on line 40 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php(40): formatDate(NULL, 'M d, Y')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(933): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->viewFeedback()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[26-Mar-2026 15:15:24 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php on line 40 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php(40): formatDate(NULL, 'M d, Y')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(933): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->viewFeedback()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[26-Mar-2026 15:26:37 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php on line 40 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php(40): formatDate(NULL, 'M d, Y')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(933): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->viewFeedback()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[26-Mar-2026 15:27:03 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php on line 40 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php(40): formatDate(NULL, 'M d, Y')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(933): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->viewFeedback()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[26-Mar-2026 15:27:42 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php on line 40 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php(40): formatDate(NULL, 'M d, Y')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(933): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->viewFeedback()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[26-Mar-2026 15:27:43 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php on line 40 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php(40): formatDate(NULL, 'M d, Y')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(933): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->viewFeedback()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[26-Mar-2026 15:27:43 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php on line 40 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php(40): formatDate(NULL, 'M d, Y')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(933): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->viewFeedback()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[26-Mar-2026 15:27:44 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php on line 40 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php(40): formatDate(NULL, 'M d, Y')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(933): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->viewFeedback()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[26-Mar-2026 15:27:44 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php on line 40 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php(40): formatDate(NULL, 'M d, Y')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(933): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->viewFeedback()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[26-Mar-2026 15:27:54 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php on line 40 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php(40): formatDate(NULL, 'M d, Y')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(933): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->viewFeedback()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[26-Mar-2026 15:27:55 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 15:27:55 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:27:55 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:27:55 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:27:55 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:27:55 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:27:55 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 15:27:55 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:27:55 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:27:55 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:27:55 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:27:55 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:27:58 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php on line 40 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php(40): formatDate(NULL, 'M d, Y')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(933): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->viewFeedback()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[26-Mar-2026 15:28:03 Asia/Manila] PHP Fatal error:  Uncaught TypeError: formatDate(): Argument #1 ($date) must be of type string, null given, called in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php on line 40 and defined in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php:38
+Stack trace:
+#0 C:\xampp\htdocs\updated-hrms\antishit\hrms\views\training\feedback.php(40): formatDate(NULL, 'M d, Y')
+#1 C:\xampp\htdocs\updated-hrms\antishit\hrms\controllers\OtherControllers.php(933): include('C:\\xampp\\htdocs...')
+#2 C:\xampp\htdocs\updated-hrms\antishit\hrms\index.php(97): TrainingController->viewFeedback()
+#3 {main}
+  thrown in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\functions.php on line 38
+[26-Mar-2026 15:30:16 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 15:30:16 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:30:16 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:30:16 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:30:16 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:30:16 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:30:16 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 15:30:16 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:30:16 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:30:16 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:30:16 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:30:16 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:32:41 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 15:32:41 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:32:41 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:32:41 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:32:41 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:32:41 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:32:41 Asia/Manila] PHP Deprecated:  number_format(): Passing null to parameter #1 ($num) of type float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 33
+[26-Mar-2026 15:32:41 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:32:41 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:32:41 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:32:41 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:32:41 Asia/Manila] PHP Deprecated:  round(): Passing null to parameter #1 ($num) of type int|float is deprecated in C:\xampp\htdocs\updated-hrms\antishit\hrms\views\performance\my.php on line 36
+[26-Mar-2026 15:35:29 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 15:36:53 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 15:44:50 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 15:45:16 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 15:45:41 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 15:49:18 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 15:49:32 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250
+[26-Mar-2026 15:53:50 Asia/Manila] PHP Warning:  preg_match(): Unknown modifier ')' in C:\xampp\htdocs\updated-hrms\antishit\hrms\includes\auth.php on line 250

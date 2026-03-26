@@ -13,13 +13,24 @@ include APP_ROOT . '/views/layouts/header.php';
             <div class="text-muted"><i class="bi bi-building me-1"></i><?= e($job['department_name']) ?> &nbsp;&bull;&nbsp; <i class="bi bi-briefcase me-1"></i><?= ucfirst(str_replace('_',' ',$job['employment_type'])) ?></div>
         </div>
         <div class="d-flex gap-2 align-items-center">
-            <span class="badge bg-<?= $job['status']==='open'?'success':($job['status']==='closed'?'secondary':'warning') ?> fs-6 me-2"><?= ucfirst(str_replace('_',' ',$job['status'])) ?></span>
+            <span class="badge bg-<?= $job['status']==='open'?'success':($job['status']==='closed'?'secondary':($job['status']==='pending_approval'?'warning':'info')) ?> fs-6 me-2"><?= ucfirst(str_replace('_',' ',$job['status'])) ?></span>
+            
+            <?php if($job['status'] === 'pending_approval' && hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)): ?>
+                <form action="index.php?module=recruitment&action=approveJob" method="POST" class="d-inline">
+                    <?= csrfField() ?>
+                    <input type="hidden" name="id" value="<?= $job['id'] ?>">
+                    <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-check-lg me-1"></i>Approve & Publish</button>
+                </form>
+            <?php endif; ?>
+
+            <?php if(currentRole() !== ROLE_RECRUITMENT_OFFICER): ?>
             <a href="index.php?module=recruitment&action=editJob&id=<?= $job['id'] ?>" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil me-1"></i>Edit</a>
             <form action="index.php?module=recruitment&action=deleteJob" method="POST" onsubmit="return confirm('Are you sure you want to delete this job posting?');" class="d-inline">
                 <?= csrfField() ?>
                 <input type="hidden" name="id" value="<?= $job['id'] ?>">
                 <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash me-1"></i>Delete</button>
             </form>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -61,7 +72,9 @@ include APP_ROOT . '/views/layouts/header.php';
                             <option value="reviewing" <?= get('status')==='reviewing'?'selected':'' ?>>Reviewing</option>
                             <option value="interview" <?= get('status')==='interview'?'selected':'' ?>>Interview</option>
                             <option value="offered" <?= get('status')==='offered'?'selected':'' ?>>Offered</option>
+                            <?php if(hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)): ?>
                             <option value="hired" <?= get('status')==='hired'?'selected':'' ?>>Hired</option>
+                            <?php endif; ?>
                             <option value="rejected" <?= get('status')==='rejected'?'selected':'' ?>>Rejected</option>
                         </select>
                     </form>
@@ -85,7 +98,7 @@ include APP_ROOT . '/views/layouts/header.php';
                                 <div class="d-flex gap-1">
                                     <a href="index.php?module=recruitment&action=viewApplicant&id=<?= $app['id'] ?>" class="btn btn-outline-primary btn-sm" title="View Profile"><i class="bi bi-person-lines-fill"></i></a>
                                     <button class="btn btn-outline-secondary btn-sm btn-update-status" data-id="<?= $app['id'] ?>" data-status="<?= $app['status'] ?>" title="Update Status"><i class="bi bi-pencil-square"></i></button>
-                                    <?php if(in_array($app['status'], ['offered', 'hired']) && empty($app['user_id'])): ?>
+                                    <?php if(in_array($app['status'], ['offered', 'hired']) && empty($app['user_id']) && hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)): ?>
                                     <a href="index.php?module=employees&action=add&from_applicant=<?= $app['id'] ?>" class="btn btn-outline-success btn-sm" title="Finalize Hiring"><i class="bi bi-person-plus-fill"></i></a>
                                     <?php endif; ?>
                                     <form action="index.php?module=recruitment&action=archiveApplicant" method="POST" onsubmit="return confirm('Archive this applicant?');" class="d-inline">
@@ -126,7 +139,9 @@ include APP_ROOT . '/views/layouts/header.php';
                         <option value="reviewing">Reviewing</option>
                         <option value="interview">Interview</option>
                         <option value="offered">Offered</option>
+                        <?php if(hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)): ?>
                         <option value="hired">Hired</option>
+                        <?php endif; ?>
                         <option value="rejected">Rejected</option>
                     </select>
                 </div>

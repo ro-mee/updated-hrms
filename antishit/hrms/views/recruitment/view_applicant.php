@@ -13,7 +13,7 @@ include APP_ROOT . '/views/layouts/header.php';
             <div class="mt-2"><?= statusBadge($applicant['status']) ?></div>
         </div>
         <div class="d-flex gap-2">
-            <?php if(in_array($applicant['status'], ['offered', 'hired']) && empty($applicant['user_id'])): ?>
+            <?php if(in_array($applicant['status'], ['offered', 'hired']) && empty($applicant['user_id']) && hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)): ?>
             <a href="index.php?module=employees&action=add&from_applicant=<?= $applicant['id'] ?>" class="btn btn-success">
                 <i class="bi bi-person-plus-fill me-1"></i>Finalize Hiring
             </a>
@@ -170,7 +170,8 @@ include APP_ROOT . '/views/layouts/header.php';
                             <label class="form-label small fw-bold">Current Status</label>
                             <select name="status" id="statusSelect" class="form-select form-select-sm" onchange="toggleInterviewFields()">
                                 <?php foreach(['new','reviewing','interview','offered','hired','rejected'] as $s): ?>
-                                <option value="<?=$s?>" <?= $applicant['status']===$s?'selected':'' ?>><?= ucfirst($s) ?></option>
+                                    <?php if($s === 'hired' && !hasRole(ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR)) continue; ?>
+                                    <option value="<?=$s?>" <?= $applicant['status']===$s?'selected':'' ?>><?= ucfirst($s) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>

@@ -26,7 +26,8 @@ $navItems = [
     // ── Growth ──
     ['section'=>'Growth'],
     ['module'=>'performance',  'label'=>'Performance',     'icon'=>'bi-graph-up-arrow',  'perm'=>'performance.review'],
-    ['module'=>'training',     'label'=>'Training',        'icon'=>'bi-mortarboard',     'perm'=>'training.manage'],
+    ['module'=>'performance',  'label'=>'My Performance',  'icon'=>'bi-graph-up',        'action'=>'my', 'perm'=>'performance.self'],
+    ['module'=>'training',     'label'=>'Training',        'icon'=>'bi-mortarboard',     'perm'=>'training.view'],
     // ── Documents ──
     ['section'=>'Documents'],
     ['module'=>'documents',    'label'=>'Documents',       'icon'=>'bi-folder2-open',    'perm'=>'documents.manage'],
@@ -117,8 +118,13 @@ $companyName = $settings->get('company_name','NexaHR');
                 <a href="<?= $href ?>" class="nav-link <?= $active ? 'active' : '' ?>">
                     <i class="bi <?= $item['icon'] ?> nav-icon"></i>
                     <span><?= e($item['label']) ?></span>
-                    <?php if ($mod==='leaves' && !hasRole(ROLE_EMPLOYEE)):
-                        $pend=(new Leave())->pendingCount();
+                    <?php if ($mod==='leaves' && $action === 'index' && !hasRole(ROLE_EMPLOYEE)):
+                        $lModel = new Leave();
+                        $lFilters = ['status' => 'pending'];
+                        if (hasRole(ROLE_DEPT_MANAGER)) {
+                            $lFilters['department_id'] = currentUser()['employee_id'] ? (new Employee())->findById(currentUser()['employee_id'])['department_id'] ?? -1 : -1;
+                        }
+                        $pend = $lModel->count($lFilters);
                         if($pend>0): ?><span class="nav-badge"><?=$pend?></span><?php endif;
                     endif; ?>
                 </a>
