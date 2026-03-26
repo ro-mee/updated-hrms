@@ -7,7 +7,18 @@
 // ── Application ──────────────────────────────────────────────────
 define('APP_NAME',    'NexaHR');
 define('APP_VERSION', '1.0.0');
-define('APP_URL',     'http://localhost/updated-hrms/antishit/hrms');
+// Dynamic Detection for APP_URL (supports ngrok and other proxies)
+if (!defined('APP_URL')) {
+    $protocol = 'http';
+    if ((isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1)) ||
+        (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
+        $protocol = 'https';
+    }
+    $host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $script = $_SERVER['SCRIPT_NAME'] ?? '';
+    $path = rtrim(str_replace('\\', '/', dirname($script)), '/');
+    define('APP_URL', $protocol . '://' . $host . $path);
+}
 if (!defined('APP_ROOT')) {
     define('APP_ROOT', dirname(__DIR__));   // /hrms directory
 }
