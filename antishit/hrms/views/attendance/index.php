@@ -7,7 +7,15 @@ include APP_ROOT . '/views/layouts/header.php';
 <div class="container-fluid px-4 py-3">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h5 class="fw-700 mb-0"><i class="bi bi-clock-history text-primary me-2"></i>Attendance Management</h5>
-        <a href="index.php?module=reports&action=attendance" class="btn btn-outline-primary btn-sm"><i class="bi bi-download me-1"></i>Export</a>
+        <div class="d-flex gap-2">
+            <form action="index.php?module=attendance&action=syncAbsences" method="POST" class="d-inline">
+                <?= csrfField() ?>
+                <button type="submit" class="btn btn-outline-warning btn-sm" onclick="return confirm('Sync absences for this month? (This will mark missing days as absent for all active employees)')">
+                    <i class="bi bi-arrow-repeat me-1"></i>Sync Absences
+                </button>
+            </form>
+            <a href="index.php?module=reports&action=attendance" class="btn btn-outline-primary btn-sm"><i class="bi bi-download me-1"></i>Export</a>
+        </div>
     </div>
     <!-- Filters -->
     <form class="card p-3 mb-3" method="GET" action="index.php">

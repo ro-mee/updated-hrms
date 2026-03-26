@@ -83,15 +83,45 @@ class Attendance {
         return (int)$stmt->fetchColumn();
     }
 
-    public function markAbsent(): void {
-        // Call nightly via cron/scheduler: mark active employees with no attendance today as absent
-        $this->db->exec("
+    public function markAbsent(?string $date = null): void {
+        $date = $date ?: date('Y-m-d');
+        // If marking for today, ensure it's at least after work hours (e.g. 6PM) or just don't mark today yet
+        if ($date === date('Y-m-d') && (int)date('H') < 18) {
+            return; // Too early for today
+        }
+        
+        $this->db->prepare("
             INSERT IGNORE INTO attendance (employee_id, date, status)
-            SELECT e.id, CURDATE(), 'absent'
+            SELECT e.id, ?, 'absent'
             FROM employees e
-            WHERE e.status='active' AND DAYOFWEEK(CURDATE()) NOT IN (1,7)
-              AND e.id NOT IN (SELECT employee_id FROM attendance WHERE date=CURDATE())
-        ");
+            WHERE e.status='active' AND DAYOFWEEK(?) NOT IN (1,7)
+              AND e.id NOT IN (SELECT employee_id FROM attendance WHERE date=?)
+        ")->execute([$date, $date, $date]);
+    }
+
+    public function syncMonthAbsences(int $year, int $month): int {
+        $count = 0;
+        $today = date('Y-m-d');
+        $lastDay = date('t', strtotime("$year-$month-01"));
+        for ($d = 1; $d <= $lastDay; $d++) {
+            $date = sprintf('%04d-%02d-%02d', $year, $month, $d);
+            if ($date >= $today) break; // Don't sync future or today (yet)
+            
+            $dayOfWeek = date('N', strtotime($date));
+            if ($dayOfWeek >= 6) continue; // Skip weekends (Sat=6, Sun=7 in N format)
+
+            $stmt = $this->db->prepare("
+                INSERT IGNORE INTO attendance (employee_id, date, status)
+                SELECT e.id, ?, 'absent'
+                FROM employees e
+                WHERE e.status='active' 
+                  AND e.id NOT IN (SELECT employee_id FROM attendance WHERE date=?)
+            ");
+            if ($stmt->execute([$date, $date])) {
+                $count += $stmt->rowCount();
+            }
+        }
+        return $count;
     }
 
     public function monthlySummary(int $employeeId, int $year, int $month): array {

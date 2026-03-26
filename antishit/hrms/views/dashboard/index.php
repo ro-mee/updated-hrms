@@ -7,6 +7,16 @@ $pageTitle  = 'Dashboard';
 $breadcrumb = [['label'=>'Dashboard','active'=>true]];
 include APP_ROOT . '/views/layouts/header.php';
 ?>
+<style>
+.report-card { border-radius: 8px; border: 1px solid var(--hrms-card-border); background: var(--hrms-card-bg); box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+.report-card-title { font-size: 0.85rem; font-weight: 600; color: var(--hrms-text-main); }
+.report-card-subtitle { font-size: 0.75rem; color: var(--hrms-text-muted); margin-bottom: 1rem; }
+.apexcharts-legend-text { color: var(--hrms-text-main) !important; }
+.apexcharts-text tspan { fill: var(--hrms-text-muted); }
+.apexcharts-tooltip { background: var(--hrms-card-bg) !important; border-color: var(--hrms-card-border) !important; color: var(--hrms-text-main) !important; box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important; }
+.apexcharts-tooltip-title { background: rgba(0,0,0,0.03) !important; border-bottom: 1px solid var(--hrms-card-border) !important; }
+.apexcharts-menu { background: var(--hrms-card-bg) !important; border-color: var(--hrms-card-border) !important; color: var(--hrms-text-main) !important; }
+</style>
 <div class="container-fluid px-4 py-3">
 
     <!-- ── Greeting ─────────────────────────────────────────── -->
@@ -29,66 +39,101 @@ include APP_ROOT . '/views/layouts/header.php';
         <?php endif; ?>
     </div>
 
-    <!-- ── Stat Cards ──────────────────────────────────────── -->
+    <!-- ── Stat Cards (Restored Info + New Design) ──────── -->
     <?php if (in_array($role,[ROLE_SUPER_ADMIN,ROLE_HR_DIRECTOR,ROLE_HR_SPECIALIST])): ?>
     <div class="row g-3 mb-4">
         <div class="col-6 col-lg-3">
-            <div class="stat-card stat-indigo">
-                <div class="stat-icon"><i class="bi bi-people"></i></div>
-                <div class="stat-number"><?= formatNumber($stats['total_employees']) ?></div>
-                <div class="stat-label">Total Employees</div>
-                <div class="stat-change"><i class="bi bi-check-circle me-1"></i><?= $stats['active_employees'] ?> Active</div>
+            <div class="report-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div class="report-card-title">Total Employees</div>
+                    <div class="text-muted"><i class="bi bi-people"></i></div>
+                </div>
+                <div class="fs-3 fw-bold mb-1"><?= formatNumber($stats['total_employees']) ?></div>
+                <div class="small text-success fw-medium">
+                    <i class="bi bi-check-circle me-1"></i><?= $stats['active_employees'] ?> Active
+                </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="stat-card stat-amber">
-                <div class="stat-icon"><i class="bi bi-calendar-x"></i></div>
-                <div class="stat-number"><?= $stats['pending_leaves'] ?></div>
-                <div class="stat-label">Pending Leaves</div>
-                <div class="stat-change"><a href="index.php?module=leaves&status=pending" class="text-white opacity-75">Review now →</a></div>
+            <div class="report-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div class="report-card-title">Pending Leaves</div>
+                    <div class="text-muted"><i class="bi bi-calendar-x"></i></div>
+                </div>
+                <div class="fs-3 fw-bold mb-1"><?= $stats['pending_leaves'] ?></div>
+                <div class="small fw-medium">
+                    <a href="index.php?module=leaves&status=pending" class="text-decoration-none text-warning">Review now →</a>
+                </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="stat-card stat-emerald">
-                <div class="stat-icon"><i class="bi bi-clock-history"></i></div>
-                <div class="stat-number"><?= $stats['today_attendance']['present'] ?? 0 ?></div>
-                <div class="stat-label">Present Today</div>
-                <div class="stat-change"><i class="bi bi-person-x me-1"></i><?= $stats['today_attendance']['absent']??0 ?> Absent</div>
+            <div class="report-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div class="report-card-title">Present Today</div>
+                    <div class="text-muted"><i class="bi bi-clock-history"></i></div>
+                </div>
+                <div class="fs-3 fw-bold mb-1"><?= $stats['today_attendance']['present'] ?? 0 ?></div>
+                <div class="small text-danger fw-medium">
+                    <i class="bi bi-person-x me-1"></i><?= $stats['today_attendance']['absent']??0 ?> Absent
+                </div>
             </div>
         </div>
         <div class="col-6 col-lg-3">
-            <div class="stat-card stat-rose">
-                <div class="stat-icon"><i class="bi bi-clock"></i></div>
-                <div class="stat-number"><?= $stats['today_attendance']['late'] ?? 0 ?></div>
-                <div class="stat-label">Late Today</div>
-                <div class="stat-change"><i class="bi bi-calendar-check me-1"></i><?= $stats['today_attendance']['on_leave']??0 ?> On Leave</div>
+            <div class="report-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div class="report-card-title">Late Today</div>
+                    <div class="text-muted"><i class="bi bi-clock"></i></div>
+                </div>
+                <div class="fs-3 fw-bold mb-1"><?= $stats['today_attendance']['late'] ?? 0 ?></div>
+                <div class="small text-info fw-medium">
+                    <i class="bi bi-calendar-check me-1"></i><?= $stats['today_attendance']['on_leave']??0 ?> On Leave
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ── Charts Row ─────────────────────────────────────── -->
+    <!-- ── Charts Row 1 ─────────────────────────────────────── -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-8">
+            <div class="report-card p-3 h-100">
+                <div class="report-card-title">Employees by Dept</div>
+                <div class="report-card-subtitle">Headcount per department (Bar Chart)</div>
+                <div id="deptChart" class="w-100"></div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="report-card p-3 h-100">
+                <div class="report-card-title">Leave Type Distribution</div>
+                <div class="report-card-subtitle">Approved requests breakdown</div>
+                <div id="leaveTypeChart" class="w-100"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 3-Grid Analytics Row ────────────────────────────── -->
     <div class="row g-3 mb-4">
         <div class="col-lg-4">
-            <div class="card h-100">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <span><i class="bi bi-bar-chart-line text-primary me-2"></i>Employees by Dept</span>
-                </div>
-                <div class="card-body py-2" style="height: 240px;"><canvas id="deptChart"></canvas></div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card h-100">
-                <div class="card-header py-3"><i class="bi bi-pie-chart text-primary me-2"></i>Attendance Today</div>
-                <div class="card-body py-2 d-flex align-items-center justify-content-center" style="height: 240px;"><canvas id="attChart"></canvas></div>
-            </div>
-        </div>
-        <div class="col-lg-4">
             <?php if (in_array($role, [ROLE_RECRUITMENT_OFFICER, ROLE_HR_DIRECTOR, ROLE_SUPER_ADMIN])): ?>
-            <div class="card h-100">
-                <div class="card-header py-3"><i class="bi bi-person-plus text-primary me-2"></i>Recruitment Pipeline</div>
-                <div class="card-body py-2 d-flex align-items-center justify-content-center" style="height: 240px;"><canvas id="recChart"></canvas></div>
+            <div class="report-card p-3 h-100">
+                <div class="report-card-title">Recruitment Pipeline</div>
+                <div class="report-card-subtitle">Applicant status breakdown</div>
+                <div id="recChart" class="w-100"></div>
             </div>
             <?php endif; ?>
+        </div>
+        <div class="col-lg-4">
+            <div class="report-card p-3 h-100">
+                <div class="report-card-title">Department Distribution</div>
+                <div class="report-card-subtitle">Employee count by department</div>
+                <div id="deptDistChart" class="w-100"></div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="report-card p-3 h-100">
+                <div class="report-card-title">Performance Distribution</div>
+                <div class="report-card-subtitle">Employee rating breakdown</div>
+                <div id="perfChart" class="w-100"></div>
+            </div>
         </div>
     </div>
 
@@ -286,43 +331,23 @@ include APP_ROOT . '/views/layouts/header.php';
             </div>
         </div>
         <div class="col-lg-4">
-            <div class="card h-100">
-                <div class="card-header py-3"><i class="bi bi-pie-chart text-primary me-2"></i>Dept. Attendance</div>
+            <div class="card h-100 border-0 shadow-sm" style="border-radius: 0.75rem;">
+                <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
+                    <h6 class="mb-0 fw-bold">Dept. Attendance</h6>
+                    <small class="text-muted">Today's presence</small>
+                </div>
                 <div class="card-body d-flex align-items-center justify-content-center">
-                    <canvas id="deptAttChart" height="220"></canvas>
+                    <div id="deptAttChart" class="w-100" style="min-height: 220px;"></div>
                 </div>
             </div>
         </div>
     </div>
     <?php endif; ?>
 
-    <!-- ── Finance Manager ─────────────────────────────── -->
-    <?php if (in_array($role,[ROLE_FINANCE_MANAGER,ROLE_HR_DIRECTOR,ROLE_SUPER_ADMIN]) && !empty($roleData['payroll_summary'])): ?>
-    <div class="row g-3 mt-1">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header py-3"><i class="bi bi-cash-stack text-primary me-2"></i>Payroll Summary</div>
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead><tr><th>Period</th><th>Pay Date</th><th>Employees</th><th>Gross</th><th>Net</th><th>Status</th></tr></thead>
-                        <tbody>
-                        <?php foreach($roleData['payroll_summary'] as $row): ?>
-                        <tr>
-                            <td class="fw-medium small"><?= e($row['period_name']) ?></td>
-                            <td class="small"><?= formatDate($row['pay_date']) ?></td>
-                            <td class="text-center"><?= $row['employees']??0 ?></td>
-                            <td class="small"><?= formatCurrency($row['total_gross']??0) ?></td>
-                            <td class="small fw-medium text-success"><?= formatCurrency($row['total_net']??0) ?></td>
-                            <td><?= statusBadge($row['status']) ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php endif; ?>
+    
+</div>
+
+</div>
 
 </div>
 
@@ -332,70 +357,198 @@ $deptLabels = array_column($roleData['by_department']??[], 'name');
 $deptData   = array_column($roleData['by_department']??[], 'cnt');
 $att = $stats['today_attendance'] ?? [];
 $recStatusData = $roleData['applicants_by_status'] ?? [];
+
+$perfDataMap = [];
+foreach (($roleData['perf_dist'] ?? []) as $pd) {
+    $perfDataMap[(int)$pd['rating']] = $pd['cnt'];
+}
 ?>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-window.addEventListener('load', function() {
-    // ── Department Chart ─────────────────────────────────────
-    const deptCtx = document.getElementById('deptChart');
-    if (deptCtx) {
-        new Chart(deptCtx, {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode($deptLabels) ?>,
-                datasets: [{ label: 'Employees', data: <?= json_encode($deptData) ?>,
-                    backgroundColor: '#4f46e5', borderRadius: 6, barThickness: 30 }]
+(function() {
+    let chartInstances = [];
+
+    function initCharts() {
+        // Destroy existing instances
+        chartInstances.forEach(chart => { try { chart.destroy(); } catch(e){} });
+        chartInstances = [];
+
+        if (typeof ApexCharts === 'undefined') return;
+
+        const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+        const textColor = isDark ? '#94a3b8' : '#64748b';
+        const gridColor = isDark ? 'rgba(148, 163, 184, 0.1)' : 'rgba(100, 116, 139, 0.1)';
+        const cardBg = getComputedStyle(document.documentElement).getPropertyValue('--hrms-card-bg').trim() || (isDark ? '#1e1b4b' : '#ffffff');
+
+        const commonOptions = {
+            chart: {
+                fontFamily: 'Inter, sans-serif',
+                background: 'transparent',
+                toolbar: { show: false },
+                animations: { enabled: true }
             },
-            options: { responsive: true, plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, ticks: { stepSize:1 } } } }
-        });
+            theme: { mode: isDark ? 'dark' : 'light' },
+            dataLabels: { enabled: false },
+            grid: { borderColor: gridColor, strokeDashArray: 4 },
+            xaxis: { labels: { style: { colors: textColor } }, axisBorder: { show: false }, axisTicks: { show: false } },
+            yaxis: { labels: { style: { colors: textColor } } },
+            legend: { labels: { colors: textColor }, position: 'bottom' }
+        };
+
+        // 1. Department Bar Chart
+        if (document.getElementById('deptChart')) {
+            try {
+                const chart = new ApexCharts(document.querySelector("#deptChart"), {
+                    ...commonOptions,
+                    series: [{ name: 'Employees', data: <?= json_encode($deptData ?: []) ?> }],
+                    chart: { ...commonOptions.chart, type: 'bar', height: 260 },
+                    colors: ['#6366f1'],
+                    plotOptions: { bar: { borderRadius: 4, columnWidth: '55%' } },
+                    xaxis: { ...commonOptions.xaxis, categories: <?= json_encode($deptLabels ?: []) ?> },
+                    yaxis: { ...commonOptions.yaxis, labels: { ...commonOptions.yaxis.labels, formatter: (v) => Math.floor(v) } }
+                });
+                chart.render();
+                chartInstances.push(chart);
+            } catch (e) { console.error("Dept Chart Error:", e); }
+        }
+
+        // 2. Leave Type Pie Chart
+        if (document.getElementById('leaveTypeChart')) {
+            try {
+                <?php
+                $leaveLabels = array_column($roleData['leave_type_dist'] ?? [], 'name');
+                $leaveData   = array_column($roleData['leave_type_dist'] ?? [], 'cnt');
+                if (empty($leaveLabels)) {
+                    $leaveLabels = ['No Leaves'];
+                    $leaveData = [1];
+                    $leaveColors = ['#94a3b8'];
+                } else {
+                    $leaveColors = ['#3b82f6', '#ef4444', '#f59e0b', '#8b5cf6', '#64748b', '#10b981'];
+                }
+                ?>
+                const chart = new ApexCharts(document.querySelector("#leaveTypeChart"), {
+                    ...commonOptions,
+                    series: <?= json_encode(array_map('intval', $leaveData)) ?>,
+                    labels: <?= json_encode($leaveLabels) ?>,
+                    chart: { ...commonOptions.chart, type: 'pie', height: 280 },
+                    colors: <?= json_encode($leaveColors) ?>,
+                    stroke: { width: 1, colors: [cardBg] },
+                    legend: { show: false },
+                    dataLabels: {
+                        enabled: true,
+                        style: { fontSize: '11px', colors: ['#fff'] },
+                        dropShadow: { enabled: true }
+                    }
+                });
+                chart.render();
+                chartInstances.push(chart);
+            } catch (e) { console.error("Leave Type Chart Error:", e); }
+        }
+
+        // 3. Recruitment Pipeline Donut
+        if (document.getElementById('recChart')) {
+            try {
+                <?php
+                $recKeys = array_keys($recStatusData ?? []);
+                $recVals = array_values($recStatusData ?? []);
+                if (empty($recVals) || array_sum($recVals) === 0) {
+                    $recKeys = ['No Applicants'];
+                    $recVals = [1];
+                    $recColors = ['#94a3b8'];
+                } else {
+                    $recKeys = array_map(function($k) { return ucwords(str_replace('_', ' ', $k)); }, $recKeys);
+                    $recColors = ['#6366f1','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+                }
+                ?>
+                const chart = new ApexCharts(document.querySelector("#recChart"), {
+                    ...commonOptions,
+                    series: <?= json_encode(array_map('intval', $recVals)) ?>,
+                    labels: <?= json_encode($recKeys) ?>,
+                    chart: { ...commonOptions.chart, type: 'donut', height: 280 },
+                    colors: <?= json_encode($recColors) ?>,
+                    stroke: { width: 1, colors: [cardBg] }
+                });
+                chart.render();
+                chartInstances.push(chart);
+            } catch (e) { console.error("Recruitment Chart Error:", e); }
+        }
+
+        // 4. Dept Distribution Pie
+        if (document.getElementById('deptDistChart')) {
+            try {
+                const chart = new ApexCharts(document.querySelector("#deptDistChart"), {
+                    ...commonOptions,
+                    series: <?= json_encode(array_map('intval', $deptData ?: [])) ?>,
+                    labels: <?= json_encode($deptLabels ?: []) ?>,
+                    chart: { ...commonOptions.chart, type: 'pie', height: 280 },
+                    colors: ['#3b82f6', '#ef4444', '#f59e0b', '#8b5cf6', '#10b981', '#6366f1'],
+                    stroke: { width: 1, colors: [cardBg] }
+                });
+                chart.render();
+                chartInstances.push(chart);
+            } catch (e) { console.error("Dept Dist Chart Error:", e); }
+        }
+
+        // 5. Performance Distribution Horizontal Bar
+        if (document.getElementById('perfChart')) {
+            try {
+                <?php
+                $perfSeriesData = [
+                    (int)($perfDataMap[5] ?? 0),
+                    (int)($perfDataMap[4] ?? 0),
+                    (int)($perfDataMap[3] ?? 0),
+                    (int)($perfDataMap[2] ?? 0),
+                    (int)($perfDataMap[1] ?? 0)
+                ];
+                ?>
+                const chart = new ApexCharts(document.querySelector("#perfChart"), {
+                    ...commonOptions,
+                    series: [{ name: 'Employees', data: <?= json_encode($perfSeriesData) ?> }],
+                    chart: { ...commonOptions.chart, type: 'bar', height: 280 },
+                    plotOptions: { bar: { horizontal: true, borderRadius: 4, barHeight: '60%' } },
+                    colors: ['#10b981'],
+                    xaxis: { ...commonOptions.xaxis, categories: ['5-Excell', '4-Good', '3-Meets', '2-Below', '1-Unsat'] }
+                });
+                chart.render();
+                chartInstances.push(chart);
+            } catch (e) { console.error("Performance Chart Error:", e); }
+        }
+
+        // 6. Dept Attendance Donut (Manager)
+        if (document.getElementById('deptAttChart')) {
+            try {
+                <?php 
+                $datt = $roleData['dept_attendance'] ?? []; 
+                $dattVals = [(int)($datt['present']??0), (int)($datt['absent']??0), (int)($datt['late']??0), (int)($datt['on_leave']??0)];
+                $dattLabels = array_sum($dattVals) === 0 ? ['No Data'] : ['Present','Absent','Late','On Leave'];
+                $dattColors = array_sum($dattVals) === 0 ? ['#94a3b8'] : ['#10b981','#ef4444','#f59e0b','#3b82f6'];
+                ?>
+                const chart = new ApexCharts(document.querySelector("#deptAttChart"), {
+                    ...commonOptions,
+                    series: <?= json_encode(array_sum($dattVals) === 0 ? [1] : $dattVals) ?>,
+                    labels: <?= json_encode($dattLabels) ?>,
+                    chart: { ...commonOptions.chart, type: 'donut', height: 260 },
+                    colors: <?= json_encode($dattColors) ?>,
+                    stroke: { width: 1, colors: [cardBg] }
+                });
+                chart.render();
+                chartInstances.push(chart);
+            } catch (e) { console.error("Dept Attendance Chart Error:", e); }
+        }
     }
-    // ── Attendance Doughnut ──────────────────────────────────
-    const attCtx = document.getElementById('attChart');
-    if (attCtx) {
-        new Chart(attCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Present','Absent','Late','On Leave'],
-                datasets: [{ data: [
-                    <?= (int)($att['present']??0) ?>,<?= (int)($att['absent']??0) ?>,
-                    <?= (int)($att['late']??0) ?>,<?= (int)($att['on_leave']??0) ?>
-                ], backgroundColor: ['#059669','#e11d48','#d97706','#0284c7'], borderWidth: 0, hoverOffset:6 }]
-            },
-            options: { responsive:true, cutout:'65%', plugins:{ legend:{ position:'bottom', labels:{ font:{size:11} } } } }
+
+    // Initial load
+    window.addEventListener('load', initCharts);
+
+    // Watch for theme changes
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'data-bs-theme') {
+                initCharts();
+            }
         });
-    }
-    // ── Recruitment Pipeline Chart ───────────────────────────
-    const recCtx = document.getElementById('recChart');
-    if (recCtx) {
-        new Chart(recCtx, {
-            type: 'doughnut',
-            data: {
-                labels: <?= json_encode(array_map('ucwords', array_keys($recStatusData))) ?>,
-                datasets: [{ 
-                    data: <?= json_encode(array_values($recStatusData)) ?>,
-                    backgroundColor: ['#6366f1','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'],
-                    borderWidth: 0, hoverOffset:6 
-                }]
-            },
-            options: { responsive:true, cutout:'65%', plugins:{ legend:{ position:'bottom', labels:{ font:{size:11} } } } }
-        });
-    }
-    // ── Dept Attendance Doughnut ──────────────────────────────
-    const deptAttCtx = document.getElementById('deptAttChart');
-    if (deptAttCtx) {
-        <?php $datt = $roleData['dept_attendance'] ?? []; ?>
-        new Chart(deptAttCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Present','Absent','Late','On Leave'],
-                datasets: [{ data: [
-                    <?= (int)($datt['present']??0) ?>,<?= (int)($datt['absent']??0) ?>,
-                    <?= (int)($datt['late']??0) ?>,<?= (int)($datt['on_leave']??0) ?>
-                ], backgroundColor: ['#059669','#e11d48','#d97706','#0284c7'], borderWidth: 0, hoverOffset:6 }]
-            },
-            options: { responsive:true, cutout:'65%', plugins:{ legend:{ position:'bottom', labels:{ font:{size:11} } } } }
-        });
-    }
-});
+    });
+    observer.observe(document.documentElement, { attributes: true });
+})();
 </script>
 <?php include APP_ROOT . '/views/layouts/footer.php'; ?>

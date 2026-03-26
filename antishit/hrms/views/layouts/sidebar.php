@@ -55,7 +55,7 @@ $companyName = $settings->get('company_name','NexaHR');
 
 <!-- User quick info -->
 <div class="sidebar-user">
-    <img src="<?= avatarUrl($user['avatar']) ?>" class="rounded-circle" width="38" height="38" alt="me" style="object-fit:cover;border:2px solid rgba(255,255,255,.3)">
+    <img src="<?= avatarUrl($user['avatar']) ?>" class="rounded-circle" width="38" height="38" alt="me" style="object-fit:cover;border:2px solid var(--hrms-sidebar-border)">
     <div class="ms-2 overflow-hidden">
         <div class="sidebar-user-name"><?= e($user['full_name']) ?></div>
         <div class="sidebar-user-role"><?= e($user['role_name']) ?></div>

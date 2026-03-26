@@ -25,10 +25,24 @@ class DashboardController {
             $roleData['by_status']     = $empModel->countByStatus();
             $roleData['recent_employees'] = $empModel->all([], 5, 0, 'date_hired DESC');
             $roleData['recent_leaves']    = $leaveModel->all(['status'=>'pending'], 5, 0);
-        }
-        if (in_array($role, [ROLE_FINANCE_MANAGER, ROLE_HR_DIRECTOR, ROLE_SUPER_ADMIN])) {
-            $payrollModel = new Payroll();
-            $roleData['payroll_summary'] = $payrollModel->summary();
+            
+            // Performance Distribution
+            $roleData['perf_dist'] = db()->query("
+                SELECT ROUND(overall_rating) as rating, COUNT(*) as cnt
+                FROM performance_reviews
+                WHERE status = 'approved' AND overall_rating IS NOT NULL
+                GROUP BY rating
+                ORDER BY rating DESC
+            ")->fetchAll();
+
+            // Leave Type Distribution
+            $roleData['leave_type_dist'] = db()->query("
+                SELECT lt.name, COUNT(l.id) as cnt
+                FROM leaves l
+                JOIN leave_types lt ON l.leave_type_id = lt.id
+                WHERE l.status = 'approved'
+                GROUP BY lt.id
+            ")->fetchAll();
         }
         if (in_array($role, [ROLE_RECRUITMENT_OFFICER, ROLE_HR_DIRECTOR, ROLE_SUPER_ADMIN])) {
             $jobModel = new Job();

@@ -49,10 +49,10 @@ foreach($summary as $s) { $summaryMap[$s['status']] = $s; }
     <div class="card table-card">
         <div class="card-header py-3"><i class="bi bi-table text-primary me-2"></i>Attendance Log – <?= date('F Y') ?></div>
         <div class="table-responsive">
-            <table class="table table-hover mb-0">
+            <table class="table table-hover table-lg mb-0">
                 <thead><tr><th>Date</th><th>Clock In</th><th>Clock Out</th><th>Hours</th><th>Overtime</th><th>Status</th></tr></thead>
                 <tbody>
-                <?php if(empty($records)): ?><tr><td colspan="6"><div class="empty-state"><i class="bi bi-clock-history"></i>No records this month</div></td></tr><?php endif; ?>
+                <?php if(empty($records)): ?><tr><td colspan="6"><div class="empty-state"><i class="bi bi-clock-history"></i>No records found</div></td></tr><?php endif; ?>
                 <?php foreach($records as $r): ?>
                 <tr>
                     <td class="fw-medium"><?= formatDate($r['date'],'D, M d') ?></td>
@@ -66,6 +66,12 @@ foreach($summary as $s) { $summaryMap[$s['status']] = $s; }
                 </tbody>
             </table>
         </div>
+        <?php if ($pg['total_pages'] > 1): ?>
+        <div class="card-footer d-flex justify-content-between align-items-center bg-transparent py-3">
+            <small class="text-muted">Showing <?= count($records) ?> of <?= $pg['total'] ?> records</small>
+            <?= paginationLinks($pg, 'index.php?module=attendance&action=my') ?>
+        </div>
+        <?php endif; ?>
     </div>
 </div>
 <?php include APP_ROOT . '/views/layouts/footer.php'; ?>
