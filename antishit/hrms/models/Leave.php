@@ -83,16 +83,18 @@ class Leave {
             UPDATE leave_balances SET used=used+?, remaining=remaining-?
             WHERE employee_id=? AND leave_type_id=? AND year=YEAR(?)
         ")->execute([$leave['days_requested'], $leave['days_requested'], $leave['employee_id'], $leave['leave_type_id'], $leave['start_date']]);
-        // Mark attendance as on_leave for the period
+        // Mark attendance as on_leave for the period (Overwrite absent if any)
         $start = new DateTime($leave['start_date']);
         $end   = new DateTime($leave['end_date']);
+        $typeLabel = "On Leave (" . $leave['leave_type_name'] . ")";
         while ($start <= $end) {
             $dow = (int)$start->format('N');
             if ($dow < 6) {
                 $this->db->prepare("
-                    INSERT IGNORE INTO attendance (employee_id, date, status)
-                    VALUES (?,?,'on_leave')
-                ")->execute([$leave['employee_id'], $start->format('Y-m-d')]);
+                    INSERT INTO attendance (employee_id, date, status, remarks)
+                    VALUES (?,?,'on_leave',?)
+                    ON DUPLICATE KEY UPDATE status='on_leave', remarks=VALUES(remarks)
+                ")->execute([$leave['employee_id'], $start->format('Y-m-d'), $typeLabel]);
             }
             $start->modify('+1 day');
         }

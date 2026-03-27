@@ -58,9 +58,16 @@ class Payroll {
             $count = 0;
             foreach ($employees as $emp) {
                 // Count actual days worked
+                // Count actual days worked (present, late, half_day) + Approved Paid Leaves
                 $stmt = db()->prepare("
-                    SELECT COUNT(*) FROM attendance
-                    WHERE employee_id=? AND date BETWEEN ? AND ? AND status IN ('present','late','half_day')
+                    SELECT COUNT(a.id) FROM attendance a
+                    LEFT JOIN leaves l ON a.employee_id = l.employee_id 
+                        AND a.date BETWEEN l.start_date AND l.end_date 
+                        AND l.status = 'approved'
+                    LEFT JOIN leave_types lt ON l.leave_type_id = lt.id
+                    WHERE a.employee_id=? AND a.date BETWEEN ? AND ? 
+                      AND (a.status IN ('present','late','half_day') 
+                           OR (a.status = 'on_leave' AND lt.is_paid = 1))
                 ");
                 $stmt->execute([$emp['id'], $period['start_date'], $period['end_date']]);
                 $daysWorked = (int)$stmt->fetchColumn();
