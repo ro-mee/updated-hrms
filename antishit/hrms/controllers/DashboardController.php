@@ -20,6 +20,10 @@ class DashboardController {
 
         // Role-specific data
         $roleData = [];
+        $empId = currentUser()['employee_id'] ?? 0;
+        if ($empId) {
+            $roleData['today_record'] = $attModel->todayRecord($empId);
+        }
         if (in_array($role, [ROLE_SUPER_ADMIN, ROLE_HR_DIRECTOR, ROLE_HR_SPECIALIST])) {
             $roleData['by_department'] = $empModel->countByDepartment();
             $roleData['by_status']     = $empModel->countByStatus();

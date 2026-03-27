@@ -32,11 +32,28 @@ class Attendance {
     public function clockOut(int $employeeId): bool {
         $today = $this->todayRecord($employeeId);
         if (!$today || empty($today['clock_in'])) return false;
+        
         $in    = new DateTime($today['clock_in']);
         $out   = new DateTime();
-        $hours = round($out->getTimestamp() - $in->getTimestamp()) / 3600;
-        // Overtime if hours > 8
-        $ot    = max(0, $hours - 8);
+        $totalSeconds = $out->getTimestamp() - $in->getTimestamp();
+
+        // Deduct unpaid breaks (Lunch is paid, so we don't deduct it)
+        $unpaidSeconds = 0;
+        if (!empty($today['break1_start']) && !empty($today['break1_end'])) {
+            $unpaidSeconds += (new DateTime($today['break1_end']))->getTimestamp() - (new DateTime($today['break1_start']))->getTimestamp();
+        }
+        if (!empty($today['break2_start']) && !empty($today['break2_end'])) {
+            $unpaidSeconds += (new DateTime($today['break2_end']))->getTimestamp() - (new DateTime($today['break2_start']))->getTimestamp();
+        }
+        if (!empty($today['emergency_break_start']) && !empty($today['emergency_break_end'])) {
+            $unpaidSeconds += (new DateTime($today['emergency_break_end']))->getTimestamp() - (new DateTime($today['emergency_break_start']))->getTimestamp();
+        }
+
+        $workedSeconds = max(0, $totalSeconds - $unpaidSeconds);
+        $hours = $workedSeconds / 3600;
+
+        $dayLimit = (int)(new Setting())->get('work_hours_per_day', 8);
+        $ot    = max(0, $hours - $dayLimit);
 
         $stmt = $this->db->prepare("
             UPDATE attendance SET clock_out=NOW(), hours_worked=?, overtime_hours=?
@@ -134,6 +151,25 @@ class Attendance {
         return $stmt->fetchAll();
     }
 
+    public function weeklyTotalHours(int $employeeId): float {
+        $stmt = $this->db->prepare("
+            SELECT SUM(hours_worked) FROM attendance 
+            WHERE employee_id=? AND YEARWEEK(date, 1) = YEARWEEK(CURDATE(), 1)
+        ");
+        $stmt->execute([$employeeId]);
+        return (float)$stmt->fetchColumn();
+    }
+
+    public function monthlyTotalStats(int $employeeId, int $year, int $month): array {
+        $stmt = $this->db->prepare("
+            SELECT SUM(hours_worked) AS hours, SUM(overtime_hours) AS ot 
+            FROM attendance WHERE employee_id=? AND YEAR(date)=? AND MONTH(date)=?
+        ");
+        $stmt->execute([$employeeId, $year, $month]);
+        $res = $stmt->fetch();
+        return ['hours' => (float)($res['hours']??0), 'ot' => (float)($res['ot']??0)];
+    }
+
     public function todayStats(?int $departmentId = null): array {
         $query = "SELECT 
                     SUM(a.status='present') AS present,
@@ -161,11 +197,51 @@ class Attendance {
         ];
     }
 
+    public function startLunch(int $employeeId): bool {
+        $stmt = $this->db->prepare("UPDATE attendance SET lunch_start=NOW() WHERE employee_id=? AND date=CURDATE()");
+        return $stmt->execute([$employeeId]);
+    }
+
+    public function endLunch(int $employeeId): bool {
+        $stmt = $this->db->prepare("UPDATE attendance SET lunch_end=NOW() WHERE employee_id=? AND date=CURDATE()");
+        return $stmt->execute([$employeeId]);
+    }
+
+    public function startBreak1(int $employeeId): bool {
+        $stmt = $this->db->prepare("UPDATE attendance SET break1_start=NOW() WHERE employee_id=? AND date=CURDATE()");
+        return $stmt->execute([$employeeId]);
+    }
+
+    public function endBreak1(int $employeeId): bool {
+        $stmt = $this->db->prepare("UPDATE attendance SET break1_end=NOW() WHERE employee_id=? AND date=CURDATE()");
+        return $stmt->execute([$employeeId]);
+    }
+
+    public function startBreak2(int $employeeId): bool {
+        $stmt = $this->db->prepare("UPDATE attendance SET break2_start=NOW() WHERE employee_id=? AND date=CURDATE()");
+        return $stmt->execute([$employeeId]);
+    }
+
+    public function endBreak2(int $employeeId): bool {
+        $stmt = $this->db->prepare("UPDATE attendance SET break2_end=NOW() WHERE employee_id=? AND date=CURDATE()");
+        return $stmt->execute([$employeeId]);
+    }
+
+    public function startEmergencyBreak(int $employeeId): bool {
+        $stmt = $this->db->prepare("UPDATE attendance SET emergency_break_start=NOW() WHERE employee_id=? AND date=CURDATE()");
+        return $stmt->execute([$employeeId]);
+    }
+
+    public function endEmergencyBreak(int $employeeId): bool {
+        $stmt = $this->db->prepare("UPDATE attendance SET emergency_break_end=NOW() WHERE employee_id=? AND date=CURDATE()");
+        return $stmt->execute([$employeeId]);
+    }
+
     public function upsert(int $employeeId, string $date, array $data): bool {
         $fields = ['employee_id','date'];
         $vals   = [$employeeId, $date];
         $updates= [];
-        $allowed= ['clock_in','clock_out','hours_worked','overtime_hours','status','remarks'];
+        $allowed= ['clock_in','clock_out','hours_worked','overtime_hours','status','remarks','lunch_start','lunch_end','break1_start','break1_end','break2_start','break2_end','emergency_break_start','emergency_break_end'];
         foreach ($allowed as $f) {
             if (array_key_exists($f,$data)) {
                 $fields[] = $f; $vals[] = $data[$f];

@@ -39,6 +39,8 @@ class AttendanceController {
         $pg       = paginate($total, (int)get('page', 1), 10);
         $records  = $this->model->list($filters, $pg['per_page'], $pg['offset']);
         $summary  = $this->model->monthlySummary($empId, date('Y'), date('n'));
+        $weeklyHours = $this->model->weeklyTotalHours($empId);
+        $monthlyStats = $this->model->monthlyTotalStats($empId, date('Y'), date('n'));
         include APP_ROOT . '/views/attendance/my.php';
     }
 
@@ -70,9 +72,138 @@ class AttendanceController {
         if (!empty($existing['clock_out'])) {
             jsonResponse(false,'You have already clocked out today.');
         }
+        if (!empty($existing['lunch_start']) && empty($existing['lunch_end'])) {
+            jsonResponse(false,'Please end your lunch break first.');
+        }
+        if (!empty($existing['break1_start']) && empty($existing['break1_end'])) {
+            jsonResponse(false,'Please end your 1st break first.');
+        }
+        if (!empty($existing['break2_start']) && empty($existing['break2_end'])) {
+            jsonResponse(false,'Please end your 2nd break first.');
+        }
+        if (!empty($existing['emergency_break_start']) && empty($existing['emergency_break_end'])) {
+            jsonResponse(false,'Please end your emergency break first.');
+        }
         $this->model->clockOut($empId);
         auditLog('clock_out','attendance','Employee clocked out',$empId);
         jsonResponse(true,'Clocked out at ' . date('h:i A'));
+    }
+
+    public function startLunch(): void {
+        requirePermission('attendance', 'self');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') { redirect('index.php?module=attendance&action=my'); }
+        validateCsrf();
+        $empId = currentUser()['employee_id'];
+        if (!$empId) { jsonResponse(false, 'Employee profile not found.'); }
+        $existing = $this->model->todayRecord($empId);
+        if (!$existing || empty($existing['clock_in'])) { jsonResponse(false, 'You must clock in first.'); }
+        if (!empty($existing['clock_out'])) { jsonResponse(false, 'You have already clocked out.'); }
+        if (!empty($existing['lunch_start'])) { jsonResponse(false, 'You have already taken your lunch break today.'); }
+
+        $this->model->startLunch($empId);
+        auditLog('start_lunch','attendance','Employee started lunch break',$empId);
+        jsonResponse(true, 'Lunch break started at ' . date('h:i A'));
+    }
+
+    public function endLunch(): void {
+        requirePermission('attendance', 'self');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') { redirect('index.php?module=attendance&action=my'); }
+        validateCsrf();
+        $empId = currentUser()['employee_id'];
+        $existing = $this->model->todayRecord($empId);
+        if (!$existing || empty($existing['lunch_start'])) { jsonResponse(false, 'You have not started lunch break.'); }
+        if (!empty($existing['lunch_end'])) { jsonResponse(false, 'You have already ended your lunch break.'); }
+
+        $this->model->endLunch($empId);
+        auditLog('end_lunch','attendance','Employee ended lunch break',$empId);
+        jsonResponse(true, 'Lunch break ended at ' . date('h:i A'));
+    }
+
+    public function startBreak1(): void {
+        requirePermission('attendance', 'self');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') { redirect('index.php?module=attendance&action=my'); }
+        validateCsrf();
+        $empId = currentUser()['employee_id'];
+        $existing = $this->model->todayRecord($empId);
+        if (!$existing || empty($existing['clock_in'])) { jsonResponse(false, 'You must clock in first.'); }
+        if (!empty($existing['clock_out'])) { jsonResponse(false, 'You have already clocked out.'); }
+        if (!empty($existing['break1_start'])) { jsonResponse(false, 'You have already taken your 1st break today.'); }
+
+        $this->model->startBreak1($empId);
+        auditLog('start_break1','attendance','Employee started 1st break',$empId);
+        jsonResponse(true, '1st break started at ' . date('h:i A'));
+    }
+
+    public function endBreak1(): void {
+        requirePermission('attendance', 'self');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') { redirect('index.php?module=attendance&action=my'); }
+        validateCsrf();
+        $empId = currentUser()['employee_id'];
+        $existing = $this->model->todayRecord($empId);
+        if (!$existing || empty($existing['break1_start'])) { jsonResponse(false, 'You have not started 1st break.'); }
+        if (!empty($existing['break1_end'])) { jsonResponse(false, 'You have already ended your 1st break.'); }
+
+        $this->model->endBreak1($empId);
+        auditLog('end_break1','attendance','Employee ended 1st break',$empId);
+        jsonResponse(true, '1st break ended at ' . date('h:i A'));
+    }
+
+    public function startBreak2(): void {
+        requirePermission('attendance', 'self');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') { redirect('index.php?module=attendance&action=my'); }
+        validateCsrf();
+        $empId = currentUser()['employee_id'];
+        $existing = $this->model->todayRecord($empId);
+        if (!$existing || empty($existing['clock_in'])) { jsonResponse(false, 'You must clock in first.'); }
+        if (!empty($existing['clock_out'])) { jsonResponse(false, 'You have already clocked out.'); }
+        if (!empty($existing['break2_start'])) { jsonResponse(false, 'You have already taken your 2nd break today.'); }
+
+        $this->model->startBreak2($empId);
+        auditLog('start_break2','attendance','Employee started 2nd break',$empId);
+        jsonResponse(true, '2nd break started at ' . date('h:i A'));
+    }
+
+    public function endBreak2(): void {
+        requirePermission('attendance', 'self');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') { redirect('index.php?module=attendance&action=my'); }
+        validateCsrf();
+        $empId = currentUser()['employee_id'];
+        $existing = $this->model->todayRecord($empId);
+        if (!$existing || empty($existing['break2_start'])) { jsonResponse(false, 'You have not started 2nd break.'); }
+        if (!empty($existing['break2_end'])) { jsonResponse(false, 'You have already ended your 2nd break.'); }
+
+        $this->model->endBreak2($empId);
+        auditLog('end_break2','attendance','Employee ended 2nd break',$empId);
+        jsonResponse(true, '2nd break ended at ' . date('h:i A'));
+    }
+
+    public function startEmergencyBreak(): void {
+        requirePermission('attendance', 'self');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') { redirect('index.php?module=attendance&action=my'); }
+        validateCsrf();
+        $empId = currentUser()['employee_id'];
+        $existing = $this->model->todayRecord($empId);
+        if (!$existing || empty($existing['clock_in'])) { jsonResponse(false, 'You must clock in first.'); }
+        if (!empty($existing['clock_out'])) { jsonResponse(false, 'You have already clocked out.'); }
+        if (!empty($existing['emergency_break_start'])) { jsonResponse(false, 'You have already taken your emergency break today.'); }
+
+        $this->model->startEmergencyBreak($empId);
+        auditLog('start_emergency_break','attendance','Employee started emergency break',$empId);
+        jsonResponse(true, 'Emergency break started at ' . date('h:i A'));
+    }
+
+    public function endEmergencyBreak(): void {
+        requirePermission('attendance', 'self');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') { redirect('index.php?module=attendance&action=my'); }
+        validateCsrf();
+        $empId = currentUser()['employee_id'];
+        $existing = $this->model->todayRecord($empId);
+        if (!$existing || empty($existing['emergency_break_start'])) { jsonResponse(false, 'You have not started an emergency break.'); }
+        if (!empty($existing['emergency_break_end'])) { jsonResponse(false, 'You have already ended your emergency break.'); }
+
+        $this->model->endEmergencyBreak($empId);
+        auditLog('end_emergency_break','attendance','Employee ended emergency break',$empId);
+        jsonResponse(true, 'Emergency break ended at ' . date('h:i A'));
     }
 
     public function edit(): void {

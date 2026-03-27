@@ -25,13 +25,23 @@ include APP_ROOT . '/views/layouts/header.php';
             <h4 class="fw-700 mb-0">Good <?= date('H')<12?'Morning':( date('H')<17?'Afternoon':'Evening') ?>, <?= e(currentUser()['first_name']) ?> 👋</h4>
             <p class="text-muted mb-0 small"><?= date('l, F j, Y') ?> &nbsp;·&nbsp; <?= e(currentUser()['role_name']) ?></p>
         </div>
-        <?php if ($role === ROLE_EMPLOYEE && isset($roleData['today_record'])): ?>
+        <?php if (isset($roleData['today_record'])): ?>
         <div class="d-flex gap-2">
             <?php $rec = $roleData['today_record']; ?>
             <?php if (!$rec || empty($rec['clock_in'])): ?>
             <button class="btn btn-success" onclick="handleClock('in')" id="clockInBtn"><i class="bi bi-play-circle me-1"></i>Clock In</button>
             <?php elseif (empty($rec['clock_out'])): ?>
-            <button class="btn btn-danger" onclick="handleClock('out')" id="clockOutBtn"><i class="bi bi-stop-circle me-1"></i>Clock Out</button>
+                <?php if (!empty($rec['lunch_start']) && empty($rec['lunch_end'])): ?>
+                <button class="btn btn-primary" onclick="handleBreak('endLunch')"><i class="bi bi-stop-circle me-1"></i>End Lunch</button>
+                <?php elseif (!empty($rec['break1_start']) && empty($rec['break1_end'])): ?>
+                <button class="btn btn-warning text-white" onclick="handleBreak('endBreak1')"><i class="bi bi-stop-circle me-1"></i>End 1st Break</button>
+                <?php elseif (!empty($rec['break2_start']) && empty($rec['break2_end'])): ?>
+                <button class="btn btn-warning text-white" onclick="handleBreak('endBreak2')"><i class="bi bi-stop-circle me-1"></i>End 2nd Break</button>
+                <?php elseif (!empty($rec['emergency_break_start']) && empty($rec['emergency_break_end'])): ?>
+                <button class="btn btn-danger" onclick="handleBreak('endEmergencyBreak')"><i class="bi bi-stop-circle me-1"></i>End E-Break</button>
+                <?php else: ?>
+                <button class="btn btn-danger" onclick="handleClock('out')" id="clockOutBtn"><i class="bi bi-stop-circle me-1"></i>Clock Out</button>
+                <?php endif; ?>
             <?php else: ?>
             <span class="badge bg-success fs-6 px-3 py-2"><i class="bi bi-check-circle me-1"></i>Done for today</span>
             <?php endif; ?>

@@ -30,12 +30,19 @@ include APP_ROOT.'/views/layouts/header.php';?>
 </div>
 <div class="col-12">
 <div class="card">
-    <div class="card-header py-3">HR Settings</div>
+    <div class="card-header py-3">HR Settings & Break Configuration</div>
     <div class="card-body">
-        <div class="row g-3">
+        <div class="row g-3 mb-3">
             <div class="col-md-4"><label class="form-label">Office Start Time</label><input type="time" name="office_start_time" class="form-control" value="<?=e($settings->get('office_start_time','08:00'))?>"></div>
             <div class="col-md-4"><label class="form-label">Office End Time</label><input type="time" name="office_end_time" class="form-control" value="<?=e($settings->get('office_end_time','17:00'))?>"></div>
             <div class="col-md-4"><label class="form-label">Late Grace Period (mins)</label><input type="number" name="late_grace_period" class="form-control" value="<?=e($settings->get('late_grace_period',15))?>"></div>
+        </div>
+        <hr class="my-3 opacity-25">
+        <div class="row g-3">
+            <div class="col-6 col-md-3"><label class="form-label">Lunch (mins)</label><input type="number" name="lunch_duration" class="form-control" value="<?=e($settings->get('lunch_duration',60))?>"></div>
+            <div class="col-6 col-md-3"><label class="form-label">1st Break (mins)</label><input type="number" name="break1_duration" class="form-control" value="<?=e($settings->get('break1_duration',15))?>"></div>
+            <div class="col-6 col-md-3"><label class="form-label">2nd Break (mins)</label><input type="number" name="break2_duration" class="form-control" value="<?=e($settings->get('break2_duration',15))?>"></div>
+            <div class="col-6 col-md-3"><label class="form-label">Emergency Break (mins)</label><input type="number" name="emergency_break_duration" class="form-control" value="<?=e($settings->get('emergency_break_duration',2))?>"></div>
         </div>
     </div>
 </div>

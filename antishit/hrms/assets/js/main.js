@@ -106,6 +106,76 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
+/* ── Break Timer ─────────────────────────────────────────── */
+function updateBreakTimer() {
+    const timerEl = document.getElementById('breakTimer');
+    if (!timerEl) return;
+    const startTimestamp = parseInt(timerEl.dataset.start, 10);
+    const durationSeconds = parseInt(timerEl.dataset.duration, 10);
+    // Use server-synced time ideally, but local time is close enough for display
+    const nowTimestamp = Math.floor(Date.now() / 1000);
+    
+    const elapsed = nowTimestamp - startTimestamp;
+    const remaining = durationSeconds - elapsed;
+    
+    const isNegative = remaining < 0;
+    const absRemaining = Math.abs(remaining);
+    
+    const m = Math.floor(absRemaining / 60).toString().padStart(2, '0');
+    const s = (absRemaining % 60).toString().padStart(2, '0');
+    
+    let timeString = (isNegative ? '-' : '') + m + ':' + s;
+    timerEl.textContent = timeString;
+    
+    if (isNegative) {
+        timerEl.classList.remove('text-warning');
+        timerEl.classList.add('text-danger');
+        timerEl.style.animation = 'flash 1s infinite alternate';
+        // Add quick inline keyframes if not present
+        if (!document.getElementById('flashAnim')) {
+            const style = document.createElement('style');
+            style.id = 'flashAnim';
+            style.innerHTML = `@keyframes flash { from { opacity: 1; } to { opacity: 0.5; } }`;
+            document.head.appendChild(style);
+        }
+
+        // Show centered popup once
+        if (!window.breakAlertShown) {
+            window.breakAlertShown = true;
+            let modalEl = document.getElementById('breakOverModal');
+            if (!modalEl) {
+                document.body.insertAdjacentHTML('beforeend', `
+                <div class="modal fade" id="breakOverModal" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-danger shadow-lg">
+                      <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title"><i class="bi bi-exclamation-octagon-fill me-2"></i>Break Time Over</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body text-center py-4">
+                        <i class="bi bi-alarm-fill text-danger mb-2" style="font-size: 3rem;"></i>
+                        <h4 class="mt-2 text-dark">Your break time is up!</h4>
+                        <p class="text-muted mb-0 mt-2">Please end your break and return to work as soon as possible.</p>
+                      </div>
+                      <div class="modal-footer justify-content-center border-0 pb-4">
+                        <button type="button" class="btn btn-danger px-4" data-bs-dismiss="modal">Acknowledge</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>`);
+                modalEl = document.getElementById('breakOverModal');
+            }
+            if (typeof bootstrap !== 'undefined') {
+                new bootstrap.Modal(modalEl).show();
+            } else {
+                alert("Your break time is up! Please end your break.");
+            }
+        }
+    }
+}
+setInterval(updateBreakTimer, 1000);
+updateBreakTimer();
+
 /* ── Clock In / Out ──────────────────────────────────────── */
 async function handleClock(action) {
     const btn = document.getElementById(action === 'in' ? 'clockInBtn' : 'clockOutBtn');
@@ -118,6 +188,21 @@ async function handleClock(action) {
         showToast('danger', 'Request failed. Please try again.');
     }
     if (btn) { btn.disabled = false; }
+}
+
+/* ── Break Tracking ──────────────────────────────────────── */
+async function handleBreak(action) {
+    const btn = event?.currentTarget;
+    const originalHtml = btn ? btn.innerHTML : '';
+    if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>'; }
+    try {
+        const res = await postJson(`index.php?module=attendance&action=${action}`);
+        showToast(res.success ? 'success' : 'danger', res.message);
+        if (res.success) setTimeout(() => location.reload(), 1200);
+    } catch(e) {
+        showToast('danger', 'Request failed. Please try again.');
+    }
+    if (btn) { btn.disabled = false; btn.innerHTML = originalHtml; }
 }
 
 /* ── Toast helper ────────────────────────────────────────── */

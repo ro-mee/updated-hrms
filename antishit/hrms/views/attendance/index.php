@@ -46,7 +46,7 @@ include APP_ROOT . '/views/layouts/header.php';
     <div class="card table-card">
         <div class="table-responsive">
             <table class="table table-hover mb-0">
-                <thead><tr><th>Employee</th><th>Dept</th><th>Date</th><th>In</th><th>Out</th><th>Hours</th><th>OT</th><th>Status</th><th></th></tr></thead>
+                <thead><tr><th>Employee</th><th>Dept</th><th>Date</th><th>In</th><th>Out</th><th>Breaks</th><th>Hours</th><th>OT</th><th>Status</th><th></th></tr></thead>
                 <tbody>
                 <?php if(empty($records)): ?><tr><td colspan="9"><div class="empty-state"><i class="bi bi-clock-history"></i>No attendance records found</div></td></tr><?php endif; ?>
                 <?php foreach($records as $r): ?>
@@ -64,6 +64,13 @@ include APP_ROOT . '/views/layouts/header.php';
                     <td class="small"><?= formatDate($r['date'],'M d, Y') ?></td>
                     <td class="small"><?= $r['clock_in'] ? date('h:i A',strtotime($r['clock_in'])) : '—' ?></td>
                     <td class="small"><?= $r['clock_out'] ? date('h:i A',strtotime($r['clock_out'])) : '—' ?></td>
+                    <td class="small" style="min-width: 130px;">
+                        <?php if ($r['lunch_start']) echo "<div class='text-primary' style='font-size:0.75rem'>Lunch: ".date('h:iA',strtotime($r['lunch_start']))."-".($r['lunch_end']?date('h:iA',strtotime($r['lunch_end'])):'—')."</div>"; ?>
+                        <?php if ($r['break1_start']) echo "<div class='text-warning' style='font-size:0.75rem'>B1: ".date('h:iA',strtotime($r['break1_start']))."-".($r['break1_end']?date('h:iA',strtotime($r['break1_end'])):'—')."</div>"; ?>
+                        <?php if ($r['break2_start']) echo "<div class='text-warning' style='font-size:0.75rem'>B2: ".date('h:iA',strtotime($r['break2_start']))."-".($r['break2_end']?date('h:iA',strtotime($r['break2_end'])):'—')."</div>"; ?>
+                        <?php if ($r['emergency_break_start']) echo "<div class='text-danger' style='font-size:0.75rem'>E-Brk: ".date('h:iA',strtotime($r['emergency_break_start']))."-".($r['emergency_break_end']?date('h:iA',strtotime($r['emergency_break_end'])):'—')."</div>"; ?>
+                        <?php if (!$r['lunch_start'] && !$r['break1_start'] && !$r['break2_start'] && !$r['emergency_break_start']) echo "<span class='text-muted'>—</span>"; ?>
+                    </td>
                     <td class="small"><?= $r['hours_worked']??'—' ?></td>
                     <td class="small"><?= $r['overtime_hours'] > 0 ? '+'.($r['overtime_hours']) : '—' ?></td>
                     <td><?= statusBadge($r['status']) ?></td>
